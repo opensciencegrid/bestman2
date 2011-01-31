@@ -1,0 +1,90 @@
+<?xml version="1.0"?>
+
+<project default="all" basedir=".">
+
+  <property file="build.properties"/>
+
+  <path id="classpath">
+    <pathelement location="${java.home}/../lib/tools.jar"/>
+	<pathelement location="./src"/>
+    <pathelement location="${build.dest}"/>
+	<fileset dir="${bestman.root}/lib/axis">
+     <include name="*.jar"/>
+    </fileset>
+	<fileset dir="${bestman.root}/lib/jglobus">
+     <include name="*.jar"/>
+    </fileset>
+
+    <fileset dir="${bestman.root}/lib">
+     <include name="bestman2-stub.jar"/>
+    </fileset>
+
+    <pathelement path="${java.class.path}"/>
+  </path>
+
+  <property name="src.dir" value="./src/"/>
+  <property name="build.dir" value="./build"/>
+  <property name="build.lib" value="${build.dir}/lib"/>
+  <property name="build.dest" value="${build.dir}/classes"/>
+
+  <target name="setenv">
+<echo message="pkg=${package}"/>
+<echo message="bestman root=${bestman.root}"/>
+<echo message="interface=${interface.name}"/>
+<echo message="using javac from ${javac.path}"/>
+
+    <mkdir dir="${build.dir}"/>
+    <mkdir dir="${build.dest}"/>
+    <mkdir dir="${build.lib}"/>
+
+  </target>
+
+  <target name="transferjar">
+    <jar jarfile="${build.lib}/${pkgname}-transfer.jar" 
+			basedir="${build.dest}" >
+      <include name="**/${package.dir}/client/transfer/**" />
+      <include name="**/${package.dir}/client/gui/MySRMFileTransfer.class" />
+      <include name="**/${package.dir}/client/intf/MyISRMFileTransfer.class" />
+    </jar>
+    <jar jarfile="${build.lib}/${pkgname}-printintf.jar" 
+			basedir="${build.dest}" >
+      <include name="**/${package.dir}/client/intf/PrintIntf.class" />
+    </jar>
+  </target>
+
+  <target name="clean">
+    <delete dir="${build.dir}" verbose="false"/>
+  </target>
+
+  <target name="client" depends="setenv">
+    <javac srcdir="src/${package.dir}/util" destdir="${build.dest}" debug="${debug}"
+      deprecation="${deprecation}"
+      fork="yes" executable="${javac.path}"
+      classpathref="classpath">
+    </javac>
+    <javac srcdir="src/${package.dir}/client" destdir="${build.dest}" debug="${debug}"
+      deprecation="${deprecation}"
+      fork="yes" executable="${javac.path}"
+      classpathref="classpath">
+    </javac>
+    <jar jarfile="${build.lib}/${pkgname}-client.jar" manifest="ClientManifest.txt" basedir="${build.dest}" >
+      <include name="**/${package.dir}/client/**" />
+      <include name="**/${package.dir}/util/**" />
+    </jar>
+  </target>
+
+  <target name="install">
+	<echo message="INSTALL into ${bestman.root}"/>
+    <copy toDir="${bestman.root}/lib">
+      <fileset dir="${build.lib}"/>
+    </copy>
+
+  </target>
+
+<target name="all" depends="client,transferjar">
+	<echo message="BUILD ALL into ${build.dir}"/>
+</target>
+
+
+</project>
+

@@ -1,0 +1,143 @@
+<?xml version="1.0"?>
+
+<project default="all" basedir=".">
+
+  <property file="build.properties"/>
+
+  <path id="classpath">
+    <pathelement location="${java.home}/../lib/tools.jar"/>
+	<pathelement location="./"/>
+    <pathelement location="${build.dest}"/>
+	<fileset dir="${bestman.root}/lib/gums">
+     <include name="*.jar"/>
+    </fileset>
+	<fileset dir="${bestman.root}/lib/gums2">
+     <include name="*.jar"/>
+    </fileset> 
+	<fileset dir="${bestman.root}/lib/axis">
+     <include name="*.jar"/>
+    </fileset>
+	<fileset dir="${bestman.root}/lib/jetty">
+     <include name="*.jar"/>
+    </fileset>
+	<fileset dir="${bestman.root}/lib/others">
+     <include name="*.jar"/>
+    </fileset>
+	<fileset dir="${bestman.root}/lib/jglobus">
+     <include name="*.jar"/>
+    </fileset>
+	<fileset dir="${bestman.root}/lib/voms">
+     <include name="*.jar"/>
+    </fileset>
+    <pathelement path="${java.class.path}"/>
+  </path>
+
+  <property name="src.dir" value="./src"/>
+  <property name="wsdl.dir" value="./wsdl"/>
+  <property name="build.dir" value="./build"/>
+  <property name="build.lib" value="${build.dir}/lib"/>
+  <property name="build.stubs" value="${build.dir}/stubs"/>
+  <property name="build.dest" value="${build.dir}/classes"/>
+  <property name="build.schema" value="${build.dir}/schema"/>
+  <property name="debug" value="yes"/>  
+
+  <target name="setenv">
+	<echo message="pkg=${package}"/>
+	<echo message="root=${bestman.root}"/>
+	<echo message="interface=${interface.name}"/>
+	<echo message="using javac from ${javac.path}"/>
+
+    <mkdir dir="${build.dir}"/>
+    <mkdir dir="${build.dest}"/>
+    <mkdir dir="${build.lib}"/>
+    <mkdir dir="${build.schema}"/>
+    <mkdir dir="${build.schema}/${package}"/>
+    <mkdir dir="${build.schema}/${package}/${interface.name}"/>
+    <mkdir dir="${build.stubs}"/>
+
+    <copy toDir="${build.schema}/${package}/${interface.name}">
+      <fileset dir="${wsdl.dir}">
+        <include name="${interface.name}.wsdl"/>
+      </fileset>
+    </copy>
+
+  </target>
+
+  <target name="generateStubs" depends="setenv">
+    <property name="schema.file.dir" value="${package}/${interface.name}"/>
+    <property name="schema.file" value="${interface.name}.wsdl"/>
+    <echo message=" Generating stubs from ${build.schema}/${schema.file.dir}/${schema.file} " />
+    <java classname="${wsdl.tool}" dir="${build.schema}" fork="yes"
+          failonerror="true" classpathref="classpath">
+      <arg value="-o"/>
+      <arg value="../stubs"/>
+	  <arg value="-c"/>
+	  <arg value="gov.lbl.srm.impl.TSRMService"/>
+      <arg value="-O"/>
+      <arg value="-1"/>
+	  <arg value="-s"/>
+	  <arg value="-w"/>  <!-- // GT4 has problem with it! -->
+      <arg value="${schema.file.dir}/${schema.file}"/>
+	  <arg value="-d"/>
+	  <arg value="application"/>
+    </java>
+  </target>
+
+  <target name="compileStubs" depends="setenv, generateStubs">
+	<echo message="compileStubs..."/>
+    <javac srcdir="${build.stubs}" destdir="${build.dest}" debug="${debug}"
+      deprecation="${deprecation}"
+      fork="yes" executable="${javac.path}"
+      classpathref="classpath" source="1.4">
+    </javac>
+  </target>
+
+  <target name="compile" depends="compileStubs">
+    <echo message="compiling: ${package.dir}"/>
+    <javac srcdir="${src.dir}/${package.dir}" destdir="${build.dest}" debug="${debug}"
+      fork="yes" executable="${javac.path}"
+      deprecation="${deprecation}"
+      classpathref="classpath">
+    </javac>
+  </target>
+
+  <target name="stubjar" depends="compileStubs">
+	<echo message="stubjar..."/>
+    <jar jarfile="${build.lib}/${pkgname}-stub.jar" basedir="${build.dest}" >
+      <include name="**/${package.dir}/${interface.name}/**" />
+    </jar>
+  </target>
+
+  <target name="server" depends="stubjar, compile">
+	<echo message="server jar..."/>
+    <jar jarfile="${build.lib}/${pkgname}.jar" manifest="ServerManifest.txt" 
+         basedir="${build.dest}" >
+      <include name="**/${package.dir}/**" />
+      <exclude name="**/${package.dir}/${interface.name}/**" />
+      <exclude name="**/${package.dir}/client/**" />
+    </jar>
+  </target>
+
+  <target name="client" depends="setenv, stubjar">
+    <echo message="aux jar..."/>
+    <jar jarfile="${build.lib}/${pkgname}-aux.jar" basedir="${build.dest}" >
+      <include name="**/${package.dir}/client/**" />
+    </jar>
+  </target>
+
+<target name="install">
+	<echo message="INSTALL into ${bestman.root}"/>
+    <copy toDir="${bestman.root}/lib">
+      <fileset dir="${build.lib}"/>
+    </copy>
+</target>
+
+<target name="clean">
+    <delete dir="${build.dir}" verbose="false"/>
+</target>
+
+<target name="all" depends="server, client">
+	<echo message="BUILD ALL into ${build.dir}"/>
+</target>
+
+</project>
