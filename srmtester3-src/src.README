@@ -13,7 +13,7 @@ SRM v2.2 tester
 http://sdm.lbl.gov/bestman
 Questions: srm@lbl.gov
 
-Note: Support is not available at the source code level.
+Note: Support is not available for the source codes.
 
 Dependency requirements:  
 JDK 1.6.0_20
@@ -23,7 +23,5 @@ WSDL4j-1.6.2
 Xerces-2.9.1
 Java CoG 1.8.0
 
-
-LICENSE files are in license directory.
 COPYRIGHT: https://sdm.lbl.gov/wiki/Software/BeStMan/Copyright
-Non-Commercial LICENSE: https://sdm.lbl.gov/bestman/license-nc.html
+LICENSE: https://sdm.lbl.gov/wiki/Software/BeStMan/License
