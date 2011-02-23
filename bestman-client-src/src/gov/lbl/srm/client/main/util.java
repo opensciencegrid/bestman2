@@ -263,30 +263,30 @@ public class util {
        }
     }
 
-   /*
-    public static void printEventLog(
-            java.util.logging.Logger theLogger, String eventName, 
-			Vector inputVec) {
-    }
-   */
-
     public static void printEventLog(
             java.util.logging.Logger theLogger, 
 			String eventName, Vector inputVec, boolean silent,
 				boolean useLog) {
-
-     if(silent || useLog) {
-       if(theLogger != null) {
-         int size = inputVec.size();
-         Object [] param = new Object[size];
-
-         for(int i = 0; i < size; i++) {
-            param[i] = (String) inputVec.elementAt(i);
-         }
-         theLogger.log(java.util.logging.Level.FINE, eventName, 
-			(Object[]) param);
-        }
-      }
+    try {
+       if(silent || useLog) {
+          if(theLogger != null) {
+             Vector cvec = (Vector) inputVec.clone();
+             int size = cvec.size();
+             Object [] param = new Object[size];
+ 
+             for(int i = 0; i < size; i++) {
+               param[i] = (String) cvec.elementAt(i);
+             }
+             theLogger.log(java.util.logging.Level.FINE, eventName,
+                (Object[]) param);
+             cvec=null;
+             param=null;
+           }//end if
+        }//end if
+     }catch(Exception e) {
+        System.out.println("Client Exception during logging, can be ignored "
+           +e.getMessage());
+     }
     }
 
     public static void printEventLogException(

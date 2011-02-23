@@ -623,11 +623,12 @@ public void thirdparty() throws IOException {
           inputVec.addElement("SOURCE gsiftp dcau feature supported");
           util.printEventLog(_theLogger,"DCAU",inputVec,silent,useLog);
           if(debug) {
-          util.printMessage("### SOURCE gsiftp dcau feature supported ",logger,silent);
-              if (dcau == DataChannelAuthentication.NONE) 
-				util.printMessage("### SOURCE gsiftp dcau set to false",logger,silent);
-			  else 
-				util.printMessage("### SOURCE gsiftp dcau set to true",logger,silent);
+            util.printMessage("### SOURCE gsiftp dcau feature supported ",
+		logger,silent);
+          if (dcau == DataChannelAuthentication.NONE) 
+	     util.printMessage("### SOURCE gsiftp dcau set to false",logger,silent);
+	  else 
+	     util.printMessage("### SOURCE gsiftp dcau set to true",logger,silent);
           }
           //fromclient.setDataChannelAuthentication(DataChannelAuthentication.NONE);
           fromclient.setDataChannelAuthentication(dcau);
@@ -641,19 +642,19 @@ public void thirdparty() throws IOException {
           inputVec.addElement("SOURCE gsiftp dcau feature not supported");
           util.printEventLog(_theLogger,"DCAU",inputVec,silent,useLog);
           if(debug) {
-          util.printMessage("### SOURCE gsiftp dcau feature not supported",logger,silent);
+            util.printMessage("### SOURCE gsiftp dcau feature not supported",
+			logger,silent);
           }
           //fromclient.setDataChannelAuthentication(DataChannelAuthentication.NONE);
           fromclient.setLocalNoDataChannelAuthentication();
         }
 
-
         toclient.setClientWaitParams(maxWait,waitDelay);
-		toclient.authenticate(destcredential);
-// AS 090707
-		toclient.setProtectionBufferSize(pbsize);
-		toclient.setType(transferType); // GridFTPSession.TYPE_IMAGE
-		toclient.setMode(transferMode); // GridFTPSession.MODE_STREAM
+	toclient.authenticate(destcredential);
+        // AS 090707
+	toclient.setProtectionBufferSize(pbsize);
+	toclient.setType(transferType); // GridFTPSession.TYPE_IMAGE
+	toclient.setMode(transferMode); // GridFTPSession.MODE_STREAM
 
 
         // AS 04/09/2009
@@ -662,11 +663,14 @@ public void thirdparty() throws IOException {
           inputVec.addElement("TARGET gsiftp dcau feature supported");
           util.printEventLog(_theLogger,"DCAU",inputVec,silent,useLog);
           if(debug) {
-          util.printMessage("### TARGET gsiftp dcau feature supported",logger,silent);
-              if (dcau == DataChannelAuthentication.NONE) 
-				util.printMessage("### TARGET gsiftp dcau set to false",logger,silent);
-			  else 
-				util.printMessage("### TARGET gsiftp dcau set to true",logger,silent);
+            util.printMessage("### TARGET gsiftp dcau feature supported",
+			logger,silent);
+            if (dcau == DataChannelAuthentication.NONE) 
+		util.printMessage("### TARGET gsiftp dcau set to false",
+			logger,silent);
+	    else 
+		util.printMessage("### TARGET gsiftp dcau set to true",
+			logger,silent);
           }
           //toclient.setDataChannelAuthentication(DataChannelAuthentication.NONE);
           toclient.setDataChannelAuthentication(dcau);
@@ -680,18 +684,20 @@ public void thirdparty() throws IOException {
           inputVec.addElement("TARGET gsiftp dcau feature not supported");
           util.printEventLog(_theLogger,"DCAU",inputVec,silent,useLog);
           if(debug) {
-          util.printMessage("### TARGET gsiftp dcau feature not supported",logger,silent);
+          util.printMessage("### TARGET gsiftp dcau feature not supported",
+		logger,silent);
           }
           //toclient.setDataChannelAuthentication(DataChannelAuthentication.NONE);
           toclient.setLocalNoDataChannelAuthentication();
         }
 
 
-		if (parallelism > 1)
-			fromclient.setOptions(new RetrieveOptions(parallelism));
+	if (parallelism > 1)
+	   fromclient.setOptions(new RetrieveOptions(parallelism));
 
-		if (transferMode == GridFTPSession.MODE_STREAM)
-			fromclient.transfer(fromurl.getPath(), toclient, tourl.getPath(), appendmode, null);
+	if (transferMode == GridFTPSession.MODE_STREAM)
+	   fromclient.transfer(fromurl.getPath(), toclient, 
+		tourl.getPath(), appendmode, null);
 		else if (transferMode == GridFTPSession.MODE_EBLOCK)
 			fromclient.extendedTransfer(fromurl.getPath(), toclient, tourl.getPath(), null);
 		else {

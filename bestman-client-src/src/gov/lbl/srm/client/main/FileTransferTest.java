@@ -203,6 +203,7 @@ public void setNewConcurrency(int conc) {
 
 public void setTransferMode(SRMTransferMode mode) {
     this.mode = mode;
+    System.out.println(">>>MODE="+mode);
 }
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -654,8 +655,10 @@ public synchronized void setPreviousStatusPanel(int status, WrappedFT wtu,
             //mostly for permission denied case, we don't want to retry here
             //no such file or directory, we don't want to retry here
             int idx = value.indexOf("file_open failed");
-            int idx2 = value.indexOf("No such file");
-            if(idx != -1 || idx2 != -1) {
+            int idx2 = value.toLowerCase().indexOf("no such file");
+            int idx3 = value.toLowerCase().indexOf("login incorrect");
+            int idx4 = value.toLowerCase().indexOf("bad password");
+            if(idx != -1 || idx2 != -1 || idx3 != -1 || idx4 != -1)  {
              //fIntf.setRetry(_retryAllowed);
              fIntf.setErrorMessage(value);
              inputVec = new Vector ();
@@ -664,7 +667,7 @@ public synchronized void setPreviousStatusPanel(int status, WrappedFT wtu,
 		   fIntf.getLabel() + " in " + _retryTimeOut + 
 	           " seconds for " + (fIntf.getRetry()+1) + " times.\n");
              util.printEventLog(_theLogger,
-				"FileTransferTest.setPreviousStatusPanel", inputVec,silent,useLog);
+		"FileTransferTest.setPreviousStatusPanel", inputVec,silent,useLog);
              int numTimes = fIntf.getRetry(); 
              totalFiles = (totalFiles-(_retryAllowed-numTimes));
              fIntf.setFileFailedAfterAllowedRetries(true);

@@ -36,7 +36,6 @@
  *
 */
 
-
 package gov.lbl.srm.transfer.mss.hpss;
 
 //import gov.lbl.srm.client.exception.*;

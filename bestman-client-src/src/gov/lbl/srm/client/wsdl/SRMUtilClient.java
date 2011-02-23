@@ -6845,15 +6845,19 @@ private void printMetaDataForTextReport(String prefix, TMetaDataPathDetail pDeta
 
   if(pDetail.getArrayOfSpaceTokens() != null) {
       ArrayOfString spaceTokens = pDetail.getArrayOfSpaceTokens();
-      String[] tokens = spaceTokens.getStringArray(); 
-      for(int k = 0; k < tokens.length; k++) {
-       //if(_debug) {
-         util.printMessage("SRM-CLIENT*SPACETOKENS("+k+")="+tokens[k],
+      if(spaceTokens != null) {
+        String[] tokens = spaceTokens.getStringArray(); 
+        if(tokens != null) { 
+         for(int k = 0; k < tokens.length; k++) {
+          //if(_debug) {
+            util.printMessage("SRM-CLIENT*SPACETOKENS("+k+")="+tokens[k],
 			logger,silent);
-         util.printMessage("SRM-CLIENT*SPACETOKENS("+k+")="+tokens[k],
+            util.printMessage("SRM-CLIENT*SPACETOKENS("+k+")="+tokens[k],
 			pIntf);
-        //}
-      }
+          //}
+         }
+        }
+     }
   }
 
   if(pDetail.getRetentionPolicyInfo() != null) {
@@ -7265,11 +7269,13 @@ private void printMetaData(String prefix, TMetaDataPathDetail pDetail,
   if(pDetail.getArrayOfSpaceTokens() != null) {
       ArrayOfString spaceTokens = pDetail.getArrayOfSpaceTokens();
       String[] tokens = spaceTokens.getStringArray(); 
-      for(int k = 0; k < tokens.length; k++) {
-         util.printMessage(prefix+"Tokens("+k+")="+tokens[k],
+      if(tokens != null) {
+        for(int k = 0; k < tokens.length; k++) {
+           util.printMessage(prefix+"Tokens("+k+")="+tokens[k],
 			logger,silent);
-         util.printMessage(prefix+"Tokens("+k+")="+tokens[k],pIntf);
-         inputVec.addElement("Tokens("+k+")="+tokens[k]);
+           util.printMessage(prefix+"Tokens("+k+")="+tokens[k],pIntf);
+           inputVec.addElement("Tokens("+k+")="+tokens[k]);
+        }
       }
   }
   else {

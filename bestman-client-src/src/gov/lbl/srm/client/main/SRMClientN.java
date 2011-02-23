@@ -554,22 +554,22 @@ public SRMClientN(String[] args, PrintIntf pIntf) {
     else if(args[i].equalsIgnoreCase("-spacesize") && i+1 < args.length) {
        String temp = args[i+1];
        try {
-         tokenSize = Integer.parseInt(temp);
+         tokenSize = Long.parseLong(temp);
        }catch(NumberFormatException nfe) {
-                    util.printEventLogException(_theLogger,"",nfe);
+         util.printEventLogException(_theLogger,"",nfe);
          System.out.println
-           ("\nGiven tokensize is not valid value :" + temp); 
+           ("\nGiven tokensize is not valid value :|" + temp+"|"); 
        }
        i++;
     }
     else if(args[i].equalsIgnoreCase("-spacegsize") && i+1 < args.length) {
        String temp = args[i+1];
        try {
-         gSize = Integer.parseInt(temp);
+         gSize = Long.parseLong(temp);
        }catch(NumberFormatException nfe) {
                     util.printEventLogException(_theLogger,"",nfe);
          System.out.println
-           ("\nGiven Space guarn size is not valid value :" + temp); 
+           ("\nGiven Space guarn size is not valid value :|" + temp+"|"); 
        }
        i++;
     }
@@ -5173,63 +5173,70 @@ public GSSCredential getCredential() throws SRMClientException{
    String proxyPath = properties.getProperty("proxy-file");
 
    try {
-     if(!proxyPath.startsWith("Enter")) {
+     if(proxyPath != null && !proxyPath.startsWith("Enter")) {
        inputVec.clear();
        inputVec.addElement("proxypath=" +proxyPath);
        util.printEventLog(_theLogger,"GetCredential",inputVec,silent,useLog);
        if(_debug) {
-         util.printMessage("\nSRM-CLIENT: Get Credential for proxyPath " + proxyPath,
-				logger,silent);
+         util.printMessage("\nSRM-CLIENT: Get Credential for proxyPath " + 
+		proxyPath, logger,silent);
        }
        mycred = 
-		gov.lbl.srm.client.util.Util.getCredential(proxyPath,"",useProxy,"");
+	  gov.lbl.srm.client.util.Util.getCredential(proxyPath,"",useProxy,"");
      }
      else {
        ukey = properties.getProperty("user-key");
        ucert = properties.getProperty("user-cert");
 
-       if(!ukey.startsWith("Enter") && (!ucert.startsWith("Enter"))) {
+       if((ukey != null && !ukey.startsWith("Enter")) && 
+	  ((ucert != null && !ucert.startsWith("Enter")))) {
          useProxy=false;
          inputVec.clear();
          inputVec.addElement("Using usercert=" +ucert);
          inputVec.addElement("Using userkey=" +ukey);
          util.printEventLog(_theLogger,"GetCredential", inputVec,silent,useLog);
          if(_debug) {
-           util.printMessage("\nSRM-CLIENT: Using usercert :" + ucert,logger,silent);
-           util.printMessage("\nSRM-CLIENT: Using userkey  :" + ukey,logger,silent);
+           util.printMessage("\nSRM-CLIENT: Using usercert :" + 
+		ucert,logger,silent);
+           util.printMessage("\nSRM-CLIENT: Using userkey  :" + 
+		ukey,logger,silent);
          }
          if(_password.equals("")) { 
           String line = PasswordField.readPassword("Enter GRID passphrase: ");
           _password = line;
          }
          mycred = 
-			gov.lbl.srm.client.util.Util.getCredential(ucert,ukey,
-				useProxy,_password);
+	   gov.lbl.srm.client.util.Util.getCredential(ucert,ukey, 
+			useProxy,_password);
        } 
        else {
          inputVec.clear();
-         inputVec.addElement("Using default user proxy=" +proxyPath);
+         inputVec.addElement("Using default user proxy");
          util.printEventLog(_theLogger,"GetCredential", inputVec,silent,useLog);
          if(_debug) {
-           util.printMessage("\nSRM-CLIENT: Using default user proxy " + proxyPath,logger,
-				silent);
+           util.printMessage("\nSRM-CLIENT: Using default user proxy ",
+		 logger, silent);
          }
          //proxyPath ="/tmp/x509up_u"+MyConfigUtil.getUID();
          try {
            proxyPath ="/tmp/x509up_u"+MyConfigUtil.getUID2();
          }catch(Exception ue) {
-            util.printMessage("\nSRM-CLIENT: Exception from client="+ue.getMessage(),logger,silent);
-                  util.printEventLogException(_theLogger,"",ue);
+            util.printMessage("\nSRM-CLIENT: Exception from client="+
+		ue.getMessage(),logger,silent);
+            util.printEventLogException(_theLogger,"",ue);
             proxyPath ="/tmp/x509up_u"+MyConfigUtil.getUID();
          }
+         inputVec.clear();
+         inputVec.addElement("Found default user proxy="+proxyPath);
+         util.printEventLog(_theLogger,"GetCredential", inputVec,silent,useLog);
          mycred = 
-		  gov.lbl.srm.client.util.Util.getCredential(proxyPath,"",useProxy,"");
-       }
-     }
+	  gov.lbl.srm.client.util.Util.getCredential(proxyPath,"",useProxy,"");
+       }//end else
+     }//end else
    }catch(Exception e) {
-      util.printMessage("\nSRM-CLIENT: Exception from client="+e.getMessage(),logger,silent);
-                  util.printEventLogException(_theLogger,"",e);
-      //util.printStackTrace(e,logger);
+      util.printMessage("\nSRM-CLIENT: Exception from client="+
+		e.getMessage(),logger,silent);
+      util.printEventLogException(_theLogger,"",e);
    }
 
    if(mycred == null) {

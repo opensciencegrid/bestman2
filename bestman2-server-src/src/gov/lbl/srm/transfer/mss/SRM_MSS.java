@@ -1,38 +1,30 @@
 /**
  *
- * *** Copyright Notice ***
+ * BeStMan Copyright (c) 2007-2008, 
+ * The Regents of the University of California,
+ * through Lawrence Berkeley National Laboratory (subject to receipt of any
+ * required approvals from the U.S. Dept. of Energy).  All rights reserved.
  *
- * BeStMan Copyright (c) 2010, The Regents of the University of California, 
- * through Lawrence Berkeley National Laboratory (subject to receipt of any 
- * required approvals from the U.S. Dept. of Energy).  This software was 
- * developed under funding from the U.S. Department of Energy and is 
- * associated with the Berkeley Lab Scientific Data Management Group projects.
- * All rights reserved.
- * 
- * If you have questions about your rights to use or distribute this software, 
+ * If you have questions about your rights to use or distribute this software,
  * please contact Berkeley Lab's Technology Transfer Department at TTD@lbl.gov.
- * 
- * NOTICE.  This software was developed under funding from the 
- * U.S. Department of Energy.  As such, the U.S. Government has been granted 
- * for itself and others acting on its behalf a paid-up, nonexclusive, 
- * irrevocable, worldwide license in the Software to reproduce, prepare 
- * derivative works, and perform publicly and display publicly.  
- * Beginning five (5) years after the date permission to assert copyright is 
- * obtained from the U.S. Department of Energy, and subject to any subsequent 
- * five (5) year renewals, the U.S. Government is granted for itself and others
- * acting on its behalf a paid-up, nonexclusive, irrevocable, worldwide license
- * in the Software to reproduce, prepare derivative works, distribute copies to
- * the public, perform publicly and display publicly, and to permit others to
- * do so.
  *
-*/
-
-/**
+ * NOTICE.  This software was developed under partial funding from the
+ * U.S. Department of Energy.  As such, the U.S. Government has been
+ * granted for itself and others acting on its behalf a paid-up,
+ * nonexclusive, irrevocable, worldwide license in the Software to
+ * reproduce, prepare derivative works, and perform publicly and
+ * display publicly.  Beginning five (5) years after the date permission
+ * to assert copyright is obtained from the U.S. Department of Energy,
+ * and subject to any subsequent five (5) year renewals, the
+ * U.S. Government is granted for itself and others acting on its
+ * behalf a paid-up, nonexclusive, irrevocable, worldwide license in
+ * the Software to reproduce, prepare derivative works, distribute
+ * copies to the public, perform publicly and display publicly, and
+ * to permit others to do so.
  *
  * Email questions to SRM@LBL.GOV
  * Scientific Data Management Research Group
  * Lawrence Berkeley National Laboratory
- * http://sdm.lbl.gov/bestman
  *
 */
 
@@ -244,6 +236,12 @@ public void init(Properties sys_config) throws Exception {
     if(temp != null) {
       hsiPath = temp;
       enableHSI=true;
+    }
+
+    if(accessType.equalsIgnoreCase("none")) {
+      if(hsiPath.equals("")) {
+        throw new SRM_MSS_Exception("Please provide a valid hsipath");
+      }
     }
 
     temp = (String) sys_config.get("enablelogging");
@@ -663,13 +661,13 @@ private boolean checkLogFileForErrors(String ftptransferlog) {
            }
         }
      }
-     if(beginScript) {
+     //if(beginScript) {
        if(debugLevel >= 6000) {
          System.out.println("\nDEBUG:checkLogFileForErrors:Script is hanging");
        }
        //may be script is hanging
        return true;
-     }
+     //}
    }catch(Exception e) { }
    return false;
 }
@@ -685,6 +683,7 @@ private void retryRequests(FileObj fObj, Object status,
   if(fObj.getNumRetry() < getMSSMaxRetrial()) {
      //kills the previous process,
      //starts a new process, and adds in the appropriate queue
+     fObj.setPFTPStatus(MSS_MESSAGE.SRM_MSS_REQUEST_QUEUED);
      p.getProcess().destroy();
      Object[] param = new Object[2]; 
      param[0] = "SOURCE="+fObj; 
@@ -723,6 +722,8 @@ private void retryRequests(FileObj fObj, Object status,
   }
   else {
      //kills the process, and set the status to process killed
+     System.out.println(">>>process is killed for requestid="+
+		fObj.getRequestToken());
      p.getProcess().destroy();
      Object[] param = new Object[2]; 
      param[0] = "SOURCE="+fObj; 
@@ -756,10 +757,15 @@ public synchronized Object checkStatus (String requestToken) throws Exception {
          if(accessType != SRM_ACCESS_TYPE.SRM_ACCESS_GSI && 
 			pftpmssg == MSS_MESSAGE.SRM_MSS_REQUEST_QUEUED) {
            ExecScript p = fileStatus.getCurrentProcess();
+           //System.out.println(">>>CheckStatus("+requestToken+")="+p);
            if(p != null) {
            long startTimeStamp = p.getStartTimeStamp();
            long currentTimeStamp = System.currentTimeMillis();
+           //System.out.println(">>>CheckStatus("+requestToken+")="+currentTimeStamp);
+           //System.out.println(">>>CheckStatus("+requestToken+")="+startTimeStamp);
+           //System.out.println(">>>CheckStatus("+requestToken+")="+processTimeOutAllowed);
            if(currentTimeStamp > startTimeStamp+processTimeOutAllowed) {
+             System.out.println(">>>CheckStatus("+requestToken+")=processtimedout");
              String logFile = p.getLogFile();
              //if logfile does not exists, it is an error,
              //process might be hanging, if logfile exists and shows
@@ -767,16 +773,18 @@ public synchronized Object checkStatus (String requestToken) throws Exception {
              boolean b  = checkLogFileForErrors(logFile); 
              if(debugLevel >= 6000) {
                System.out.println(
-				"\nDEBUG:checkStatus.checkLogFileForErrors.returnValue="+b);
+		"\nDEBUG:checkStatus.checkLogFileForErrors.returnValue="+b);
              }
              if(b) {
                String requestType = getRequestType(requestToken);
                p.setStartTimeStamp(System.currentTimeMillis());
+               //System.out.println(">>>BEFORE RETRY(1)");
                retryRequests(fObj,fileStatus,p,requestType);
                pftpmssg = fObj.getPFTPStatus();  
+               //System.out.println(">>>AFTER RETRY(1)");
                fileStatus.setStatus(pftpmssg);  
                System.out.println(">>>CheckStatus("+requestToken+")="+
-						pftpmssg);
+					pftpmssg);
                param = new Object[2];
                param[0] = "REQUEST-TOKEN="+requestToken;
                param[1] = "STATUS="+pftpmssg;
@@ -821,7 +829,11 @@ public synchronized Object checkStatus (String requestToken) throws Exception {
            if(p != null) {
            long startTimeStamp = p.getStartTimeStamp();
            long currentTimeStamp = System.currentTimeMillis();
+           //System.out.println(">>>CheckStatus("+requestToken+")="+currentTimeStamp);
+           //System.out.println(">>>CheckStatus("+requestToken+")="+startTimeStamp);
+           //System.out.println(">>>CheckStatus("+requestToken+")="+processTimeOutAllowed);
            if(currentTimeStamp > startTimeStamp+processTimeOutAllowed) {
+             System.out.println(">>>CheckStatus("+requestToken+")=processtimedout");
              String logFile = p.getLogFile();
              //if logfile does not exists, it is an error,
              //process might be hanging, if logfile exists and shows
@@ -829,16 +841,18 @@ public synchronized Object checkStatus (String requestToken) throws Exception {
              boolean b  = checkLogFileForErrors(logFile); 
              if(debugLevel >= 6000) {
                System.out.println(
-				"\nDEBUG:checkStatus.checkLogFileForErrors.returnValue="+b);
+		"\nDEBUG:checkStatus.checkLogFileForErrors.returnValue="+b);
              }
              if(b) {
                p.setStartTimeStamp(System.currentTimeMillis());
                String requestType = getRequestType(requestToken);
+               //System.out.println(">>>BEFORE RETRY(2)");
                retryRequests(fObj,fileStatus,p,requestType);
                pftpmssg = fObj.getPFTPStatus();  
+               //System.out.println(">>>AFTER RETRY(2)");
                fileStatus.setStatus(pftpmssg);  
-               System.out.println(
-					">>>CheckStatus("+requestToken+")="+pftpmssg);
+               //System.out.println(
+			//">>>CheckStatus("+requestToken+")="+pftpmssg);
                param = new Object[2];
                param[0] = "REQUEST-TOKEN="+requestToken;
                param[1] = "STATUS="+pftpmssg;
@@ -880,24 +894,30 @@ public synchronized Object checkStatus (String requestToken) throws Exception {
            if(p != null) {
            long startTimeStamp = p.getStartTimeStamp();
            long currentTimeStamp = System.currentTimeMillis();
+           //System.out.println(">>>CheckStatus("+requestToken+")="+currentTimeStamp);
+           //System.out.println(">>>CheckStatus("+requestToken+")="+startTimeStamp);
+           //System.out.println(">>>CheckStatus("+requestToken+")="+processTimeOutAllowed);
            if(currentTimeStamp > startTimeStamp+processTimeOutAllowed) {
              //if logfile does not exists, it is an error,
              //process might be hanging, if logfile exists and shows
              //HSI error, then the procees might be hanging too
+             System.out.println(">>>CheckStatus("+requestToken+")=processtimedout");
              String logFile = p.getLogFile();
              boolean b  = checkLogFileForErrors(logFile); 
              if(debugLevel >= 6000) {
                System.out.println(
-				"\nDEBUG:checkStatus.checkLogFileForErrors.returnValue="+b);
+		  "\nDEBUG:checkStatus.checkLogFileForErrors.returnValue="+b);
              }
              if(b) {
                p.setStartTimeStamp(System.currentTimeMillis());
                String requestType = getRequestType(requestToken);
+               //System.out.println(">>>BEFORE RETRY(3)");
                retryRequests(fObj,mkDirStatus,p,requestType);
                pftpmssg = fObj.getPFTPStatus();  
+               //System.out.println(">>>AFTER RETRY(3)");
                mkDirStatus.setStatus(pftpmssg);  
-               System.out.println(
-					">>>CheckStatus("+requestToken+")="+pftpmssg);
+               //System.out.println(
+			//">>>CheckStatus("+requestToken+")="+pftpmssg);
                param = new Object[2];
                param[0] = "REQUEST-TOKEN="+requestToken;
                param[1] = "STATUS="+pftpmssg;
@@ -931,24 +951,34 @@ public synchronized Object checkStatus (String requestToken) throws Exception {
          if(accessType != SRM_ACCESS_TYPE.SRM_ACCESS_GSI && 
 			pftpmssg == MSS_MESSAGE.SRM_MSS_REQUEST_QUEUED) {
            ExecScript p = status.getCurrentProcess();
+           //System.out.println(">>>CheckStatus("+requestToken+")="+p);
            if(p != null) {
            long startTimeStamp = p.getStartTimeStamp();
            long currentTimeStamp = System.currentTimeMillis();
+           //System.out.println(">>>CheckStatus("+requestToken+")="+
+		//currentTimeStamp);
+           //System.out.println(">>>CheckStatus("+requestToken+")="+
+		//startTimeStamp);
+           //System.out.println(">>>CheckStatus("+requestToken+")="+
+		//processTimeOutAllowed);
            if(currentTimeStamp > startTimeStamp+processTimeOutAllowed) {
+             System.out.println(">>>CheckStatus("+requestToken+")=processtimedout");
              String logFile = p.getLogFile();
              boolean b  = checkLogFileForErrors(logFile); 
              if(debugLevel >= 6000) {
-			   System.out.println
-				("\nDEBUG:checkStatus.checkLogFileForErrors.returnValue="+b);
+	        System.out.println
+		  ("\nDEBUG:checkStatus.checkLogFileForErrors.returnValue="+b);
              }
              if(b) {
                p.setStartTimeStamp(System.currentTimeMillis());
                String requestType = getRequestType(requestToken);
+               //System.out.println(">>>BEFORE RETRY(4)");
                retryRequests(fObj,status,p,requestType);
                pftpmssg = fObj.getPFTPStatus();  
+               //System.out.println(">>>AFTER RETRY(4)");
                status.setStatus(pftpmssg);  
-               System.out.println(">>>CheckStatus("+
-					requestToken+")="+pftpmssg);
+               //System.out.println(">>>CheckStatus("+
+				//requestToken+")="+pftpmssg);
                param = new Object[2];
                param[0] = "REQUEST-TOKEN="+requestToken;
                param[1] = "STATUS="+pftpmssg;
