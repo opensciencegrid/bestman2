@@ -1195,6 +1195,23 @@ private void srmCopy(String uid, Vector fileInfo)
         }
         }//end for
 
+       /*
+       if(abortFilesVec.size() > 0) {
+             util.printMessage("\nSRM-CLIENT: Calling SrmAbortFiles",
+                logger,silent);
+             SRMUtilClient utilClient = new SRMUtilClient
+               (serverUrl,uid,userDesc, _credential, _theLogger, logger,
+                pIntf, _debug,silent,useLog,false, false,
+                statusMaxTimeAllowed,statusWaitTime, storageInfo,proxyType,
+                connectionTimeOutAllowed,setHTTPConnectionTimeOutAllowed,
+		        delegationNeeded,numRetry,retryTimeOut);
+             TStatusCode abortRequestCode =
+                utilClient.doSrmAbortFiles(abortFilesVec,requestToken);
+             util.printMessage("\nSRM-CLIENT: AbortStatusCode="+
+                abortRequestCode.getValue(),logger,silent);
+       }
+       */
+
         keySetArray = subStatusArray.keySet().toArray();
 
         //System.out.println(">>keySetArray.length="+keySetArray.length);

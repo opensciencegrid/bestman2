@@ -98,6 +98,7 @@ public class SRMPutClient implements SRMWSDLIntf {
   private SRMClientIntf _srmClientIntf; 
   private GSSCredential _credential;
   private boolean _debug;
+  private Vector abortFilesVec = new Vector ();
   private Log logger;
   private String fileToken;
   private boolean doReserveSpace;
@@ -1241,6 +1242,8 @@ private void srmPut(String uid, Vector fileInfo) throws Exception {
                if(code != null) {
                  ffInfo.setFileStatus(code.toString());
                }
+               ffInfo.setSURL(ffInfo.getTURL());
+               abortFilesVec.add(ffInfo);
                ffInfo.setFileExplanation("SRM-CLIENT: File Status TimedOut");
                _srmClientIntf.srmFileFailure(ffInfo.getLabel(),
                  "File Status TimedOut.");
@@ -1354,6 +1357,21 @@ private void srmPut(String uid, Vector fileInfo) throws Exception {
             }//end else if
           }//end else
        }//end for
+
+       if(abortFilesVec.size() > 0) {
+             util.printMessage("\nSRM-CLIENT: Calling SrmAbortFiles",
+                logger,silent);
+             SRMUtilClient utilClient = new SRMUtilClient
+               (serverUrl,uid,userDesc, _credential, _theLogger, logger,
+                pIntf, _debug,silent,useLog,false, false,
+                statusMaxTimeAllowed,statusWaitTime, storageInfo,proxyType,
+                connectionTimeOutAllowed,setHTTPConnectionTimeOutAllowed,
+		        delegationNeeded,numRetry,retryTimeOut);
+             TStatusCode abortRequestCode =
+                utilClient.doSrmAbortFiles(abortFilesVec,requestToken);
+             util.printMessage("\nSRM-CLIENT: AbortStatusCode="+
+                abortRequestCode.getValue(),logger,silent);
+       }
 
        keySetArray = subStatusArray.keySet().toArray();
 

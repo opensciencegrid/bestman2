@@ -99,6 +99,7 @@ public class SRMGetClient implements SRMWSDLIntf {
   private GSSCredential _credential;
   private boolean _debug;
   private Log logger;
+  private Vector abortFilesVec = new Vector ();
   private PrintIntf pIntf;
   private String fileToken;
   private String userDesc="";
@@ -976,6 +977,8 @@ private void srmGet(String uid, Vector fileInfo)
               if(ffInfo.getSURL().equals(turl)) {
                _srmClientIntf.srmFileFailure(ffInfo.getLabel(),
                  "File Status TimedOut.");
+               ffInfo.setSURL(ffInfo.getTURL());
+               abortFilesVec.add(ffInfo);
                if(code != null) {
                  ffInfo.setFileStatus(code.toString());
                }
@@ -1115,6 +1118,21 @@ private void srmGet(String uid, Vector fileInfo)
           }
          }
          }//end for
+
+       if(abortFilesVec.size() > 0) {
+             util.printMessage("\nSRM-CLIENT: Calling SrmAbortFiles",
+                logger,silent);
+             SRMUtilClient utilClient = new SRMUtilClient
+               (serverUrl,uid,userDesc, _credential, _theLogger, logger,
+                pIntf, _debug,silent,useLog,false, false,
+                statusMaxTimeAllowed,statusWaitTime, storageInfo,proxyType,
+                connectionTimeOutAllowed,setHTTPConnectionTimeOutAllowed,
+		        delegationNeeded,numRetry,retryTimeOut);
+             TStatusCode abortRequestCode =
+                utilClient.doSrmAbortFiles(abortFilesVec,requestToken);
+             util.printMessage("\nSRM-CLIENT: AbortStatusCode="+
+                abortRequestCode.getValue(),logger,silent);
+       }
 
         //if all files are returned from SourceSRM (gateway) source
         //then ok to call SRMPrepareToPut with all files in it.

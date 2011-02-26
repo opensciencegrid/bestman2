@@ -4023,6 +4023,7 @@ public TStatusCode doSrmAbortFiles(Vector fileInfo, String token)
      String surl =  fIntf.getSURL();
      if(_debug) {
      util.printMessage("SRM-COPY: SURL=" + surl, logger,silent);
+     util.printMessage("SRM-COPY: TURL=" + fIntf.getTURL(), logger,silent);
      }
      inputVec.addElement("SURL("+i+")="+token);
      pathArray[i] = new URI(surl);  
@@ -6863,6 +6864,7 @@ private void printMetaDataForTextReport(String prefix, TMetaDataPathDetail pDeta
   if(pDetail.getRetentionPolicyInfo() != null) {
       TRetentionPolicyInfo retentionPolicyInfo =	
 			pDetail.getRetentionPolicyInfo();
+      if(retentionPolicyInfo != null) {
       TRetentionPolicy retentionPolicy = 			
 			retentionPolicyInfo.getRetentionPolicy();
       TAccessLatency accessLatency = retentionPolicyInfo.getAccessLatency();
@@ -6882,6 +6884,7 @@ private void printMetaDataForTextReport(String prefix, TMetaDataPathDetail pDeta
 			accessLatency.getValue(), pIntf);
         //}
       }
+     }
   } 
 
   if (pDetail.getLastModificationTime() != null) {
@@ -6930,9 +6933,11 @@ private void printMetaDataForTextReport(String prefix, TMetaDataPathDetail pDeta
   if(pDetail.getArrayOfSubPaths() != null) {
     TMetaDataPathDetail[] subPDetail =
             pDetail.getArrayOfSubPaths().getPathDetailArray();
+    if(subPDetail != null) {
     for(int i = 0; i<subPDetail.length;i++) {
        //printMetaDataForTextReport(prefix+"\t\t\t",subPDetail[i],getRecursive, surl,turl);
        printMetaDataForTextReport(prefix+"\t",subPDetail[i],getRecursive, surl,turl);
+    }
     }
   }
   }
@@ -7268,6 +7273,7 @@ private void printMetaData(String prefix, TMetaDataPathDetail pDetail,
 
   if(pDetail.getArrayOfSpaceTokens() != null) {
       ArrayOfString spaceTokens = pDetail.getArrayOfSpaceTokens();
+      if(spaceTokens != null) {
       String[] tokens = spaceTokens.getStringArray(); 
       if(tokens != null) {
         for(int k = 0; k < tokens.length; k++) {
@@ -7277,6 +7283,7 @@ private void printMetaData(String prefix, TMetaDataPathDetail pDetail,
            inputVec.addElement("Tokens("+k+")="+tokens[k]);
         }
       }
+     }
   }
   else {
     inputVec.addElement("ArrayOfSpaceTokens=null");
@@ -7286,6 +7293,7 @@ private void printMetaData(String prefix, TMetaDataPathDetail pDetail,
   if(pDetail.getRetentionPolicyInfo() != null) {
       TRetentionPolicyInfo retentionPolicyInfo =	
 			pDetail.getRetentionPolicyInfo();
+      if(retentionPolicyInfo != null) {
       TRetentionPolicy retentionPolicy = retentionPolicyInfo.getRetentionPolicy();
       TAccessLatency accessLatency = retentionPolicyInfo.getAccessLatency();
       if(retentionPolicy != null) {
@@ -7302,6 +7310,7 @@ private void printMetaData(String prefix, TMetaDataPathDetail pDetail,
 			pIntf);
          inputVec.addElement("AccessLatency="+accessLatency.getValue());
       }
+     }
   } 
   else {
     inputVec.addElement("RetentionPolicyInfo=null");
@@ -7401,10 +7410,12 @@ private void printMetaData(String prefix, TMetaDataPathDetail pDetail,
     inputVec.clear(); 
     TMetaDataPathDetail[] subPDetail =
             pDetail.getArrayOfSubPaths().getPathDetailArray();
+    if(subPDetail != null) {
     for(int i = 0; i<subPDetail.length;i++) {
        //printMetaData(prefix+"\t\t\t",subPDetail[i],getRecursive, resultVec,surl,turl);
        //printMetaData(prefix+"\t",subPDetail[i],getRecursive, resultVec,surl,turl);
        printMetaData(prefix+"   ",subPDetail[i],getRecursive, resultVec,surl,turl);
+    }
     }
   }
   }
@@ -10104,17 +10115,22 @@ private void printXMLReportForPathDetail(org.w3c.dom.Document doc,
 
     if(pDetail.getArrayOfSpaceTokens() != null) {
       ArrayOfString spaceTokens = pDetail.getArrayOfSpaceTokens();
+      if(spaceTokens != null) {
       String[] tokens = spaceTokens.getStringArray(); 
+      if(tokens != null) {
       for(int k = 0; k < tokens.length; k++) {
          Attr spacetokens = doc.createAttribute("spacetokens-("+k+")");
          spacetokens.setValue(tokens[k]);
          fileElement.setAttributeNode(spacetokens);
+      }
+      }
       }
     }
 
     if(pDetail.getRetentionPolicyInfo() != null) {
       TRetentionPolicyInfo retentionPolicyInfo =	
 			pDetail.getRetentionPolicyInfo();
+      if(retentionPolicyInfo != null) {
       TRetentionPolicy retentionPolicy = 			
 			retentionPolicyInfo.getRetentionPolicy();
       TAccessLatency accessLatency = retentionPolicyInfo.getAccessLatency();
@@ -10127,6 +10143,7 @@ private void printXMLReportForPathDetail(org.w3c.dom.Document doc,
          Attr accesslatency = doc.createAttribute("accesslatency");
          accesslatency.setValue(accessLatency.toString());
          fileElement.setAttributeNode(accesslatency);
+      }
       }
     } 
 
@@ -10163,9 +10180,11 @@ private void printXMLReportForPathDetail(org.w3c.dom.Document doc,
    if(pDetail.getArrayOfSubPaths() != null) {
      TMetaDataPathDetail[] subPDetail =
             pDetail.getArrayOfSubPaths().getPathDetailArray();
+     if(subPDetail != null) {
      for(int i = 0; i<subPDetail.length;i++) {
-         printXMLReportForPathDetail(doc,root,
-			prefix+"\t",subPDetail[i],getRecursive, surl,turl,esgReportType);
+        printXMLReportForPathDetail(doc,root,
+	  prefix+"\t",subPDetail[i],getRecursive, surl,turl,esgReportType);
+     }
      }
    }
   }
