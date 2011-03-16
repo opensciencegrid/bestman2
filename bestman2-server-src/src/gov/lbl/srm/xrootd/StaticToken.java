@@ -26,7 +26,6 @@
  * do so.
  *
 */
-
 /**
  *
  * Email questions to SRM@LBL.GOV
@@ -49,6 +48,7 @@ public class StaticToken {
   TRetentionPolicyInfo _rInfo = null;
   Integer _givenTotalSizeGB = null;
   String _checkSizeCommand = null;
+  String _totalSizeCommand = null;
   long _unit = 1;
   TMetaDataSpace _metadata = new TMetaDataSpace();
 
@@ -75,11 +75,22 @@ public class StaticToken {
     }
 
   public long getTotalBytes() {
-	if (_givenTotalSizeGB != null) {
+	if (_totalSizeCommand != null) {
+	    if (_localPath != null) {
+		String hoho = TPlatformUtil.execShellCmdWithOutput(_totalSizeCommand+" "+_localPath, true);
+		return runCommand(hoho);
+	    } else {
+		String hoho = TPlatformUtil.execShellCmdWithOutput(_totalSizeCommand, true);
+		return runCommand(hoho);	  
+	    }
+	}
+
+        if (_givenTotalSizeGB != null) {
 	   return (long)_givenTotalSizeGB.intValue()*(long)1073741824;
 	}
+
 	return 0;
-	}
+  }
 
   public static StaticToken[] fromInput(String[] input) {
 	 if (input == null) {
@@ -196,10 +207,16 @@ public class StaticToken {
 	    result =Long.valueOf(output.substring(0, pos2));
 	}
 	if (result < 0) {
-	    TSRMLog.debug(this.getClass(), null, "event=getUsusedBytes", "errorResult="+result);
+	    TSRMLog.debug(this.getClass(), null, "event=runCommand", "errorResult="+result);
 	    return 0;
-	} else if (result > getTotalBytes()) {
-	    TSRMLog.debug(this.getClass(), null, "event=getUsusedBytes", "errorResultSmall="+result);
+	}
+	return result;
+    }
+
+    private long calculateUnusedBytes(String hoho) {
+	long result = runCommand(hoho);
+	if (result > getTotalBytes()) {
+	    TSRMLog.debug(this.getClass(), null, "event=getUnusedBytes", "errorResultSmall="+result);
 	    return 0;
 	} else {
 	    return getTotalBytes() - result*_unit;
@@ -216,7 +233,7 @@ public class StaticToken {
 	    TSRMLog.debug(this.getClass(), null, "event=getUnusedBytes", "error=NoLocalPath");
 	    if (_checkSizeCommand != null) {
 		String hoho = TPlatformUtil.execShellCmdWithOutput(_checkSizeCommand, true);
-		return runCommand(hoho);
+		return calculateUnusedBytes(hoho);
 	    }
 	    return 0;
 	} 
@@ -229,7 +246,7 @@ public class StaticToken {
 	    TSRMLog.debug(this.getClass(), null, "event=getUnusedBytes", "command="+_checkSizeCommand);
 	    if (_checkSizeCommand != null) {
 		String hoho = TPlatformUtil.execShellCmdWithOutput(_checkSizeCommand+" "+_localPath, true);
-		return runCommand(hoho);
+		return calculateUnusedBytes(hoho);
 	    }
 
 	    long result = _localPath.getUsableSpace();
@@ -283,13 +300,24 @@ public class StaticToken {
 	    _rInfo.setAccessLatency(TAccessLatency.fromValue(value.substring(8)));
 	} else if (value.startsWith("size:")) {
 	    _givenTotalSizeGB = Integer.valueOf(value.substring(5));
+	    if (_givenTotalSizeGB.intValue() <= 0) {
+		TSRMUtil.startUpInfo("Invalid total size:"+_givenTotalSizeGB.intValue()+", Ignored.");
+		_givenTotalSizeGB = null;
+	    }
 	} else if (value.startsWith("path:")) {
 	    //_localPath = new java.io.File(value.substring(5));
 	    _localPath = TSRMUtil.initFile(value.substring(5));
-	    testCommandAndPath();
+	    if (!_localPath.exists()) {
+		TSRMUtil.startUpInfo("This path:"+_localPath.getPath()+" is invalid.");
+		System.exit(1);
+	    }
+	    //testCommandAndPath(null);
 	} else if (value.startsWith("usedBytesCommand:")) {
 	    _checkSizeCommand = value.substring(17);	    
-	    testCommandAndPath();
+	    testCommandAndPath(_checkSizeCommand);
+	} else if (value.startsWith("totalBytesCommand:")) {
+	    _totalSizeCommand = value.substring(18);
+	    testCommandAndPath(_totalSizeCommand);
 	} else if (value.startsWith("unit:")) {
 	    String unitValue = value.substring(5);
 	    if (unitValue.equalsIgnoreCase("kb")) {
@@ -300,15 +328,15 @@ public class StaticToken {
 	      _unit = 1073741824;
 	    }
 	} else {
-		try {
+	    try {
 	    	_givenTotalSizeGB = Integer.valueOf(value);
-		} catch (Exception e) {
-			String err = "Invalid entry:["+value+"]. Either should be integer or starts with one of these keywords: desc:/owner:/retetion:/latency:/size:/path:/usedBytesCommand:";
-			throw new TSRMException(err, false);
+	    } catch (Exception e) {
+		String err = "Invalid entry:["+value+"]. Either should be integer or starts with one of these keywords: desc:/owner:/retetion:/latency:/size:/path:/usedBytesCommand:";
+		throw new TSRMException(err, false);
+	    }
 	}
     }
-	}
-
+    
     private void checkOutput(String hoho) {
 	int pos = hoho.indexOf("OUTPUT:");
 	if ((pos <0) && (hoho.startsWith("ERROR>"))) {		    
@@ -317,14 +345,14 @@ public class StaticToken {
 	}
     }
 
-    private void testCommandAndPath() {
-        TSRMLog.info(StaticToken.class, null, "command="+_checkSizeCommand, "localpath="+_localPath+" unit="+_unit);
-	if (_checkSizeCommand == null) {
+    private void testCommandAndPath(String  commandStr) {
+        TSRMLog.info(StaticToken.class, null, "command="+commandStr, "localpath="+_localPath+" unit="+_unit);
+	if (commandStr == null) {
 	    return;
 	}
 
 	if (_localPath == null) {
-	    String hoho = TPlatformUtil.execShellCmdWithOutput(_checkSizeCommand, true);
+	    String hoho = TPlatformUtil.execShellCmdWithOutput(commandStr, true);
 	    checkOutput(hoho);
 	    return;
 	}
@@ -335,14 +363,15 @@ public class StaticToken {
 	}
 
 	try {
-	    String hoho = TPlatformUtil.execShellCmdWithOutput(_checkSizeCommand+" "+_localPath, true);
+	    String hoho = TPlatformUtil.execShellCmdWithOutput(commandStr+" "+_localPath, true);
 	    checkOutput(hoho);
 	} catch (Exception e) {
 	    e.printStackTrace();
-	    TSRMUtil.startUpInfo("Command given["+_checkSizeCommand+"] is not valid.");
+	    TSRMUtil.startUpInfo("Command given["+commandStr+"] is not valid.");
 	    System.exit(1);
 	}
     }
+
   public static String[] getNames(StaticToken[] list) {
 	if (list == null) {
 	    return null;
