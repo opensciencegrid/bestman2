@@ -42,25 +42,25 @@
     <pathelement location="${java.home}/../lib/tools.jar"/>
 	<pathelement location="./"/>
     <pathelement location="${build.dest}"/>
-	<fileset dir="${bestman.root}/lib/gums">
+	<fileset dir="${dependency.root}/lib/gums">
      <include name="*.jar"/>
     </fileset>
-	<fileset dir="${bestman.root}/lib/gums2">
+	<fileset dir="${dependency.root}/lib/gums2">
      <include name="*.jar"/>
     </fileset> 
-	<fileset dir="${bestman.root}/lib/axis">
+	<fileset dir="${dependency.root}/lib/axis">
      <include name="*.jar"/>
     </fileset>
-	<fileset dir="${bestman.root}/lib/jetty">
+	<fileset dir="${dependency.root}/lib/jetty">
      <include name="*.jar"/>
     </fileset>
-	<fileset dir="${bestman.root}/lib/others">
+	<fileset dir="${dependency.root}/lib/others">
      <include name="*.jar"/>
     </fileset>
-	<fileset dir="${bestman.root}/lib/jglobus">
+	<fileset dir="${dependency.root}/lib/jglobus">
      <include name="*.jar"/>
     </fileset>
-	<fileset dir="${bestman.root}/lib/voms">
+	<fileset dir="${dependency.root}/lib/voms">
      <include name="*.jar"/>
     </fileset>
     <pathelement path="${java.class.path}"/>
@@ -77,7 +77,7 @@
 
   <target name="setenv">
 	<echo message="pkg=${package}"/>
-	<echo message="root=${bestman.root}"/>
+	<echo message="root=${dependency.root}"/>
 	<echo message="interface=${interface.name}"/>
 	<echo message="using javac from ${javac.path}"/>
 
@@ -160,8 +160,8 @@
   </target>
 
 <target name="install">
-	<echo message="INSTALL into ${bestman.root}"/>
-    <copy toDir="${bestman.root}/lib">
+	<echo message="INSTALL into ${dependency.root}"/>
+    <copy toDir="${dependency.root}/lib">
       <fileset dir="${build.lib}"/>
     </copy>
 </target>
