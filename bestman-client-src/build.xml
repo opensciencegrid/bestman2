@@ -43,14 +43,14 @@
     <pathelement location="${java.home}/../lib/tools.jar"/>
 	<pathelement location="./src"/>
     <pathelement location="${build.dest}"/>
-	<fileset dir="${bestman.root}/lib/axis">
+	<fileset dir="${dependency.root}/lib/axis">
      <include name="*.jar"/>
     </fileset>
-	<fileset dir="${bestman.root}/lib/jglobus">
+	<fileset dir="${dependency.root}/lib/jglobus">
      <include name="*.jar"/>
     </fileset>
 
-    <fileset dir="${bestman.root}/lib">
+    <fileset dir="${dependency.root}/lib">
      <include name="bestman2-stub.jar"/>
     </fileset>
 
@@ -64,7 +64,7 @@
 
   <target name="setenv">
 <echo message="pkg=${package}"/>
-<echo message="bestman root=${bestman.root}"/>
+<echo message="dependency root=${dependency.root}"/>
 <echo message="interface=${interface.name}"/>
 <echo message="using javac from ${javac.path}"/>
 
@@ -109,8 +109,8 @@
   </target>
 
   <target name="install">
-	<echo message="INSTALL into ${bestman.root}"/>
-    <copy toDir="${bestman.root}/lib">
+	<echo message="INSTALL into ${dependency.root}"/>
+    <copy toDir="${dependency.root}/lib">
       <fileset dir="${build.lib}"/>
     </copy>
 
