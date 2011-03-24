@@ -163,12 +163,12 @@ public class StaticToken {
 	if (_metadata.getStatus() == null) {
 	    _metadata.setStatus(TSRMUtil.createReturnStatus(TStatusCode.SRM_SUCCESS, getDesc()));
 	}
-	if (_metadata.getTotalSize() == null) {
+	//if (_metadata.getTotalSize() == null) {
 	    _metadata.setTotalSize(new org.apache.axis.types.UnsignedLong(getTotalBytes()));
-	}
-	if (_metadata.getGuaranteedSize() == null) {
+	//}
+	//if (_metadata.getGuaranteedSize() == null) {
 	    _metadata.setGuaranteedSize(new org.apache.axis.types.UnsignedLong(getTotalBytes()));
-	}
+	//}
 	if (_metadata.getRetentionPolicyInfo() == null) {
 	    _metadata.setRetentionPolicyInfo(getRetentionPolicyInfo());
 	}
@@ -338,9 +338,14 @@ public class StaticToken {
     }
     
     private void checkOutput(String hoho) {
+	if (hoho == null) {
+	TSRMUtil.startUpInfo(hoho+" is invalid. Not able to read outputs.");
+	System.exit(1);
+	}
 	int pos = hoho.indexOf("OUTPUT:");
 	if ((pos <0) && (hoho.startsWith("ERROR>"))) {		    
 	    TSRMUtil.startUpInfo("Command given ["+_checkSizeCommand+"] is invalid.");
+		TSRMUtil.startUpInfo("reference:"+hoho);
 	    System.exit(1);
 	}
     }
