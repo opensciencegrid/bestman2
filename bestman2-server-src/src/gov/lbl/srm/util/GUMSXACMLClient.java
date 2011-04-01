@@ -89,9 +89,15 @@ public class GUMSXACMLClient implements IntGUMS {
 		TSRMLog.debug(this.getClass(), null, "event=noMappingRetrieved", "userDN="+userDN+" fqan="+fqan);
 		return null;
 	    }
-	    TSRMLog.debug(this.getClass(), null, "event=retrievedMapping", "result="+id.getUserName()+" userDN="+userDN+" fqan="+fqan);
-	    gov.lbl.srm.server.Config.storeID(userDN, fqan, id.getUserName());		   
-	    return id.getUserName();
+	    TSRMLog.debug(this.getClass(), null, "event=retrievedMapping", "result="+id+" userDN="+userDN+" fqan="+fqan);
+	    TSRMLog.debug(this.getClass(), null, "event=retrievedMapping", "resultName="+id.getUserName()+" userDN="+userDN+" fqan="+fqan);
+	    TSRMLog.debug(this.getClass(), null, "event=retrievedMapping", "resultid="+id.getUID()+" userDN="+userDN+" fqan="+fqan);
+	    String mappedName = id.getUserName();
+	    if (mappedName == null) {
+		mappedName = id.getUID();
+	    }
+	    gov.lbl.srm.server.Config.storeID(userDN, fqan, mappedName);		   
+	    return mappedName;
 	} catch (Exception e) {
 	    TSRMLog.exception(this.getClass(), "Failed to get mapping from:"+_serviceUrl+"userDN="+userDN+" fqan="+fqan, e);
 	    return null;
