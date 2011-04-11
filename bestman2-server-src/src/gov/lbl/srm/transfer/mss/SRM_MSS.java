@@ -169,7 +169,7 @@ public void init(Properties sys_config) throws Exception {
     
     MSSHost = (String) sys_config.get("msshost");
     if(MSSHost == null) {
-      throw new SRM_MSS_Exception("MSSHost cannot be null");
+      //throw new SRM_MSS_Exception("MSSHost cannot be null");
     }
 
     String temp = (String) sys_config.get("mssport");
@@ -230,12 +230,21 @@ public void init(Properties sys_config) throws Exception {
     temp = (String) sys_config.get("pftppath");
     if(temp != null) {
       pftpPath = temp;
+      if(MSSHost == null || MSSHost.equals("")) {
+        throw new SRM_MSS_Exception("MSSHost cannot be null");
+      }
     }
 
     temp = (String) sys_config.get("hsipath");
     if(temp != null) {
       hsiPath = temp;
       enableHSI=true;
+      int idx = hsiPath.indexOf("-h");
+      if(idx == -1) { 
+        if(MSSHost == null || MSSHost.equals("")) {
+          throw new SRM_MSS_Exception("MSSHost cannot be null");
+        }
+      }
     }
 
     if(accessType.equalsIgnoreCase("none")) {
