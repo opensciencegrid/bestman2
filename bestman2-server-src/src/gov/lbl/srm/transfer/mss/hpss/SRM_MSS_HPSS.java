@@ -26,7 +26,6 @@
  * do so.
  *
 */
-
 /**
  *
  * Email questions to SRM@LBL.GOV
@@ -759,29 +758,52 @@ public void mssGet(FileObj fObj,
 
     endTime = System.currentTimeMillis(); 
 
-    if(!_errorMessage.equals("") || _errorOccured) {
+
+     if(!_errorMessage.equals("") || _errorOccured) {
+      File ftplog = new File(ftptransferlog);
        util.printMessage("\nProbably some problem in executing script.");
-       util.printMessage("log file is " + ftptransferlog);
+       util.printMessage("error message="+_errorMessage);
+       util.printMessage("error occured="+_errorOccured);
+       if(!ftplog.exists() || ftplog.length() == 0) {
+         util.printMessage("log file is empty and " + ftptransferlog);
+       }
+       else {
+         util.printMessage("log file is " + ftptransferlog);
+       }
        fObj.setPFTPStatus(MSS_MESSAGE.SRM_MSS_UNKNOWN_ERROR);
        fObj.setExplanation("ERROR while executing script "+script + "  " +
-			_errorMessage);
+                        _errorMessage + " and erroroccured");
        status.setStatus(MSS_MESSAGE.SRM_MSS_UNKNOWN_ERROR);
        status.setExplanation("ERROR while executing script "+script + " " +
-			_errorMessage);
-    }
+                        _errorMessage + " and erroroccured");
+    }//end if
 
     try {
        File ftplog = new File(ftptransferlog);
+       t = new Thread();
+       int numTimes = 0;
+       while(numTimes < 6) {
+         ftplog = new File(ftptransferlog);
+         if(!ftplog.exists() || ftplog.length() == 0) {
+           t.sleep(10000);
+           numTimes++;
+         }
+         else {
+          break;
+         }
+       }//end while
+       ftplog = new File(ftptransferlog);
        if(!ftplog.exists() || ftplog.length() == 0) {
-         util.printMessage("\nProbably some problem in executing script.");
-         util.printMessage("log file is empty " + ftptransferlog);
-         fObj.setPFTPStatus(MSS_MESSAGE.SRM_MSS_UNKNOWN_ERROR);
-         fObj.setExplanation("ERROR while executing script.");
-         status.setStatus(MSS_MESSAGE.SRM_MSS_UNKNOWN_ERROR);
-         status.setExplanation("ERROR while executing script.");
-       }
+          util.printMessage("\nProbably some problem in executing script.");
+          util.printMessage("log file is empty " + ftptransferlog);
+          fObj.setPFTPStatus(MSS_MESSAGE.SRM_MSS_UNKNOWN_ERROR);
+          fObj.setExplanation("ERROR while executing script.");
+          status.setStatus(MSS_MESSAGE.SRM_MSS_UNKNOWN_ERROR);
+          status.setExplanation("ERROR while executing script.");
+        }
     }catch(Exception e) {}
-
+ 
+    
     if(debugLevel < 3000) { 
      try {
        if(script.exists()) { 
@@ -1642,33 +1664,59 @@ public void mssCopy(FileObj fObj, SRM_STATUS status)
 
    long endTime = System.currentTimeMillis();
 
-   if(!_errorMessage.equals("") || _errorOccured) {
+    if(!_errorMessage.equals("") || _errorOccured) {
+      File ftplog = new File(ftptransferlog);
       util.printMessage("Probably some problem in executing script.",
             logger,debugLevel);
-      util.printMessage("log file is " + ftptransferlog,logger,debugLevel);
+      util.printMessage("error message="+_errorMessage);
+      util.printMessage("error occured="+_errorOccured);
+      if(!ftplog.exists() || ftplog.length() == 0) {
+        util.printMessage
+          ("log file is empty and " + ftptransferlog,logger,debugLevel);
+      }
+      else {
+        util.printMessage
+          ("log file is " + ftptransferlog,logger,debugLevel);
+      }
       fObj.setPFTPStatus(MSS_MESSAGE.SRM_MSS_UNKNOWN_ERROR);
       fObj.setExplanation
-			("Probably some problem in executing script "+script);
+                        ("Probably some problem in executing script "+script);
       status.setStatus(MSS_MESSAGE.SRM_MSS_UNKNOWN_ERROR);
       status.setExplanation
-			("Probably some problem in executing script "+script);
-   }
+                        ("Probably some problem in executing script "+script);
+    }
+
 
    try {
-      File ftplog = new File(ftptransferlog);
-      if(!ftplog.exists() || ftplog.length() == 0) {
-        util.printMessage("Probably some problem in executing script.",
-              logger,debugLevel);
-        util.printMessage("log file is empty " + 
-			ftptransferlog,logger,debugLevel);
-        fObj.setPFTPStatus(MSS_MESSAGE.SRM_MSS_UNKNOWN_ERROR);
-        fObj.setExplanation
-			("Probably some problem in executing script, log file is empty.");
-        status.setStatus(MSS_MESSAGE.SRM_MSS_UNKNOWN_ERROR);
-        status.setExplanation
-			("Probably some problem in executing script, log file is empty.");
-      }
-   }catch(Exception e) {}
+       File ftplog = new File(ftptransferlog);
+       t = new Thread();
+       int numTimes = 0;
+       while(numTimes < 6) {
+         ftplog = new File(ftptransferlog);
+         if(!ftplog.exists() || ftplog.length() == 0) {
+           t.sleep(10000);
+           numTimes++;
+         }
+         else {
+          break;
+         }
+       }//end while
+       ftplog = new File(ftptransferlog);
+       if(!ftplog.exists() || ftplog.length() == 0) {
+          util.printMessage("\nProbably some problem in executing script.",
+                logger, debugLevel);
+          util.printMessage("log file is empty " + ftptransferlog,
+                logger, debugLevel);
+          fObj.setPFTPStatus(MSS_MESSAGE.SRM_MSS_UNKNOWN_ERROR);
+          fObj.setExplanation
+            ("Probably some problem in executing script, log file is empty.");
+          status.setStatus(MSS_MESSAGE.SRM_MSS_UNKNOWN_ERROR);
+          status.setExplanation
+            ("Probably some problem in executing script, log file is empty.");
+        }
+    }catch(Exception e) {}
+
+
 
    if(debugLevel < 3000) {
     try {
@@ -2159,26 +2207,54 @@ public void mssDelete(FileObj fObj, SRM_STATUS status) throws Exception {
 
      long endTime = System.currentTimeMillis();
 
-     if(!_errorMessage.equals("") || _errorOccured) {
+
+      if(!_errorMessage.equals("") || _errorOccured) {
+      File ftplog = new File(ftptransferlog);
        util.printMessage("Probably some problem in executing script.");
-       util.printMessage("log file is " + ftptransferlog);
+       util.printMessage("error message="+_errorMessage);
+       util.printMessage("error occured="+_errorOccured);
+       if(!ftplog.exists() || ftplog.length() == 0) {
+         util.printMessage("log file is empty and " + ftptransferlog);
+       }
+       else {
+         util.printMessage("log file is " + ftptransferlog);
+       }
        fObj.setPFTPStatus(MSS_MESSAGE.SRM_MSS_UNKNOWN_ERROR);
        fObj.setExplanation("ERROR while executing script "+script);
        status.setStatus(MSS_MESSAGE.SRM_MSS_UNKNOWN_ERROR);
        status.setExplanation("ERROR while executing script "+script);
-     }
+      }//end if
+     
 
      try {
        File ftplog = new File(ftptransferlog);
+       t = new Thread();
+       int numTimes = 0;
+       while(numTimes < 6) {
+         ftplog = new File(ftptransferlog);
+         if(!ftplog.exists() || ftplog.length() == 0) {
+           t.sleep(10000);
+           numTimes++;
+         }
+         else {
+          break;
+         }
+       }//end while
+       ftplog = new File(ftptransferlog);
        if(!ftplog.exists() || ftplog.length() == 0) {
-        util.printMessage("Probably some problem in executing script.");
-        util.printMessage("log file is empty " + ftptransferlog);
-        fObj.setPFTPStatus(MSS_MESSAGE.SRM_MSS_UNKNOWN_ERROR);
-        fObj.setExplanation("ERROR while executing script.");
-        status.setStatus(MSS_MESSAGE.SRM_MSS_UNKNOWN_ERROR);
-        status.setExplanation("ERROR while executing script.");
-       }
-     }catch(Exception e) {}
+          util.printMessage("\nProbably some problem in executing script.",
+                logger, debugLevel);
+          util.printMessage("log file is empty " + ftptransferlog,
+                logger, debugLevel);
+          fObj.setPFTPStatus(MSS_MESSAGE.SRM_MSS_UNKNOWN_ERROR);
+          fObj.setExplanation
+            ("Probably some problem in executing script, log file is empty.");
+          status.setStatus(MSS_MESSAGE.SRM_MSS_UNKNOWN_ERROR);
+          status.setExplanation
+            ("Probably some problem in executing script, log file is empty.");
+        }
+    }catch(Exception e) {}
+
 
      if(debugLevel < 3000) {
       try {
@@ -3917,38 +3993,54 @@ private MSS_MESSAGE_W_E mssListing (String rPath,
 
       long endTime = System.currentTimeMillis(); 
 
+     
       if(!_errorMessage.equals("") || _errorOccured) {
+      File ftplog = new File(logftpmssg);
         util.printMessage("\nProbably some problem in executing script.");
-        util.printMessage("log file is empty " + logftpmssg);
+        util.printMessage("error message="+_errorMessage);
+        util.printMessage("error occured="+_errorOccured);
+        if(!ftplog.exists() || ftplog.length() == 0) {
+          util.printMessage("log file is empty " + logftpmssg);
+        }
+        else {
+          util.printMessage("log file is " + logftpmssg);
+        }
         result.setStatus(MSS_MESSAGE.SRM_MSS_UNKNOWN_ERROR);
         result.setExplanation
-			("probably some problem in executing script " + script);
+            ("probably some problem in executing script " + script);
         return result;
-      }
+       }
+     
 
       try {
-        File ftplog = new File(logftpmssg);
-        if(!ftplog.exists() || ftplog.length() == 0) {
-          util.printMessage("\nProbably some problem in executing script.");
-          util.printMessage("log file is empty " + logftpmssg);
+       File ftplog = new File(logftpmssg);
+       t = new Thread();
+       int numTimes = 0;
+       while(numTimes < 6) {
+         ftplog = new File(logftpmssg);
+         if(!ftplog.exists() || ftplog.length() == 0) {
+           t.sleep(10000);
+           numTimes++;
+         }
+         else {
+          break;
+         }
+       }//end while
+       ftplog = new File(logftpmssg);
+       if(!ftplog.exists() || ftplog.length() == 0) {
+          util.printMessage("\nProbably some problem in executing script.",
+                logger, debugLevel);
+          util.printMessage("log file is empty " + logftpmssg,
+                logger, debugLevel);
+          fObj.setPFTPStatus(MSS_MESSAGE.SRM_MSS_UNKNOWN_ERROR);
+          fObj.setExplanation
+            ("Probably some problem in executing script, log file is empty.");
           result.setStatus(MSS_MESSAGE.SRM_MSS_UNKNOWN_ERROR);
           result.setExplanation
-			("probably some problem in executing script, outputfile is empty");
-          return result;
+            ("Probably some problem in executing script, log file is empty.");
         }
-      }catch(Exception e) {}
+    }catch(Exception e) {}
 
-      /*
-     if(debugLevel < 3000) {
-      try {
-       if(script.exists()) {
-         script.delete();
-       }
-     }catch(Exception e) {
-      util.printMessage("Exception " + e.getMessage(),logger,debugLevel);
-     }  
-    }
-    */
 
      Object[] param = new Object[1]; 
      param[0] = "REQUEST-ID="+fObj.getRequestToken();
@@ -4518,29 +4610,32 @@ public void mssPut(FileObj fObj,
 
      endTime = System.currentTimeMillis(); 
 
+
      try {
        File ftplog = new File(ftptransferlog);
+       t = new Thread();
+       int numTimes = 0;
+       while(numTimes < 6) {
+         ftplog = new File(ftptransferlog);
+         if(!ftplog.exists() || ftplog.length() == 0) {
+           t.sleep(10000);
+           numTimes++;
+         }
+         else {
+          break;
+         }
+       }//end while
+       ftplog = new File(ftptransferlog);
        if(!ftplog.exists() || ftplog.length() == 0) {
-         util.printMessage("\nProbably some problem in executing script.");
-         util.printMessage("log file is empty " + ftptransferlog);
-         fObj.setPFTPStatus(MSS_MESSAGE.SRM_MSS_UNKNOWN_ERROR);
-         fObj.setExplanation("ERROR while executing script.");
-         status.setStatus(MSS_MESSAGE.SRM_MSS_UNKNOWN_ERROR);
-         status.setExplanation("ERROR while executing script.");
-       }
-     }catch(Exception e) {}
-
-     /*
-     if(debugLevel < 3000) {
-      try {
-       if(script.exists()) {
-         script.delete();
-       }
-      }catch(Exception ioe) {
-        util.printMessage("Exception " + ioe.getMessage());
-      } 
-     }
-     */
+          util.printMessage("\nProbably some problem in executing script.");
+          util.printMessage("log file is empty " + ftptransferlog);
+          fObj.setPFTPStatus(MSS_MESSAGE.SRM_MSS_UNKNOWN_ERROR);
+          fObj.setExplanation("ERROR while executing script.");
+          status.setStatus(MSS_MESSAGE.SRM_MSS_UNKNOWN_ERROR);
+          status.setExplanation("ERROR while executing script.");
+        }
+    }catch(Exception e) {}
+  
 
      //seems like the script runs successfully.
      //but there may be other problems such as login, file not found etc.
@@ -5373,16 +5468,30 @@ public void mssGetHomeDir(FileObj fObj,
     long endTime = System.currentTimeMillis(); 
 
     try {
-      File ftplog = new File(ftptransferlog);
-      if(!ftplog.exists() || ftplog.length() == 0) {
-        util.printMessage("Probably some problem in executing script.");
-        util.printMessage("log file is empty " + ftptransferlog);
-        fObj.setPFTPStatus(MSS_MESSAGE.SRM_MSS_UNKNOWN_ERROR);
-        fObj.setExplanation("ERROR while executing script.");
-        status.setStatus(MSS_MESSAGE.SRM_MSS_UNKNOWN_ERROR);
-        status.setExplanation("ERROR while executing script.");
-      }
+       File ftplog = new File(ftptransferlog);
+       t = new Thread();
+       int numTimes = 0;
+       while(numTimes < 6) {
+         ftplog = new File(ftptransferlog);
+         if(!ftplog.exists() || ftplog.length() == 0) {
+           t.sleep(10000);
+           numTimes++;
+         }
+         else {
+          break;
+         }
+       }//end while
+       ftplog = new File(ftptransferlog);
+       if(!ftplog.exists() || ftplog.length() == 0) {
+          util.printMessage("\nProbably some problem in executing script.");
+          util.printMessage("log file is empty " + ftptransferlog);
+          fObj.setPFTPStatus(MSS_MESSAGE.SRM_MSS_UNKNOWN_ERROR);
+          fObj.setExplanation("ERROR while executing script.");
+          status.setStatus(MSS_MESSAGE.SRM_MSS_UNKNOWN_ERROR);
+          status.setExplanation("ERROR while executing script.");
+        }
     }catch(Exception e) {}
+
 
     /*
     if(debugLevel < 3000) {
@@ -6068,29 +6177,33 @@ public void mssMkDir(FileObj fObj,
      //generally for the new directory creation, it writes one line
      //in the logfile, for duplicate directory creation it leaves it
      //empty.
-      try {
-         File ftplog = new File(ftptransferlog);
+
+
+    try {
+       File ftplog = new File(ftptransferlog);
+       t = new Thread();
+       int numTimes = 0;
+       while(numTimes < 6) {
+         ftplog = new File(ftptransferlog);
          if(!ftplog.exists() || ftplog.length() == 0) {
-          util.printMessage("Probably some problem in executing script.");
+           t.sleep(10000);
+           numTimes++;
+         }
+         else {
+          break;
+         }
+       }//end while
+       ftplog = new File(ftptransferlog);
+       if(!ftplog.exists() || ftplog.length() == 0) {
+          util.printMessage("\nProbably some problem in executing script.");
           util.printMessage("log file is empty " + ftptransferlog);
           fObj.setPFTPStatus(MSS_MESSAGE.SRM_MSS_UNKNOWN_ERROR);
           fObj.setExplanation("ERROR while executing script.");
           status.setStatus(MSS_MESSAGE.SRM_MSS_UNKNOWN_ERROR);
           status.setExplanation("ERROR while executing script.");
         }
-      }catch(Exception e) {}
+    }catch(Exception e) {}
 
-      /*
-      if(debugLevel < 3000) {
-        try {
-          if(script.exists()) {
-           script.delete();
-          }
-        }catch(Exception ioe) {
-          util.printMessage("Exception " + ioe.getMessage());
-        }
-      }
-      */
 
     //seems like the script runs successfully.
     //but there may be other problems such as login, file not found etc.

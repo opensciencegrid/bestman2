@@ -26,7 +26,6 @@
  * do so.
  *
 */
-
 /**
  *
  * Email questions to SRM@LBL.GOV
@@ -56,6 +55,7 @@ public class Checksum {
 
     public static long getAdler32(String file) {
 	try {
+	    /*
 	    FileInputStream f = new FileInputStream(file);
 	    Adler32 ad32 = new Adler32();
 	    CheckedInputStream cis = new CheckedInputStream(f, ad32);
@@ -68,6 +68,16 @@ public class Checksum {
 	    cis.close();
 	    f.close();
 	    return result;
+	    */
+	    Adler32 ad32 = new Adler32();
+	    FileInputStream in = new FileInputStream(file);
+	    byte[] buff = new byte[1024];
+	    int len = 0;
+	    while ((len = in.read(buff)) > 0) {
+		ad32.update(buff, 0, len);
+	    }
+	    in.close();
+	    return ad32.getValue();
 	} catch (Exception e) {
 	    e.printStackTrace();
 	    return 0;
@@ -88,6 +98,7 @@ public class Checksum {
 	
     public static long getCRC32(String file) {
 	try {
+	    /*
 	    FileInputStream f = new FileInputStream(file);
 	    CRC32 crc32 = new CRC32();
 	    CheckedInputStream cis = new CheckedInputStream(f, crc32);
@@ -100,6 +111,17 @@ public class Checksum {
 	    cis.close();
 	    f.close();
 	    return result;
+	    */
+	    CRC32 crc32 = new CRC32();
+	    FileInputStream in = new FileInputStream(file);
+	    byte[] buff = new byte[1024];
+	    int len = 0;
+	    while ((len = in.read(buff)) > 0) {
+		crc32.update(buff, 0, len);
+	    }
+	    in.close();
+	    return crc32.getValue();
+
 	} catch (Exception e) {
 	    e.printStackTrace();
 	    return 0;
@@ -172,11 +194,13 @@ public class Checksum {
 	try {
 	    if (gov.lbl.srm.server.Config._doComputeFileChecksum) {
 		String filepath = f.getCanonicalPath();
+		TSRMLog.debug(Checksum.class, null, "event=startCalc", "path="+filepath); 
 		if (gov.lbl.srm.server.Config._checksumCommand != null) {
-            compute(gov.lbl.srm.server.Config._checksumCommand, filepath,result);
+		    compute(gov.lbl.srm.server.Config._checksumCommand, filepath,result);
 		} else {
-			useAssignedType(result, filepath, Config._defaultChecksumType);
+		    useAssignedType(result, filepath, Config._defaultChecksumType);
 		}
+		TSRMLog.debug(Checksum.class, null, "event=endCalc", "path="+filepath); 
 	    }
 	} catch (Exception e) {
 	    e.printStackTrace();

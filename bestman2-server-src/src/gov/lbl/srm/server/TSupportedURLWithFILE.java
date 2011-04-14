@@ -26,7 +26,6 @@
  * do so.
  *
 */
-
 /**
  *
  * Email questions to SRM@LBL.GOV
@@ -1054,6 +1053,7 @@ class TSRMFileAccessGsiftp extends ISRMFileAccess {
     }
 
     public TMetaDataPathDetail listAttr(File f, TSRMFileListingOption lsOption) {
+	TSRMLog.debug(this.getClass(), null, "event=starts", null);
 	String path  = f.getPath();
 	TMetaDataPathDetail result = new TMetaDataPathDetail();
 	//result.setPath(TSRMTxfProtocol.FILE.generateURI(f).toString());
@@ -1082,6 +1082,7 @@ class TSRMFileAccessGsiftp extends ISRMFileAccess {
 		if (lsOption.isDetailNeeded()){	    
 		    result.setLastModificationTime(TSRMUtil.createGMTTime(client.getLastModified(path).getTime()));
 		}	    
+
 		if (result.getType() == TFileType.FILE) {
 		    result.setSize(TSRMUtil.createTSizeInBytes(client.getSize(path)));
 		    Checksum.handle(result, f, lsOption);
@@ -1315,6 +1316,7 @@ class  TSRMFileAccessSudo extends ISRMFileAccess {
     }
 
     public TMetaDataPathDetail listAttr(File f, TSRMFileListingOption lsOption) {
+	TSRMLog.debug(this.getClass(), null, "event=listAttrSudoStarts", null);
 	String path  = f.getPath();
 	TMetaDataPathDetail result = new TMetaDataPathDetail();
 	//result.setPath(TSRMTxfProtocol.FILE.generateURI(f).toString());
@@ -1326,6 +1328,7 @@ class  TSRMFileAccessSudo extends ISRMFileAccess {
 	String sudoCommand = "sudo -u "+uid+" "+op+path;
 
 	String out = TPlatformUtil.execCmdWithOutput(sudoCommand, true);
+	TSRMLog.debug(this.getClass(), null, "event=listAttrSudoOutputCollected", null);
 	//System.out.println("####"+sudoCommand+"  =>"+out);
 	if (out == null) {
 	    result.setStatus(TSRMUtil.createReturnStatus(TStatusCode.SRM_FAILURE, "Read nothing from disk through sudo"));
