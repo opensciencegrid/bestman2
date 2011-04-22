@@ -6850,12 +6850,12 @@ private void printMetaDataForTextReport(String prefix, TMetaDataPathDetail pDeta
         String[] tokens = spaceTokens.getStringArray(); 
         if(tokens != null) { 
          for(int k = 0; k < tokens.length; k++) {
-          //if(_debug) {
+          if(_debug) {
             util.printMessage("SRM-CLIENT*SPACETOKENS("+k+")="+tokens[k],
 			logger,silent);
             util.printMessage("SRM-CLIENT*SPACETOKENS("+k+")="+tokens[k],
 			pIntf);
-          //}
+          }
          }
         }
      }
@@ -6869,20 +6869,20 @@ private void printMetaDataForTextReport(String prefix, TMetaDataPathDetail pDeta
 			retentionPolicyInfo.getRetentionPolicy();
       TAccessLatency accessLatency = retentionPolicyInfo.getAccessLatency();
       if(retentionPolicy != null) {
-        //if(_debug) {
+        if(_debug) {
          util.printMessage("SRM-CLIENT*RETENTIONPOLICY="+
 			retentionPolicy.getValue(), logger,silent);
          util.printMessage("SRM-CLIENT*RETENTIONPOLICY="+
 			retentionPolicy.getValue(), pIntf);
-        //}
+        }
       }
       if(accessLatency != null) {
-        //if(_debug) {
+        if(_debug) {
          util.printMessage("SRM-CLIENT*ACCESSLATENCY="+
 			accessLatency.getValue(), logger,silent);
          util.printMessage("SRM-CLIENT*ACCESSLATENCY="+
 			accessLatency.getValue(), pIntf);
-        //}
+        }
       }
      }
   } 

@@ -194,7 +194,8 @@ public static GSSCredential getCredential(String proxyPath, String userKey,
         try {
           proxyPath ="/tmp/x509up_u"+MyConfigUtil.getUID2();
         }catch(Exception ue) { 
-          System.out.println("\nSRM-CLIENT: Exception from client="+ue.getMessage());
+          System.out.println("\nSRM-CLIENT: Exception from client="+
+                ue.getMessage());
           proxyPath ="/tmp/x509up_u"+MyConfigUtil.getUID();
         }
        }

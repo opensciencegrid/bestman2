@@ -320,11 +320,13 @@ public class SoapCallThread extends Thread {
      int idx1 = msg.indexOf("Defective credential detected");
      int idx5 = msg.indexOf("org.globus.common.ChainedIOException");
      int idx6 = msg.indexOf("java.net.SocketTimeoutException: Read timed out");
-     int idx7 = msg.indexOf("EOFException");
-     int idx8 = msg.indexOf("Unauthorized");
+     int idx7 = msg.indexOf("Connection timed out");
+     int idx8 = msg.indexOf("java.net.SocketException: Connection reset");
+     int idx9 = msg.indexOf("EOFException");
+     int idx10 = msg.indexOf("Unauthorized");
      if(msg.startsWith("CGSI-gSOAP: Could not find mapping") ||
        idx != -1 || idx1 != -1 || idx5 != -1 || 
-       idx6 != -1 || idx7 != -1 || idx8 != -1) {
+       idx6 != -1 || idx7 != -1 || idx8 != -1 || idx9 !=-1 || idx10 != -1) {
       if(idx != -1 || idx6 != -1) {
         inputVec.clear(); 
         inputVec.addElement("ExitStatus="+90);
