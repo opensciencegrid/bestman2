@@ -26,7 +26,6 @@
  * do so.
  *
 */
-
 /**
  *
  * Email questions to SRM@LBL.GOV
@@ -114,9 +113,9 @@ public class TPlatformUtil {
     }
 
     public static final boolean execCmdValidationWithReturn(String cmd) {
+	Process p = null;
 	try {
-	    Process p = Runtime.getRuntime().exec(cmd);	    	    
-
+	    p = Runtime.getRuntime().exec(cmd);	    	    
 	    OutputStream os2 = p.getOutputStream();
 	    if (os2 != null) {
 		PrintWriter pw = new PrintWriter(os2);
@@ -143,10 +142,28 @@ public class TPlatformUtil {
 	    TSRMUtil.startUpInfo("Trouble with: "+cmd+" exception="+e);
 	    e.printStackTrace();
 	    return false;
+	} finally {
+	    if (p != null) p.destroy();
 	}
     }
 
     public static final String execShellCmdWithOutput(String cmd, boolean showOutput) {
+      Process p = null;
+      try {
+	String[] cmds = {"/bin/sh", "-c", cmd};
+        p = Runtime.getRuntime().exec(cmds);
+	return getProcessOutput(p, showOutput);
+      } catch (Exception e) {
+	TSRMUtil.startUpInfo("Trouble with commands: "+cmd+" exception:"+e); 
+	e.printStackTrace();                                                                                                                         
+	return e.getMessage();   		     
+      } finally {
+	  if (p != null) p.destroy();
+      }
+    }
+
+    /*
+    public static final String execShellCmdWithOutput0(String cmd, boolean showOutput) {
       try {
 	String[] cmds = {"/bin/sh", "-c", cmd};
 	Process p = Runtime.getRuntime().exec(cmds);
@@ -157,15 +174,19 @@ public class TPlatformUtil {
 	return e.getMessage();   		     
       }
     }
-    
+    */
+
     public static final String execCmdWithOutput(String cmd, boolean showOutput) {
+	Process p = null;
 	try {
-	    Process p = Runtime.getRuntime().exec(cmd);
+	    p = Runtime.getRuntime().exec(cmd);
 	    return getProcessOutput(p, showOutput);
 	} catch (Exception e) {
 	    TSRMUtil.startUpInfo("Trouble with: "+cmd+" exception:"+e);
 	    e.printStackTrace();
 	    return e.getMessage();
+	} finally {
+	    if (p != null) p.destroy();
 	}
     }
 
@@ -196,8 +217,9 @@ public class TPlatformUtil {
     }
 
     public static final boolean execWithOutput(String cmd) {
+	Process p = null;
 	try {
-	    Process p = Runtime.getRuntime().exec(cmd);
+	    p = Runtime.getRuntime().exec(cmd);
 	    
 	    StreamGobbler errorGobbler = new StreamGobbler(p.getErrorStream(), "ERROR");
 	    StreamGobbler outputGobbler = new StreamGobbler(p.getInputStream(), "OUTPUT");
@@ -212,6 +234,8 @@ public class TPlatformUtil {
 	    TSRMUtil.startUpInfo("Trouble with: "+cmd+" exception:"+e);
 	    e.printStackTrace();
 	    return false;
+	} finally {
+	    if (p != null) p.destroy();
 	}
     }
 
@@ -285,11 +309,12 @@ public class TPlatformUtil {
     private static final long getFreeSpaceInUnix(String path) throws
 	IllegalStateException, IOException
     {
+	Process p = null;
 	//PrintWriter writer = null;
 	BufferedReader reader = null;
 	try {
 	    String command = "df -k "+path;
-	    Process p = Runtime.getRuntime().exec(command);
+	    p = Runtime.getRuntime().exec(command);
 	    
 	    reader = new BufferedReader( new InputStreamReader(p.getInputStream() ) );
 	    
@@ -312,6 +337,7 @@ public class TPlatformUtil {
 	finally {
 	    //if (writer != null) writer.close();
 	    if (reader != null) reader.close();
+	    if (p != null) p.destroy();
 	}
     }
     
@@ -319,6 +345,7 @@ public class TPlatformUtil {
 	IllegalStateException, IOException
     {
 	//PrintWriter writer = null;
+	Process p = null;
 	BufferedReader reader = null;
 	try {
 	    // create a temp  file to run the dir command:
@@ -341,7 +368,7 @@ public class TPlatformUtil {
 	    //Process p = Runtime.getRuntime().exec(script.getAbsolutePath());
 	    
 	    String command = "df -B 1 "+path;
-	    Process p = Runtime.getRuntime().exec(command);
+	    p = Runtime.getRuntime().exec(command);
 	    
 	    reader = new BufferedReader( new InputStreamReader(p.getInputStream() ) );
 	  
@@ -368,6 +395,7 @@ public class TPlatformUtil {
 	finally {
 	    //if (writer != null) writer.close();
 	    if (reader != null) reader.close();
+	    if (p != null) p.destroy();
 	}
     }
     
@@ -398,6 +426,7 @@ public class TPlatformUtil {
     private static final long getFreeSpaceInWindows(File where) throws
 	IllegalStateException, IOException 
     {
+	Process p = null;
 	PrintWriter writer = null;
 	BufferedReader reader = null;
 	try {
@@ -409,7 +438,7 @@ public class TPlatformUtil {
 	    writer.close(); // MUST close it at this point, else the Process below will fail to run
 	    
 	    // get output from running the .bat file:
-	    Process p = Runtime.getRuntime().exec( script.getAbsolutePath() );
+	    p = Runtime.getRuntime().exec( script.getAbsolutePath() );
 	    reader = new BufferedReader( new InputStreamReader(p.getInputStream() ) );
 	    String line = null;
 	    while (true) {
@@ -462,6 +491,7 @@ public class TPlatformUtil {
 	finally {
 	    if (writer != null) writer.close();
 	    if (reader != null) reader.close();
+	    if (p != null) p.destroy();
 	}
     }
 }

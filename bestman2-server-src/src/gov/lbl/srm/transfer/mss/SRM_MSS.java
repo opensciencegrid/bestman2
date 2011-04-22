@@ -770,10 +770,13 @@ public synchronized Object checkStatus (String requestToken) throws Exception {
            if(p != null) {
            long startTimeStamp = p.getStartTimeStamp();
            long currentTimeStamp = System.currentTimeMillis();
-           //System.out.println(">>>CheckStatus("+requestToken+")="+currentTimeStamp);
-           //System.out.println(">>>CheckStatus("+requestToken+")="+startTimeStamp);
-           //System.out.println(">>>CheckStatus("+requestToken+")="+processTimeOutAllowed);
-           if(currentTimeStamp > startTimeStamp+processTimeOutAllowed) {
+           //System.out.println(">>>CheckStatus("+requestToken+")="+
+                //currentTimeStamp);
+           //System.out.println(">>>CheckStatus("+requestToken+")="+
+                 //startTimeStamp);
+           //System.out.println(">>>CheckStatus("+requestToken+")="+
+                //processTimeOutAllowed*1000);
+           if(currentTimeStamp > startTimeStamp+(processTimeOutAllowed*1000)) {
              System.out.println(">>>CheckStatus("+requestToken+")=processtimedout");
              String logFile = p.getLogFile();
              //if logfile does not exists, it is an error,
@@ -840,8 +843,9 @@ public synchronized Object checkStatus (String requestToken) throws Exception {
            long currentTimeStamp = System.currentTimeMillis();
            //System.out.println(">>>CheckStatus("+requestToken+")="+currentTimeStamp);
            //System.out.println(">>>CheckStatus("+requestToken+")="+startTimeStamp);
-           //System.out.println(">>>CheckStatus("+requestToken+")="+processTimeOutAllowed);
-           if(currentTimeStamp > startTimeStamp+processTimeOutAllowed) {
+           //System.out.println(">>>CheckStatus("+requestToken+")="+
+                //processTimeOutAllowed*1000);
+           if(currentTimeStamp > startTimeStamp+(processTimeOutAllowed*1000)) {
              System.out.println(">>>CheckStatus("+requestToken+")=processtimedout");
              String logFile = p.getLogFile();
              //if logfile does not exists, it is an error,
@@ -905,8 +909,9 @@ public synchronized Object checkStatus (String requestToken) throws Exception {
            long currentTimeStamp = System.currentTimeMillis();
            //System.out.println(">>>CheckStatus("+requestToken+")="+currentTimeStamp);
            //System.out.println(">>>CheckStatus("+requestToken+")="+startTimeStamp);
-           //System.out.println(">>>CheckStatus("+requestToken+")="+processTimeOutAllowed);
-           if(currentTimeStamp > startTimeStamp+processTimeOutAllowed) {
+           //System.out.println(">>>CheckStatus("+requestToken+")="+
+                //processTimeOutAllowed*1000);
+           if(currentTimeStamp > startTimeStamp+(processTimeOutAllowed*1000)) {
              //if logfile does not exists, it is an error,
              //process might be hanging, if logfile exists and shows
              //HSI error, then the procees might be hanging too
@@ -969,8 +974,8 @@ public synchronized Object checkStatus (String requestToken) throws Exception {
            //System.out.println(">>>CheckStatus("+requestToken+")="+
 		//startTimeStamp);
            //System.out.println(">>>CheckStatus("+requestToken+")="+
-		//processTimeOutAllowed);
-           if(currentTimeStamp > startTimeStamp+processTimeOutAllowed) {
+		//processTimeOutAllowed*1000);
+           if(currentTimeStamp > startTimeStamp+(processTimeOutAllowed*1000)) {
              System.out.println(">>>CheckStatus("+requestToken+")=processtimedout");
              String logFile = p.getLogFile();
              boolean b  = checkLogFileForErrors(logFile); 
