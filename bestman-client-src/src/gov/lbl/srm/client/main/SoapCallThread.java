@@ -334,10 +334,12 @@ public class SoapCallThread extends Thread {
      int idx8 = msg.indexOf("java.net.SocketException: Connection reset");
      int idx9 = msg.indexOf("EOFException");
      int idx10 = msg.indexOf("Unauthorized");
+     int idx11 = msg.indexOf("NumberFormatException");
 
      if(msg.startsWith("CGSI-gSOAP: Could not find mapping") ||
        idx != -1 || idx1 != -1 || idx5 != -1 || 
-       idx6 != -1 || idx7 != -1 || idx8 != -1 || idx9 !=-1 || idx10 != -1) {
+       idx6 != -1 || idx7 != -1 || idx8 != -1 || idx9 !=-1 || 
+       idx10 != -1 || idx11 !=-1) {
       if(idx != -1 || idx6  != -1 || idx7 != -1 || idx8 != -1) {
         inputVec.clear(); 
         inputVec.addElement("ExitStatus="+90);
@@ -351,6 +353,12 @@ public class SoapCallThread extends Thread {
         inputVec.addElement("ExitStatus="+96);
         util.printEventLog(_theLogger,"ExitCodeStatus",inputVec,silent,useLog);
         System.exit(96);
+      }
+      else if(idx11 != -1) {
+        inputVec.clear(); 
+        inputVec.addElement("ExitStatus="+92);
+        util.printEventLog(_theLogger,"ExitCodeStatus",inputVec,silent,useLog);
+        System.exit(92);
       }
       else {
         inputVec.clear(); 
