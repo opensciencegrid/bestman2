@@ -26,7 +26,6 @@
  * do so.
  *
 */
-
 /**
  *
  * Email questions to SRM@LBL.GOV
@@ -79,11 +78,12 @@ public class SRMXrootd extends TSRMServerIdle {
 	storageReport.add(TSRMUtil.createTExtraInfo("GatewayMode", "Enabled"));
 	TSRMUtil.addCallerDN(storageReport);
 	
-
-	if (Config._staticTokenList != null) {
-	    for (int i=0; i<Config._staticTokenList.length; i++) {
-		StaticToken curr = Config._staticTokenList[i];
+	if (debugLevel == 1) {
+	    if (Config._staticTokenList != null) {
+		for (int i=0; i<Config._staticTokenList.length; i++) {
+		    StaticToken curr = Config._staticTokenList[i];
 		storageReport.add(TSRMUtil.createTExtraInfo("staticToken("+i+")", curr.getID()+" desc="+curr.getDesc()+" size="+curr.getTotalBytes()));
+		}
 	    }
 	}
 

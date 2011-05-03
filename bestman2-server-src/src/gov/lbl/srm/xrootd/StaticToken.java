@@ -163,11 +163,13 @@ public class StaticToken {
 	if (_metadata.getStatus() == null) {
 	    _metadata.setStatus(TSRMUtil.createReturnStatus(TStatusCode.SRM_SUCCESS, getDesc()));
 	}
+	long totalBytes = getTotalBytes();
 	//if (_metadata.getTotalSize() == null) {
-	    _metadata.setTotalSize(new org.apache.axis.types.UnsignedLong(getTotalBytes()));
+	    _metadata.setTotalSize(new org.apache.axis.types.UnsignedLong(totalBytes));
 	//}
 	//if (_metadata.getGuaranteedSize() == null) {
-	    _metadata.setGuaranteedSize(new org.apache.axis.types.UnsignedLong(getTotalBytes()));
+	    //_metadata.setGuaranteedSize(new org.apache.axis.types.UnsignedLong(getTotalBytes()));
+	    _metadata.setGuaranteedSize(_metadata.getTotalSize());
 	//}
 	if (_metadata.getRetentionPolicyInfo() == null) {
 	    _metadata.setRetentionPolicyInfo(getRetentionPolicyInfo());
@@ -178,7 +180,7 @@ public class StaticToken {
 	if (_metadata.getLifetimeLeft() == null) {
 	    _metadata.setLifetimeLeft(new Integer(-1));
 	}
-	_metadata.setUnusedSize(new org.apache.axis.types.UnsignedLong(getUnusedSize()));
+	_metadata.setUnusedSize(new org.apache.axis.types.UnsignedLong(getUnusedSize(totalBytes)));
 	
 	return _metadata;
     }
@@ -213,27 +215,27 @@ public class StaticToken {
 	return result;
     }
 
-    private long calculateUnusedBytes(String hoho) {
+    private long calculateUnusedBytes(String hoho, long totalBytes) {
 	long result = runCommand(hoho);
-	if (result > getTotalBytes()) {
+	if (result > totalBytes) {
 	    TSRMLog.debug(this.getClass(), null, "event=getUnusedBytes", "errorResultSmall="+result);
 	    return 0;
 	} else {
-	    return getTotalBytes() - result*_unit;
+	    return totalBytes - result*_unit;
 	}
     }
 
-    private long getUnusedSize() {
-	if (getTotalBytes() <= 0) {
+    private long getUnusedSize(long totalBytes) {
+	if (totalBytes <= 0) {
 	    TSRMLog.debug(this.getClass(), null, "event=getUnusedBytes", "error=noTotalBytes");
 	    return 0;
 	}
 
 	if (_localPath == null) {
-	    TSRMLog.debug(this.getClass(), null, "event=getUnusedBytes", "error=NoLocalPath");
+	    TSRMLog.debug(this.getClass(), null, "event=getUnusedBytes", "checkSizeCommand="+_checkSizeCommand);
 	    if (_checkSizeCommand != null) {
 		String hoho = TPlatformUtil.execShellCmdWithOutput(_checkSizeCommand, true);
-		return calculateUnusedBytes(hoho);
+		return calculateUnusedBytes(hoho, totalBytes);
 	    }
 	    return 0;
 	} 
@@ -246,7 +248,7 @@ public class StaticToken {
 	    TSRMLog.debug(this.getClass(), null, "event=getUnusedBytes", "command="+_checkSizeCommand);
 	    if (_checkSizeCommand != null) {
 		String hoho = TPlatformUtil.execShellCmdWithOutput(_checkSizeCommand+" "+_localPath, true);
-		return calculateUnusedBytes(hoho);
+		return calculateUnusedBytes(hoho, totalBytes);
 	    }
 
 	    long result = _localPath.getUsableSpace();
