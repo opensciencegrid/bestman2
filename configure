@@ -599,10 +599,13 @@ SHELL'
 ac_subst_files=''
 ac_user_opts='
 enable_option_checking
-enable_clean_build
+enable_cleanup
+enable_cached_src
+enable_cached_pkg
 enable_server_build
 enable_client_build
 enable_tester_build
+with_pkg_dir
 with_bestman_url
 with_wget_path
 with_java_home
@@ -1157,24 +1160,6 @@ if test "$ac_init_help" = "long"; then
   cat <<_ACEOF
 \`configure' configures BeStMan 2.2 to adapt to many kinds of systems.
 
-Usage: $0 [OPTION]... [VAR=VALUE]...
-
-To assign environment variables (e.g., CC, CFLAGS...), specify them as
-VAR=VALUE.  See below for descriptions of some of the useful variables.
-
-Defaults for the options are specified in brackets.
-
-Configuration:
-  -h, --help              display this help and exit
-      --help=short        display options specific to this package
-      --help=recursive    display the short help of all the included packages
-  -V, --version           display version information and exit
-  -q, --quiet, --silent   do not print \`checking...' messages
-      --cache-file=FILE   cache test results in FILE [disabled]
-  -C, --config-cache      alias for \`--cache-file=config.cache'
-  -n, --no-create         do not create output files
-      --srcdir=DIR        find the sources in DIR [configure dir or \`..']
-
 
 README:
 
@@ -1202,7 +1187,7 @@ README:
              --with-revision=7
 
     3. make
-    4. In the same directory, you will see new tar.gz files:
+    4. In the pkg directory, you will see new tar.gz files:
        bestman2-<version>.tar.gz 
        bestman-client-<version>.tar.gz 
        srmtester3-<version>.tar.gz
@@ -1677,15 +1662,30 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
 
-CLEANBUILD="yes"
+CACHEDSRC="no"
+CACHEDPKG="no"
+CLEANUP="yes"
 BUILDSERVER="yes"
 BUILDCLIENT="yes"
 BUILDTESTER="yes"
 
-# Check whether --enable-clean-build was given.
-if test "${enable_clean_build+set}" = set; then :
-  enableval=$enable_clean_build; CLEANBUILD=$enableval
+# Check whether --enable-cleanup was given.
+if test "${enable_cleanup+set}" = set; then :
+  enableval=$enable_cleanup; CLEANUP=$enableval
 fi
+
+
+# Check whether --enable-cached-src was given.
+if test "${enable_cached_src+set}" = set; then :
+  enableval=$enable_cached_src; CACHEDSRC=$enableval
+fi
+
+
+# Check whether --enable-cached-pkg was given.
+if test "${enable_cached_pkg+set}" = set; then :
+  enableval=$enable_cached_pkg; CACHEDPKG=$enableval
+fi
+
 
 
 # Check whether --enable-server-build was given.
@@ -1719,6 +1719,24 @@ MYHOST=`hostname -f`
 MAKEFILE="./Makefile"
 
 
+
+
+PKG_DIR=./pkg
+
+# Check whether --with-pkg-dir was given.
+if test "${with_pkg_dir+set}" = set; then :
+  withval=$with_pkg_dir; PKG_DIR=$withval
+
+fi
+
+if test -d $PKG_DIR ; then
+    { $as_echo "$as_me:${as_lineno-$LINENO}: result: PKG_DIR exists" >&5
+$as_echo "PKG_DIR exists" >&6; }
+else
+    \mkdir $PKG_DIR
+    { $as_echo "$as_me:${as_lineno-$LINENO}: result: PKG_DIR created" >&5
+$as_echo "PKG_DIR created" >&6; }
+fi
 
 
 BESTMAN_URL=
@@ -1762,7 +1780,8 @@ $as_echo "WGET not found" >&6; }
     fi
 fi
 if test "$WGET_PATH" = "" ; then
-    as_fn_error "WGET is not found." "$LINENO" 5
+    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: WGET is not found." >&5
+$as_echo "$as_me: WARNING: WGET is not found." >&2;}
 fi
 
 
@@ -1878,8 +1897,8 @@ CLIENT2PRE="$CLIENT2-src"
 TESTER2="srmtester3"
 TESTER2PRE="$TESTER2-src"
 
-if test "$CLEANBUILD" = "yes" ; then
-    echo "Cleaning up the sources and build procedure..."
+if test "$CACHEDSRC" = "no" ; then
+    echo "Cleaning up the sources and build procedurei if applicable..."
     if test "$BUILDSERVER" = "yes" -a -d $BESTMAN2PRE ; then
         echo "Removing $BESTMAN2PRE..."
         \rm -rf $BESTMAN2PRE
@@ -1909,7 +1928,7 @@ TESTERCLEAN=""
 
 
 if test "$BUILDSERVER" = "yes" ; then
-    if test "$CLEANBUILD" = "yes" ; then
+    if test "$CACHEDSRC" = "no" ; then
         echo "BeStMan2 version $BESTMAN2VERSION from $CODEFORGE_URL"
         echo "Checking out bestman2-server sources..."
         svn --quiet checkout -r $REVISION $CODEFORGE_URL/$BESTMAN2PRE
@@ -1921,7 +1940,7 @@ if test "$BUILDSERVER" = "yes" ; then
     SERVERPCLEAN="server2postclean"
 fi
 if test "$BUILDCLIENT" = "yes" ; then
-    if test "$CLEANBUILD" = "yes" ; then
+    if test "$CACHEDSRC" = "no" ; then
         echo "BeStMan2 client version $BESTMAN2VERSION from $CODEFORGE_URL"
         echo "Checking out bestman-client sources..."
         svn --quiet checkout -r $REVISION $CODEFORGE_URL/$CLIENT2PRE
@@ -1933,7 +1952,7 @@ if test "$BUILDCLIENT" = "yes" ; then
     CLIENTPCLEAN="client2postclean"
 fi
 if test "$BUILDTESTER" = "yes" ; then
-    if test "$CLEANBUILD" = "yes" ; then
+    if test "$CACHEDSRC" = "no" ; then
         echo "BeStMan2 srmtester3  version $BESTMAN2VERSION from $CODEFORGE_URL"
         echo "Checking out srmtester3 sources..."
         svn --quiet checkout -r $REVISION $CODEFORGE_URL/$TESTER2PRE
@@ -1947,55 +1966,66 @@ fi
 
 BESTMAN2_PKG_WGET="$BESTMAN2.pkg.tar.gz"
 
-if test "$BESTMAN_HOME" = "" -a "$BESTMAN_URL" = "" ; then
-    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: BESTMAN_HOME or URL for the BeStMan not found" >&5
-$as_echo "$as_me: WARNING: BESTMAN_HOME or URL for the BeStMan not found" >&2;}
-    as_fn_error "To continue, provide either --with-bestman-home or --with-bestman-url" "$LINENO" 5
+if test "$BESTMAN_URL" = "" ; then
+    as_fn_error "To continue, provide --with-bestman-url" "$LINENO" 5
 else
-   if test "$BESTMAN_URL" = "" ; then
-      echo "BESTMAN_HOME=$BESTMAN_HOME"
-      if test ! -e $BESTMAN2 ; then
-          ln -s $BESTMAN_HOME $BESTMAN2
-      fi
-   else
-      if test "$WGET_PATH" = "" ; then
-          { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: WGET not found" >&5
+      if test "$CACHEDPKG" = "no" ; then
+          if test "$WGET_PATH" = "" ; then
+              { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: WGET not found" >&5
 $as_echo "$as_me: WARNING: WGET not found" >&2;}
-          as_fn_error "To continue, either provide --with-wget-path or have it on your path env" "$LINENO" 5
-      fi
-      if test "$CLEANBUILD" = "yes" ; then
+              as_fn_error "To continue, either provide --with-wget-path or have it on your path env" "$LINENO" 5
+          fi
           if test -L $BESTMAN2 ; then
               \rm -f $BESTMAN2
-           fi
-           echo "Checking out bestman2 distribution from $BESTMAN_URL"
-           $WGET_PATH -q --no-check-certificate --output-document=$BESTMAN2_PKG_WGET $BESTMAN_URL
-           tar zxf $BESTMAN2_PKG_WGET
-           BESTMAN_HOME=$ptmp/$BESTMAN2
-           \rm -f $BESTMAN2_PKG_WGET
-           $WGET_PATH -q --no-check-certificate -O $BESTMAN2PRE/build.xml https://sdm.lbl.gov/bestman/docs/bestman2-server-src-build.xml
-           $WGET_PATH -q --no-check-certificate -O $CLIENT2PRE/build.xml https://sdm.lbl.gov/bestman/docs/bestman-client-src-build.xml
-           $WGET_PATH -q --no-check-certificate -O $TESTER2PRE/build.xml https://sdm.lbl.gov/bestman/docs/srmtester3-src-build.xml
-       else
-           echo "BESTMAN_HOME=$BESTMAN2"
-           BESTMAN_HOME=$ptmp/$BESTMAN2
-           if test ! -e $BESTMAN2 ; then
+          fi
+          echo "Checking out bestman2 distribution from $BESTMAN_URL"
+          $WGET_PATH -q --no-check-certificate --output-document=$BESTMAN2_PKG_WGET $BESTMAN_URL
+          tar zxf $BESTMAN2_PKG_WGET
+          BESTMAN_HOME=$ptmp/$BESTMAN2
+          if test "$CLEANUP" = "yes" ; then
+               \rm -f $BESTMAN2_PKG_WGET
+          fi
+      else
+          echo "Using existing bestman2 distribution pkg"
+          echo "BESTMAN_HOME=$ptmp/$BESTMAN2"
+          BESTMAN_HOME=$ptmp/$BESTMAN2
+          if test -f "$BESTMAN_HOME/lib/bestman2-stub.jar" ; then
+              { $as_echo "$as_me:${as_lineno-$LINENO}: result: Verified bestman2 pkg" >&5
+$as_echo "Verified bestman2 pkg" >&6; }
+          else
+              { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Verification failed on missing library for bestman2 pkg dir" >&5
+$as_echo "$as_me: WARNING: Verification failed on missing library for bestman2 pkg dir" >&2;}
+              echo "Checking on bestman2 pkg"
+              if test -f $BESTMAN2_PKG_WGET ; then
+                  echo "Unpacking bestman2 pkg $BESTMAN2_PKG_WGET"
+                  tar zxf $BESTMAN2_PKG_WGET
+			  else
+                  if test -f $BESTMAN2-$BESTMAN2VERSION.tar.gz ; then
+                      echo "Unpacking bestman2 pkg $BESTMAN2-$BESTMAN2VERSION.tar.gz"
+                      tar zxf $BESTMAN2-$BESTMAN2VERSION.tar.gz
+                  else
+                      echo "Verification failed on missing bestman2 pkg"
+                      as_fn_error "To continue, provide the proper bestman2 dist pkg" "$LINENO" 5
+                  fi
+              fi
+
+
+          fi
+          if test ! -e $BESTMAN2 ; then
                ln -s $BESTMAN_HOME $BESTMAN2
-           fi
-       fi
-   fi
+          fi
+      fi
 fi
 
-if test "$CLEANBUILD" = "yes" ; then
-    if test -L $CLIENT2  ; then
-        \rm -f $CLIENT2
-    fi
-    ln -s $BESTMAN_HOME $CLIENT2
-
-    if test -L $TESTER2  ; then
-        \rm -f $TESTER2
-    fi
-    ln -s $BESTMAN_HOME $TESTER2
+if test -L $CLIENT2  ; then
+    \rm -f $CLIENT2
 fi
+ln -s $BESTMAN_HOME $CLIENT2
+
+if test -L $TESTER2  ; then
+    \rm -f $TESTER2
+fi
+ln -s $BESTMAN_HOME $TESTER2
 
 
 BESTMAN2PKG="$BESTMAN2/*"
@@ -2090,9 +2120,6 @@ if test "$BUILDSERVER" = "yes" ; then
 	echo "	@ cd $BESTMAN2PRE; export JAVA_HOME=$JAVA_HOME; $ANT_BINPATH clean" >> $MAKEFILE
 	echo "	@ \rm -f $BESTMAN2PRE/build.properties" >> $MAKEFILE
 	echo "server2postclean:" >> $MAKEFILE
-if test "$CLEANBUILD" = "yes" ; then
-	echo "	@ \rm -f $BESTMAN2PRE/build.xml" >> $MAKEFILE
-fi
 	echo "	@ echo ''" >> $MAKEFILE
 	echo "##############################################################################" >> $MAKEFILE
 fi
@@ -2116,9 +2143,6 @@ if test "$BUILDCLIENT" = "yes" ; then
 	echo "	@ cd $CLIENT2PRE; export JAVA_HOME=$JAVA_HOME; $ANT_BINPATH clean" >> $MAKEFILE
 	echo "	@ \rm -f $CLIENT2PRE/build.properties" >> $MAKEFILE
 	echo "client2postclean:" >> $MAKEFILE
-if test "$CLEANBUILD" = "yes" ; then
-	echo "	@ \rm -f $CLIENT2PRE/build.xml" >> $MAKEFILE
-fi
 	echo "	@ echo ''" >> $MAKEFILE
 	echo "##############################################################################" >> $MAKEFILE
 fi
@@ -2142,16 +2166,45 @@ if test "$BUILDTESTER" = "yes" ; then
 	echo "	@ cd $TESTER2PRE; export JAVA_HOME=$JAVA_HOME; $ANT_BINPATH clean" >> $MAKEFILE
 	echo "	@ \rm -f $TESTER2PRE/build.properties " >> $MAKEFILE
 	echo "tester2postclean:" >> $MAKEFILE
-if test "$CLEANBUILD" = "yes" ; then
-	echo "	@ \rm -f $TESTER2PRE/build.xml" >> $MAKEFILE
-fi
 	echo "	@ echo ''" >> $MAKEFILE
 	echo "##############################################################################" >> $MAKEFILE
 fi
 echo "depend:" >> $MAKEFILE
 
-echo "javac.path=$JAVA_HOME/bin/javac" > build.properties
-echo "bestman.root=$BESTMAN_HOME" >> build.properties
+echo "#" > build.properties
+echo "# *** Copyright Notice ***" >> build.properties
+echo "#" >> build.properties
+echo "# BeStMan Copyright (c) 2010, The Regents of the University of California, " >> build.properties
+echo "# through Lawrence Berkeley National Laboratory (subject to receipt of any " >> build.properties
+echo "# required approvals from the U.S. Dept. of Energy).  This software was " >> build.properties
+echo "# developed under funding from the U.S. Department of Energy and is " >> build.properties
+echo "# associated with the Berkeley Lab Scientific Data Management Group projects." >> build.properties
+echo "# All rights reserved." >> build.properties
+echo "# " >> build.properties
+echo "# If you have questions about your rights to use or distribute this software, " >> build.properties
+echo "# please contact Berkeley Lab's Technology Transfer Department at TTD@lbl.gov." >> build.properties
+echo "# " >> build.properties
+echo "# NOTICE.  This software was developed under funding from the " >> build.properties
+echo "# U.S. Department of Energy.  As such, the U.S. Government has been granted " >> build.properties
+echo "# for itself and others acting on its behalf a paid-up, nonexclusive, " >> build.properties
+echo "# irrevocable, worldwide license in the Software to reproduce, prepare " >> build.properties
+echo "# derivative works, and perform publicly and display publicly.  " >> build.properties
+echo "# Beginning five (5) years after the date permission to assert copyright is " >> build.properties
+echo "# obtained from the U.S. Department of Energy, and subject to any subsequent " >> build.properties
+echo "# five (5) year renewals, the U.S. Government is granted for itself and others" >> build.properties
+echo "# acting on its behalf a paid-up, nonexclusive, irrevocable, worldwide license" >> build.properties
+echo "# in the Software to reproduce, prepare derivative works, distribute copies to" >> build.properties
+echo "# the public, perform publicly and display publicly, and to permit others to" >> build.properties
+echo "# do so." >> build.properties
+echo "#" >> build.properties
+echo "# Scientific Data Management Research Group" >> build.properties
+echo "# Lawrence Berkeley National Laboratory" >> build.properties
+echo "# http://sdm.lbl.gov/bestman" >> build.properties
+echo "#" >> build.properties
+echo "#####################################################" >> build.properties
+echo "javac.path=$JAVA_HOME/bin/javac" >> build.properties
+echo "dependency.root=$BESTMAN_HOME" >> build.properties
+echo "#####################################################" >> build.properties
 echo "interface.name=StorageResourceManager" >> build.properties
 echo "pkgname=bestman2" >> build.properties
 echo "package=gov.lbl.srm" >> build.properties
@@ -2172,9 +2225,9 @@ if test "$BUILDSERVER" = "yes" ; then
 	echo "server2pkg:" >> $MAKEFILE
 	echo "	@ echo '######################################################'" >> $MAKEFILE
 	echo "	@ echo 'BeStMan2 packaging for version $BESTMAN2VERSION'" >> $MAKEFILE
-	echo "	@ tar zcf $BESTMAN2-$BESTMAN2VERSION.tar.gz $BESTMAN2PKG" >> $MAKEFILE
+	echo "	@ tar zcf $PKG_DIR/$BESTMAN2-$BESTMAN2VERSION.tar.gz $BESTMAN2PKG" >> $MAKEFILE
 	echo "	@ echo 'BeStMan2 PKG'" >> $MAKEFILE
-	echo "	ls -l $BESTMAN2-$BESTMAN2VERSION.tar.gz" >> $MAKEFILE
+	echo "	ls -l $PKG_DIR/$BESTMAN2-$BESTMAN2VERSION.tar.gz" >> $MAKEFILE
 	echo "	@ echo ''" >> $MAKEFILE
 	echo "##############################################################################" >> $MAKEFILE
 fi
@@ -2182,9 +2235,9 @@ if test "$BUILDCLIENT" = "yes" ; then
 	echo "client2pkg:" >> $MAKEFILE
 	echo "	@ echo '######################################################'" >> $MAKEFILE
 	echo "	@ echo 'BeStMan2 Client packaging for version $BESTMAN2VERSION'" >> $MAKEFILE
-	echo "	@ tar zcf $CLIENT2-$BESTMAN2VERSION.tar.gz $CLIENT2PKG" >> $MAKEFILE
+	echo "	@ tar zcf $PKG_DIR/$CLIENT2-$BESTMAN2VERSION.tar.gz $CLIENT2PKG" >> $MAKEFILE
 	echo "	@ echo 'BeStMan2 CLIENT PKG'" >> $MAKEFILE
-	echo "	ls -l $CLIENT2-$BESTMAN2VERSION.tar.gz" >> $MAKEFILE
+	echo "	ls -l $PKG_DIR/$CLIENT2-$BESTMAN2VERSION.tar.gz" >> $MAKEFILE
 	echo "	@ echo ''" >> $MAKEFILE
 	echo "##############################################################################" >> $MAKEFILE
 fi
@@ -2192,9 +2245,9 @@ if test "$BUILDTESTER" = "yes" ; then
 	echo "tester2pkg:" >> $MAKEFILE
 	echo "	@ echo '######################################################'" >> $MAKEFILE
 	echo "	@ echo 'BeStMan2 Tester packaging for version $BESTMAN2VERSION'" >> $MAKEFILE
-	echo "	@ tar zcf $TESTER2-$BESTMAN2VERSION.tar.gz $TESTER2PKG" >> $MAKEFILE
+	echo "	@ tar zcf $PKG_DIR/$TESTER2-$BESTMAN2VERSION.tar.gz $TESTER2PKG" >> $MAKEFILE
 	echo "	@ echo 'BeStMan2 TESTER PKG'" >> $MAKEFILE
-	echo "	ls -l $TESTER2-$BESTMAN2VERSION.tar.gz" >> $MAKEFILE
+	echo "	ls -l $PKG_DIR/$TESTER2-$BESTMAN2VERSION.tar.gz" >> $MAKEFILE
 	echo "	@ echo ''" >> $MAKEFILE
 	echo "##############################################################################" >> $MAKEFILE
 fi
