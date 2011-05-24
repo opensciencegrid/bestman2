@@ -26,7 +26,6 @@
  * do so.
  *
 */
-
 /**
  *
  * Email questions to SRM@LBL.GOV
@@ -48,6 +47,7 @@ public class TSRMRequestPutToRemote extends TSRMRequestPut {
 		setReturnStatusFailed("No credential! Cann't put to remote site.");
 	    throw new TSRMException("No credential. Cannt proceed.", false);
 	}
+	_proposedPinDuration = -1;
     }
 
    
