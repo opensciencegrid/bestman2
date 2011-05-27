@@ -693,7 +693,8 @@ public synchronized void setPreviousStatusPanel(int status, WrappedFT wtu,
             addNextFileInfo(wtu.getFileIntf());
             inputVec = new Vector(); 
             inputVec.addElement("FileInfo="+_fInfo);
-            util.printEventLog(_theLogger,"FileTransferTest.setPreviousStatusPanel", inputVec,silent,useLog);
+            util.printEventLog(_theLogger,
+		"FileTransferTest.setPreviousStatusPanel", inputVec,silent,useLog);
             if(!silent) {
              if(_debug) {
               System.out.println(_fInfo);

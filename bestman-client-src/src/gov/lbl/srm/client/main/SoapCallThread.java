@@ -54,6 +54,7 @@ public class SoapCallThread extends Thread {
   private java.util.logging.Logger _theLogger;
   private boolean silent;
   private boolean useLog;
+  private String exceptionHappened="";
   private Vector inputVec = new Vector ();
 
  public SoapCallThread (ISRM srm, Object request, String callingMethodName) {
@@ -65,6 +66,10 @@ public class SoapCallThread extends Thread {
 
  public Object getResponseObject() {
    return response;
+ }
+
+ public String exceptionHappened() {
+    return exceptionHappened;
  }
 
  public void setInterrupt(boolean b) {
@@ -340,11 +345,22 @@ public class SoapCallThread extends Thread {
        idx != -1 || idx1 != -1 || idx5 != -1 || 
        idx6 != -1 || idx7 != -1 || idx8 != -1 || idx9 !=-1 || 
        idx10 != -1 || idx11 !=-1) {
-      if(idx != -1 || idx6  != -1 || idx7 != -1 || idx8 != -1) {
+      
+      if(idx != -1)  {
         inputVec.clear(); 
         inputVec.addElement("ExitStatus="+90);
         util.printEventLog(_theLogger,"ExitCodeStatus",inputVec,silent,useLog);
         System.exit(90);
+      }
+      else if(idx6 != -1 || idx7 != -1 || idx8 != -1 || idx9 != -1) {
+        inputVec.clear(); 
+        inputVec.addElement("EOFExceptionCaught");
+        util.printEventLog(_theLogger,"ExitCodeStatus",inputVec,silent,useLog);
+        exceptionHappened=msg;
+        //System.out.println(">>exception caught and returning ");
+        //may 27, 11 added for retrying tanya's case for EOFException
+        return;
+        //System.exit(90);
       }
       else if(idx1 != -1 || idx5 != -1) {
         util.printMessage("\nException : proxy type mismatch, " +

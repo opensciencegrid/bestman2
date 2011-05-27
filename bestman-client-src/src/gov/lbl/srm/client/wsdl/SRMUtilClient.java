@@ -940,6 +940,7 @@ private static Object callStaticSoapThread(ISRM srm,
 
      int retrySoFar=0;
      boolean timeOutHappened=false;
+     String exceptionHappened="";
      Vector vec = new Vector ();
      int nRetry = numRetry;
      boolean statusCall = false;
@@ -983,7 +984,9 @@ private static Object callStaticSoapThread(ISRM srm,
          responseObject = soapCallThread.getResponseObject();
          timeOutCallBack.setObject(responseObject);
          timeOutHappened = timeOutCallBack.isTimedOut();
-         if(timeOutHappened && responseObject == null) {
+         exceptionHappened = soapCallThread.exceptionHappened();
+         if((timeOutHappened && responseObject == null) ||
+           (!exceptionHappened.equals("") && responseObject == null)) {
            vec.clear();
            vec.addElement("Interrupting " + methodName);
            vec.addElement("timedout and responseobject is null");
@@ -1056,6 +1059,7 @@ private Object callSoapThread(Object request,
 
      int retrySoFar=0;
      boolean timeOutHappened=false;
+     String exceptionHappened="";
      int nRetry = numRetry;
      boolean statusCall = false;
 
@@ -1092,6 +1096,7 @@ private Object callSoapThread(Object request,
        boolean stay=true;
        timeOutHappened = timeOutCallBack.isTimedOut();
 
+
        while(stay) {
          Object responseObject = soapCallThread.getResponseObject();
          timeOutCallBack.setObject(responseObject);
@@ -1099,7 +1104,9 @@ private Object callSoapThread(Object request,
          responseObject = soapCallThread.getResponseObject();
          timeOutCallBack.setObject(responseObject);
          timeOutHappened = timeOutCallBack.isTimedOut();
-         if(timeOutHappened && responseObject == null) {
+         exceptionHappened = soapCallThread.exceptionHappened();
+         if((timeOutHappened && responseObject == null) ||
+           (!exceptionHappened.equals("") && responseObject == null)) {
            inputVec.clear();
            inputVec.addElement("Interrupting " + methodName);
            inputVec.addElement("timedout and responseobject is null");
@@ -6191,6 +6198,7 @@ public TStatusCode doSrmLs(Vector fileInfo,boolean doGsiFTPList,
     util.printEventLog(_theLogger,"DoSrmLsRequest", inputVec,silent,useLog);
 
     SrmLsResponse result = null;
+
 
     result = (SrmLsResponse) callSoapThread(req,result,"srmls");
 

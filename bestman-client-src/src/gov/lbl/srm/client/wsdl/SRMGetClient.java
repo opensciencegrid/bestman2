@@ -1498,6 +1498,7 @@ private Object callSoapThread(Object request,
 
      int retrySoFar=0;
      int nRetry = numRetry;
+     String exceptionHappened="";
 
      boolean timeOutHappened=false;
      boolean statusCall=false;
@@ -1537,7 +1538,9 @@ private Object callSoapThread(Object request,
          responseObject = soapCallThread.getResponseObject();
          timeOutCallBack.setObject(responseObject);
          timeOutHappened = timeOutCallBack.isTimedOut();
-         if(timeOutHappened && responseObject == null) {
+         exceptionHappened = soapCallThread.exceptionHappened();
+         if((timeOutHappened && responseObject == null) ||
+           (!exceptionHappened.equals("") && responseObject == null)) {
            inputVec.clear();
            inputVec.addElement("Interrupting " + methodName);
            inputVec.addElement("timedout and responseobject is null");
