@@ -120,7 +120,7 @@ private boolean textReport=true;
 private boolean statusMaxTimeGiven=false;
 private boolean esgReportType;
 private boolean serviceURLGiven=false;
-private int connectionTimeOutAllowed=600;
+private int connectionTimeOutAllowed=1800;
 private int setHTTPConnectionTimeOutAllowed=600;
 private boolean gotConnectionTimeOut;
 private boolean gotHTTPConnectionTimeOut;
@@ -1140,7 +1140,7 @@ public SRMClientLs(String[] args, PrintIntf pIntf) {
 			   _debug,silent, useLog,doGsiFTPList, doLocalLsList,
 			   statusMaxTimeAllowed,statusWaitTime,storageInfo,proxyType,
 			   connectionTimeOutAllowed,setHTTPConnectionTimeOutAllowed,
-		       delegationNeeded,3,30);
+		       delegationNeeded,3,60);
 
       if(tokenType == 'p') {
         fileStorageType = TFileStorageType.PERMANENT;

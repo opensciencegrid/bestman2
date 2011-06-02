@@ -1049,7 +1049,7 @@ public SRMClientSpace(String[] args, PrintIntf pIntf) {
                 _theLogger, logger, pIntf, _debug,silent,useLog,false,false,
 		statusMaxTimeAllowed,statusWaitTime,storageInfo,proxyType,
 		connectionTimeOutAllowed,setHTTPConnectionTimeOutAllowed,
-	        delegationNeeded,3,30);
+	        delegationNeeded,3,60);
 
        TStatusCode code  = utilClient.getSpaceToken(spaceTokenDesc); 
        if(code != null) {
@@ -1070,7 +1070,7 @@ public SRMClientSpace(String[] args, PrintIntf pIntf) {
                 _theLogger, logger, pIntf, _debug,silent,useLog,false,false,
 		statusMaxTimeAllowed,statusWaitTime,storageInfo,proxyType,
 		connectionTimeOutAllowed,setHTTPConnectionTimeOutAllowed,
-	        delegationNeeded,3,30);
+	        delegationNeeded,3,60);
 
        ISRM srm = utilClient.getISRM();
 
@@ -1109,7 +1109,7 @@ public SRMClientSpace(String[] args, PrintIntf pIntf) {
                 _theLogger, logger, pIntf, _debug,silent,useLog,false,false,
 			    statusMaxTimeAllowed,statusWaitTime,storageInfo,proxyType,
 				connectionTimeOutAllowed,setHTTPConnectionTimeOutAllowed,
-			    delegationNeeded,3,30);
+			    delegationNeeded,3,60);
        utilClient.setFileToken(fileToken);
        utilClient.setSpaceParams(spaceType,accessLatencyType,
 			tokenLifetime,tokenSize,gTokenSize);
@@ -1142,7 +1142,7 @@ public SRMClientSpace(String[] args, PrintIntf pIntf) {
                 _theLogger, logger, pIntf, _debug,silent,useLog,false,false,
 				 statusMaxTimeAllowed,statusWaitTime,storageInfo,proxyType,
 				 connectionTimeOutAllowed,setHTTPConnectionTimeOutAllowed,
-			    delegationNeeded,3,30);
+			    delegationNeeded,3,60);
        utilClient.setFileToken(fileToken);
        utilClient.setSpaceParams(spaceType,accessLatencyType,
 			tokenLifetime,tokenSize,gTokenSize);
@@ -1163,7 +1163,7 @@ public SRMClientSpace(String[] args, PrintIntf pIntf) {
 					pIntf, _debug,silent,useLog,false, false,statusMaxTimeAllowed,
 				    statusWaitTime,storageInfo,proxyType,
 					connectionTimeOutAllowed,setHTTPConnectionTimeOutAllowed,
-			    delegationNeeded,3,30);
+			    delegationNeeded,3,60);
           utilClient.setRequestToken(requestToken);
           sCode = utilClient.releaseFile(keepSpace, requestType, fileInfo);
         }
@@ -1191,7 +1191,7 @@ public SRMClientSpace(String[] args, PrintIntf pIntf) {
                  _theLogger, logger, pIntf, _debug,silent,useLog,false,false,
 				 statusMaxTimeAllowed,statusWaitTime,storageInfo,proxyType,
 				 connectionTimeOutAllowed,setHTTPConnectionTimeOutAllowed,
-			    delegationNeeded,3,30);
+			    delegationNeeded,3,60);
         utilClient.setFileToken(fileToken);
         TStatusCode code  = utilClient.releaseSpace(forceFileRelease);
         if(code != null) {
@@ -1213,7 +1213,7 @@ public SRMClientSpace(String[] args, PrintIntf pIntf) {
                  _theLogger, logger, pIntf, _debug,silent,useLog,false,false,
 			     statusMaxTimeAllowed,statusWaitTime,storageInfo,proxyType,
 			     connectionTimeOutAllowed,setHTTPConnectionTimeOutAllowed,
-			    delegationNeeded,3,30);
+			    delegationNeeded,3,60);
         utilClient.setFileToken(fileToken);
         TStatusCode code = utilClient.purgeFromSpace(fileInfo);
         if(code != null) {
@@ -1235,7 +1235,7 @@ public SRMClientSpace(String[] args, PrintIntf pIntf) {
                  _theLogger, logger, pIntf, _debug,silent,useLog,false,false,
 				 statusMaxTimeAllowed,statusWaitTime,storageInfo,proxyType,
 				 connectionTimeOutAllowed,setHTTPConnectionTimeOutAllowed,
-			    delegationNeeded,3,30);
+			    delegationNeeded,3,60);
         utilClient.setFileToken(fileToken);
         TStatusCode code = utilClient.changeSpace(fileInfo);
         if(code != null) {
@@ -1251,7 +1251,7 @@ public SRMClientSpace(String[] args, PrintIntf pIntf) {
                 _theLogger, logger, pIntf, _debug,silent,useLog,false,false,
 				statusMaxTimeAllowed,statusWaitTime,storageInfo,proxyType,
 			    connectionTimeOutAllowed,setHTTPConnectionTimeOutAllowed,
-			    delegationNeeded,3,30);
+			    delegationNeeded,3,60);
         utilClient.setSpaceParams(spaceType,accessLatencyType,
 			tokenLifetime,tokenSize,gTokenSize);
         //TStatusCode code = utilClient.reserveSpace(textReport,false);

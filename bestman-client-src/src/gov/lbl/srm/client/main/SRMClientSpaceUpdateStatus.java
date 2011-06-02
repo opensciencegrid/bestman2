@@ -862,7 +862,7 @@ public SRMClientSpaceUpdateStatus(String[] args, PrintIntf pIntf) {
              _theLogger, logger, pIntf, _debug,silent,useLog,false,false,
 			 statusMaxTimeAllowed,statusWaitTime,storageInfo,proxyType,
 			 connectionTimeOutAllowed,setHTTPConnectionTimeOutAllowed,
-			 delegationNeeded,3,30);
+			 delegationNeeded,3,60);
        utilClient.setFileToken(fileToken);
        utilClient.setSpaceParams(spaceType,accessLatencyType,
 			tokenLifetime,tokenSize,gTokenSize);

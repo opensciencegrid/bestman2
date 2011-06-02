@@ -2341,8 +2341,8 @@ private Object callSoapThread(Object request,
 
      while(retrySoFar < nRetry) {
 
-       if(retrySoFar > 0) {
-         Thread.sleep(retryTimeOut);
+       if(retrySoFar > 1) {
+         Thread.sleep(retryTimeOut*1000);
        }
         
        inputVec.clear();

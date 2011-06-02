@@ -791,7 +791,7 @@ public SRMClientMv(String[] args, PrintIntf pIntf) {
 			   _debug,silent, useLog,doGridFTPList, doLocalLsList,
 			   statusMaxTimeAllowed,statusWaitTime,storageInfo,proxyType,
 			   connectionTimeOutAllowed,setHTTPConnectionTimeOutAllowed,
-		       delegationNeeded,3,30);
+		       delegationNeeded,3,60);
 
       String sCode = utilClient.doSrmMv(fileInfo,doLocalLsList,doGridFTPList);
       int exitValue = util.mapStatusCode(sCode);

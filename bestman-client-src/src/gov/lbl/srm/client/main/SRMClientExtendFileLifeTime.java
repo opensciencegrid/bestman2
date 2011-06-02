@@ -942,7 +942,7 @@ public SRMClientExtendFileLifeTime(String[] args, PrintIntf pIntf) {
 			   credential, _theLogger,logger, pIntf, _debug,silent,useLog,false,false,
 			   statusMaxTimeAllowed,statusWaitTime,storageInfo,proxyType,
 			   connectionTimeOutAllowed,setHTTPConnectionTimeOutAllowed,
-		       delegationNeeded,3,30);
+		       delegationNeeded,3,60);
 
       //if -s <sourceUrl> -lifetime must be provided. (request token is not
       //necessary in this case.
@@ -1040,7 +1040,7 @@ public SRMClientExtendFileLifeTime(String[] args, PrintIntf pIntf) {
 			   credential, _theLogger,logger, pIntf, _debug,silent,useLog,false,false,
 			   statusMaxTimeAllowed,statusWaitTime,"",proxyType,
 		       connectionTimeOutAllowed,setHTTPConnectionTimeOutAllowed,
-		       delegationNeeded,3,30);
+		       delegationNeeded,3,60);
              utilClient.setFileToken(fileToken);
              utilClient.setSpaceParams(spaceType,accessLatencyType,
                    lifeTime,tokenSize,gTokenSize);

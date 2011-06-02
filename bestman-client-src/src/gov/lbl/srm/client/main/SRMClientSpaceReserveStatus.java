@@ -759,7 +759,7 @@ public SRMClientSpaceReserveStatus(String[] args, PrintIntf pIntf) {
                 _theLogger, logger, pIntf, _debug,silent,useLog,false,false,
 				statusMaxTimeAllowed,statusWaitTime,"",proxyType,
 				connectionTimeOutAllowed,setHTTPConnectionTimeOutAllowed,
-			    delegationNeeded,3,30);
+			    delegationNeeded,3,60);
       TStatusCode sCode = utilClient.reserveSpaceStatus(textReport,rToken);
       if(pIntf == null) {
        int exitValue = util.mapStatusCode(sCode);

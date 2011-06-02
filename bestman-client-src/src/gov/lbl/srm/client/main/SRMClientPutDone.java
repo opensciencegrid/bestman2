@@ -829,7 +829,7 @@ public SRMClientPutDone(String[] args, PrintIntf pIntf) {
 			   false, false,
 			   statusMaxTimeAllowed,statusWaitTime,storageInfo,proxyType,
 			   connectionTimeOutAllowed,setHTTPConnectionTimeOutAllowed,
-		       delegationNeeded,3,30);
+		       delegationNeeded,3,60);
 
       TStatusCode sCode = utilClient.doSrmPutDone(fileInfo, requestToken);
       int exitValue = util.mapStatusCode(sCode);

@@ -881,7 +881,7 @@ public SRMClientSpaceReleaseFile(String[] args, PrintIntf pIntf) {
 				    statusMaxTimeAllowed,
 				    statusWaitTime,storageInfo,proxyType,
 					connectionTimeOutAllowed,setHTTPConnectionTimeOutAllowed,
-			        delegationNeeded,3,30);
+			        delegationNeeded,3,60);
           utilClient.setRequestToken(requestToken);
           sCode = utilClient.releaseFile(keepSpace, requestType, fileInfo);
       //}

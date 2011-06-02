@@ -333,10 +333,10 @@ public class SoapCallThread extends Thread {
      String msg = e.getMessage();
      int idx = msg.indexOf("Connection refused");
      int idx1 = msg.indexOf("Defective credential detected");
-     int idx5 = msg.indexOf("org.globus.common.ChainedIOException");
-     int idx6 = msg.indexOf("java.net.SocketTimeoutException: Read timed out");
+     int idx5 = msg.indexOf("IOException");
+     int idx6 = msg.indexOf("Read timed out");
      int idx7 = msg.indexOf("Connection timed out");
-     int idx8 = msg.indexOf("java.net.SocketException: Connection reset");
+     int idx8 = msg.indexOf("Connection reset");
      int idx9 = msg.indexOf("EOFException");
      int idx10 = msg.indexOf("Unauthorized");
      int idx11 = msg.indexOf("NumberFormatException");

@@ -815,7 +815,7 @@ public SRMClientCheckPermission(String[] args, PrintIntf pIntf) {
 	           false,false,
 			   statusMaxTimeAllowed,statusWaitTime,storageInfo,proxyType,
 			   connectionTimeOutAllowed,setHTTPConnectionTimeOutAllowed,
-               delegationNeeded,3,30);
+               delegationNeeded,3,60);
       TStatusCode sCode = utilClient.doSrmCheckPermission(fileInfo);
       int exitCode = util.mapStatusCode(sCode);
         inputVec.clear(); 

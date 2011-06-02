@@ -790,7 +790,7 @@ public SRMClientGetPermission(String[] args, PrintIntf pIntf) {
 			   credential, _theLogger, logger, pIntf, _debug,silent,useLog,false,false,
 			   statusMaxTimeAllowed,statusWaitTime,storageInfo,proxyType,
 			   connectionTimeOutAllowed,setHTTPConnectionTimeOutAllowed,
-			   delegationNeeded,3,30);
+			   delegationNeeded,3,60);
       TStatusCode sCode = utilClient.doSrmGetPermission(fileInfo);
       int exitValue = util.mapStatusCode(sCode);
         inputVec.clear(); 

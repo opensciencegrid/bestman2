@@ -964,7 +964,7 @@ public SRMClientLsStatus(String[] args, PrintIntf pIntf) {
 			   _debug,silent, useLog,doGsiFTPList, false,
 			   statusMaxTimeAllowed,statusWaitTime,storageInfo,proxyType,
 			   connectionTimeOutAllowed,setHTTPConnectionTimeOutAllowed,
-			   delegationNeeded,3,30);
+			   delegationNeeded,3,60);
 
       if(!requestToken.equals("")) {
              //util.printMessage("\nSRM-DIR: Doing srm ls status for the request token ", logger,silent);

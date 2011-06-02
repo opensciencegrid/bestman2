@@ -722,7 +722,7 @@ public SRMClientPing(String[] args, PrintIntf pIntf) {
 		new SRMUtilClient(serviceUrl,uid, "",credential,
                 _theLogger, logger,pIntf,_debug,silent,useLog,
 			    false,false, 5,15,"",
-				proxyType,connectionTimeOutAllowed,setHTTPConnectionTimeOutAllowed,delegationNeeded,3,30);
+				proxyType,connectionTimeOutAllowed,setHTTPConnectionTimeOutAllowed,delegationNeeded,3,60);
      utilClient.doPing();
 
      if(pIntf == null) {

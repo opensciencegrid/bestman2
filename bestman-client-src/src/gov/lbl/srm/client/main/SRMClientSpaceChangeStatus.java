@@ -911,7 +911,7 @@ public SRMClientSpaceChangeStatus(String[] args, PrintIntf pIntf) {
                 _theLogger, logger, pIntf, _debug,silent,useLog,false, false,
 				statusMaxTimeAllowed,statusWaitTime,storageInfo,proxyType,
 				connectionTimeOutAllowed,setHTTPConnectionTimeOutAllowed,
-			    delegationNeeded,3,30);
+			    delegationNeeded,3,60);
       utilClient.setFileToken(fileToken);
       TStatusCode sCode = utilClient.changeSpace(fileInfo);
       if(pIntf == null) {

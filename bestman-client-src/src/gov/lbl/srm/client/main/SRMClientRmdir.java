@@ -952,7 +952,7 @@ public SRMClientRmdir(String[] args, PrintIntf pIntf) {
 			   _debug,silent, useLog, doGridFTPList, doLocalLsList,
 			   statusMaxTimeAllowed,statusWaitTime,storageInfo,proxyType,
 			   connectionTimeOutAllowed,setHTTPConnectionTimeOutAllowed,
-			   delegationNeeded,3,30);
+			   delegationNeeded,3,60);
 
       if(tokenType == 'p') {
         fileStorageType = TFileStorageType.PERMANENT;

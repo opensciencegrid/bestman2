@@ -956,8 +956,8 @@ private static Object callStaticSoapThread(ISRM srm,
 
      while(retrySoFar < numRetry) {
 
-       if(retrySoFar > 0) {
-         Thread.sleep(retryTimeOut);
+       if(retrySoFar > 1) {
+         Thread.sleep(retryTimeOut*1000);
        }
 
        vec.clear();
@@ -1075,8 +1075,8 @@ private Object callSoapThread(Object request,
 
      while(retrySoFar < nRetry) {
 
-       if(retrySoFar > 0) {
-         Thread.sleep(retryTimeOut);
+       if(retrySoFar > 1) {
+         Thread.sleep(retryTimeOut*1000);
        }
 
        inputVec.clear();

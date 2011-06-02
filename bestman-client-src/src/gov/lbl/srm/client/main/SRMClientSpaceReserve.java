@@ -931,7 +931,7 @@ public SRMClientSpaceReserve(String[] args, PrintIntf pIntf) {
               _theLogger, logger, pIntf, _debug,silent,useLog,false,false,
 		   	  statusMaxTimeAllowed,statusWaitTime,storageInfo,proxyType,
 			  connectionTimeOutAllowed,setHTTPConnectionTimeOutAllowed,
-			  delegationNeeded,3,30);
+			  delegationNeeded,3,60);
       utilClient.setSpaceParams(spaceType,accessLatencyType,
 			tokenLifetime,tokenSize,gTokenSize);
       String sCode = utilClient.reserveSpace(textReport,submitOnly);

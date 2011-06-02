@@ -760,7 +760,7 @@ public SRMClientSpaceGetSpaceTokens(String[] args, PrintIntf pIntf) {
                 _theLogger, logger, pIntf, _debug,silent,useLog,false,false,
                 statusMaxTimeAllowed,statusWaitTime,storageInfo,proxyType,
 				connectionTimeOutAllowed,setHTTPConnectionTimeOutAllowed,
-			    delegationNeeded,3,30);
+			    delegationNeeded,3,60);
       TStatusCode sCode = utilClient.getSpaceToken(spaceTokenDesc);
       if(pIntf == null) {
        int exitValue = util.mapStatusCode(sCode);

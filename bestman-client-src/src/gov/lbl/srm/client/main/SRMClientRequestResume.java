@@ -737,7 +737,7 @@ public SRMClientRequestResume(String[] args, PrintIntf pIntf) {
 			   false, false,
 			   statusMaxTimeAllowed,statusWaitTime,"",proxyType,
 			   connectionTimeOutAllowed,setHTTPConnectionTimeOutAllowed,
-			   delegationNeeded,3,30);
+			   delegationNeeded,3,60);
       TStatusCode sCode = utilClient.doSrmResumeRequest(requestToken);
       int exitValue = util.mapStatusCode(sCode);
       if(pIntf == null) {

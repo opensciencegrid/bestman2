@@ -823,7 +823,7 @@ public SRMClientRequestAbortFiles(String[] args, PrintIntf pIntf) {
 			   false, false,
 			   statusMaxTimeAllowed,statusWaitTime,storageInfo,proxyType,
 			   connectionTimeOutAllowed,setHTTPConnectionTimeOutAllowed,
-			   delegationNeeded,3,30);
+			   delegationNeeded,3,60);
 
       if(requestToken == null) { 
           inputVec.clear(); 
