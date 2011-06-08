@@ -795,6 +795,7 @@ public class Config {
 	handleMiscOptions(prop);
 
 	assignLogs(prop);
+	setLogLevel();
 
 	handleFileAccessOptions(prop);
 
