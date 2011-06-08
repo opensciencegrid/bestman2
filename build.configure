@@ -1223,12 +1223,25 @@ Options:
   --with-ant-home=<PATH>            Specify the ANT_HOME path
   --with-wget-path=<PATH>           Specify the WGET path
 
+Unsupported Options:
+  --enable-cleanup  (default=yes)    Enable clean up after the build
+  --enable-cached-src  (default=no)    Enable using cached bestman src without downloading from source codeforge
+  --enable-cached-pkg  (default=no)    Enable using cached bestman pkg without downloading a new dist pkg
+  --enable-server-build (default=yes)    Enable building bestman2 server
+  --enable-client-build (default=yes)    Enable building bestman client
+  --enable-tester-build (default=yes)    Enable building srm-tester
+  --with-pkg-dir=<path>   Specify the BeStMan pkg built directory
+
+
+
 _ACEOF
 
   cat <<\_ACEOF
 _ACEOF
 
   cat <<\_ACEOF
+
+
 
 Report bugs to <srm@lbl.gov>.
 _ACEOF
