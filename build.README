@@ -1,0 +1,23 @@
+
+Download build.configure
+chmod 755 build.configure
+
+Required Options:
+  --with-bestman-url=<URL>          Specify the BeStMan pkg download URL 
+                         from https://codeforge.lbl.gov/projects/bestman/
+  --with-bestman2-version=<STRING>  Specify the BeStMan version
+  --with-revision=<INT>             Specifi the svn revision number
+
+Options:
+  --with-java-home=<PATH>           Specify the JAVA_HOME directory (> 1.6.0_01)
+  --with-ant-home=<PATH>            Specify the ANT_HOME path
+  --with-wget-path=<PATH>           Specify the WGET path
+
+sample build.configure options:
+./build.configure \
+--with-ant-home=/software/apache-ant-1.7.0 \
+--with-java-home=/software/jdk1.6.0_20 \
+--with-bestman2-version=2.0.12 \
+--with-bestman-url=https://codeforge.lbl.gov/frs/download.php/289/bestman2-2.0.12.tar.gz \
+--with-revision=37
+
