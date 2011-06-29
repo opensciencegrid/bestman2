@@ -2205,10 +2205,22 @@ public int doStatus(String uid, Vector fileInfo, String rToken)
  URI[] fromsurl = new URI[size];
  URI[] tosurl  = new URI[size];
 
+ boolean skipSettingTURL=false;
+
  for(int i = 0; i < size; i++) {
    FileIntf fIntf = (FileIntf)fileInfo.elementAt(i);
    fromsurl[i] =  new URI(fIntf.getSURL());
-   tosurl[i] = new URI(fIntf.getTURL());
+   if(!fIntf.getTURL().equals("")) {
+    tosurl[i] = new URI(fIntf.getTURL());
+   }
+   else {
+     if(size > 1) {
+       tosurl[i] = new URI(fIntf.getSURL());
+     }
+     else {
+       skipSettingTURL=true;
+     }
+   }
    sampleURL=fIntf.getSURL();
    if(_debug) {
      util.printMessage("SRM-CLIENT: SURL="+fromsurl[i],logger,silent);
@@ -2217,9 +2229,11 @@ public int doStatus(String uid, Vector fileInfo, String rToken)
  }
 
  ArrayOfAnyURI arrayOfFromURI = SRMUtilClient.convertToArrayOfAnyURI(fromsurl);
- ArrayOfAnyURI arrayOfToURI   = SRMUtilClient.convertToArrayOfAnyURI(tosurl);
  r.setArrayOfSourceSURLs(arrayOfFromURI);
- r.setArrayOfTargetSURLs(arrayOfToURI);
+ if(!skipSettingTURL) {
+   ArrayOfAnyURI arrayOfToURI   = SRMUtilClient.convertToArrayOfAnyURI(tosurl);
+   r.setArrayOfTargetSURLs(arrayOfToURI);
+ } 
 
  r.setRequestToken(rToken);
  if(!uid.equals("")) {

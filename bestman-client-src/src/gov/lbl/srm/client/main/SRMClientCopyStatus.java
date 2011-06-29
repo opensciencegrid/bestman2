@@ -946,7 +946,8 @@ public SRMClientCopyStatus(String[] args, PrintIntf pIntf) {
 
                if(!sourceUrl.equals("") || !targetUrl.equals("")) {
                  surl[0] = sourceUrl;
-                 if(targetUrl.equals("")) targetUrl=sourceUrl;
+                 //june 28, 11
+                 //if(targetUrl.equals("")) targetUrl=sourceUrl;
                  turl[0] = targetUrl;
                  request = createRequest(surl[0],turl[0], "");
                  //requestType is already given by user for doStatus.
@@ -996,6 +997,7 @@ public SRMClientCopyStatus(String[] args, PrintIntf pIntf) {
       String temp = "";
       String tempType ="surlType";
 
+
       if(fileInfo.size() > 0) {
           FileInfo fInfo = (FileInfo) fileInfo.elementAt(0);
           if((requestType.equalsIgnoreCase("put"))) {
@@ -1010,8 +1012,14 @@ public SRMClientCopyStatus(String[] args, PrintIntf pIntf) {
                  temp = fInfo.getSURL(); 
               } 
               else {  
-                 tempType="turlType";
-                 temp = fInfo.getTURL(); 
+                 //june 28, 11
+                 if(fInfo.getTURL().equals("")) {
+                   temp = fInfo.getSURL(); 
+                 }
+                 else {
+                   tempType="turlType";
+                   temp = fInfo.getTURL(); 
+                 }
               }
               overrideserviceurl = true;
           }
@@ -1039,7 +1047,7 @@ public SRMClientCopyStatus(String[] args, PrintIntf pIntf) {
       if(overrideserviceurl) {
           //serviceUrl = getServiceUrl(temp,1);
           serviceUrl = gov.lbl.srm.client.util.Util.getServiceUrl(temp,serviceURL,
-		     serviceHandle,servicePortNumber,1,silent,useLog,_theLogger,logger);
+	     serviceHandle,servicePortNumber,1,silent,useLog,_theLogger,logger);
           for(int i = 0; i < fileInfo.size(); i++) {
             FileIntf fIntf = (FileIntf)fileInfo.elementAt(i);
             if(tempType.equals("surlType")) {
