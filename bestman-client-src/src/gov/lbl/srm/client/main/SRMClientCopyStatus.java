@@ -880,7 +880,8 @@ public SRMClientCopyStatus(String[] args, PrintIntf pIntf) {
            proxyFile ="/tmp/x509up_u"+MyConfigUtil.getUID2();
          }catch(Exception e) {
            //util.printStackTrace(e,logger);
-           util.printMessage("\nSRM-CLIENT: Exception from client="+e.getMessage(),logger,silent);
+           util.printMessage("\nSRM-CLIENT: Exception from client="+e.getMessage(),
+		logger,silent);
                     util.printEventLogException(_theLogger,"",e);
            proxyFile ="/tmp/x509up_u"+MyConfigUtil.getUID();
          }
@@ -944,6 +945,25 @@ public SRMClientCopyStatus(String[] args, PrintIntf pIntf) {
           surl = new String[1];
           turl = new String[1];
 
+               //System.out.println(">>sourceurl="+sourceUrl);
+               //System.out.println(">>targeturl="+targetUrl);
+
+               //if(requestType.equalsIgnoreCase("put")) {
+                  //if(targetUrl.equals("")) {
+                     //System.out.println("SRM-CLIENT: -t <targeturl> is "+
+			//"required " + "for put requests");   
+                     //System.exit(1);
+                  //}
+               //}
+               //else if((requestType.equalsIgnoreCase("get")) ||
+			//(requestType.equalsIgnoreCase("bringonline"))) {
+                  //if(sourceUrl.equals("")) {
+                     //System.out.println("SRM-CLIENT: -s <sourceurl> is "+
+			//"required " + "for get/bringonline requests");   
+                     //System.exit(1);
+                  //}
+               //}
+
                if(!sourceUrl.equals("") || !targetUrl.equals("")) {
                  surl[0] = sourceUrl;
                  //june 28, 11
@@ -968,12 +988,14 @@ public SRMClientCopyStatus(String[] args, PrintIntf pIntf) {
       } 
       else {
         //by default request is get, so target dir check is done in parseXML
-          request = parseXML(inputFile,useLog);
+        request = parseXML(inputFile,useLog);
       }
 
        if(requestType.equals("")) {
-           util.printMessage("\nPlease provide a -requesttype <request_type>" + requestType, logger,silent);
-           util.printMessage("\nPlease provide a -requesttype <request_type>" , pIntf);
+           util.printMessage("\nPlease provide a -requesttype <request_type>" + 
+			requestType, logger,silent);
+           util.printMessage("\nPlease provide a -requesttype <request_type>" , 
+			pIntf);
            showUsage(false);
        }
 
@@ -997,14 +1019,24 @@ public SRMClientCopyStatus(String[] args, PrintIntf pIntf) {
       String temp = "";
       String tempType ="surlType";
 
-
       if(fileInfo.size() > 0) {
           FileInfo fInfo = (FileInfo) fileInfo.elementAt(0);
           if((requestType.equalsIgnoreCase("put"))) {
                temp = fInfo.getTURL(); 
                tempType="turlType";
-               if(temp.startsWith("srm:")) {
-                 overrideserviceurl = true;
+               if(serviceURLGiven) {
+                 int idx = temp.indexOf("?SFN");
+                 if(idx != -1) {
+                   String aaa = temp.substring(0,idx);
+                   if(aaa.equals(serviceUrl)) {
+                     overrideserviceurl=true;
+                   }
+                 }
+               }
+               else {
+                if(temp.startsWith("srm:")) {
+                  overrideserviceurl = true;
+                }
                }
           }
           else if((requestType.equalsIgnoreCase("copy"))) {
@@ -1021,18 +1053,23 @@ public SRMClientCopyStatus(String[] args, PrintIntf pIntf) {
                    temp = fInfo.getTURL(); 
                  }
               }
-              overrideserviceurl = true;
+              if(!serviceURLGiven) {
+                overrideserviceurl = true;
+              }
           }
           else {
              temp = fInfo.getSURL();
              if(temp.startsWith("srm:")) {
-               overrideserviceurl = true;
+               if(!serviceURLGiven) {
+                 overrideserviceurl = true;
+               }
              }
           }
       }
-      else {  
+
+
          if(statusToken != null && !statusToken.equals("")) {
-               if(serviceUrl.equals("")) {
+               if(temp.equals("") && serviceUrl.equals("")) {
                  util.printMessage("\nPlease provide the -serviceurl",
 		   	      logger,silent);
                  showUsage(false);
@@ -1043,9 +1080,14 @@ public SRMClientCopyStatus(String[] args, PrintIntf pIntf) {
 		   	    logger,silent);
               showUsage(false);
          }
-      }
+
+      //System.out.println(">>>fileInfo.size()="+fileInfo.size() +  " " +
+		//overrideserviceurl);
+     
       if(overrideserviceurl) {
           //serviceUrl = getServiceUrl(temp,1);
+          //System.out.println(">>temp="+temp+ " " + serviceURL +  " " +
+		//serviceUrl);
           serviceUrl = gov.lbl.srm.client.util.Util.getServiceUrl(temp,serviceURL,
 	     serviceHandle,servicePortNumber,1,silent,useLog,_theLogger,logger);
           for(int i = 0; i < fileInfo.size(); i++) {
@@ -1074,14 +1116,16 @@ public SRMClientCopyStatus(String[] args, PrintIntf pIntf) {
 		        ("\nPlease provide the -serviceurl full SRM service url",
 					logger,silent);
               util.printMessage 
-		        ("  example:srm://<hostname>:<port>//wsdlpath",logger,silent);
+		        ("  example:srm://<hostname>:<port>//wsdlpath",
+				logger,silent);
                 showUsage(false);
             }
            }
           }
           //serviceUrl = getServiceUrl(serviceUrl,0);
-          serviceUrl = gov.lbl.srm.client.util.Util.getServiceUrl(serviceUrl,serviceURL,
-		     serviceHandle,servicePortNumber,0,silent,useLog,_theLogger,logger);
+          serviceUrl = gov.lbl.srm.client.util.Util.getServiceUrl(
+	     serviceUrl,serviceURL, serviceHandle,servicePortNumber,0,
+	     silent,useLog,_theLogger,logger);
       } 
 
       if(!doReleaseFile) {
@@ -1835,16 +1879,23 @@ private Vector  validateURL(Request request) {
         }
       }
       else {  
+        if(requestType.equalsIgnoreCase("put"))  {
+        }  
+        else {
         inputVec = new Vector();
         inputVec.addElement("Reason=Given surl is not valid " + surl +
-			" surl should start with gsiftp, ftp, http, srm, file" +
+		    " surl should start with gsiftp, ftp, http, srm, file" +
 		    " skipping this file in the request");
         util.printEventLog(_theLogger,"ValidateURL",inputVec,silent,useLog);
-        util.printMessage("\nSRM-CLIENT: Given surl is not valid " + surl, logger,silent);
+        util.printMessage("\nSRM-CLIENT: Given surl is not valid " + surl, 
+		logger,silent);
         util.printMessage
-	 	  ("\nSRM-CLIENT: surl should start with gsiftp,ftp,http,srm,file",logger,silent);
-        util.printMessage("SRM-CLIENT: skipping this file in the request.",logger,silent);
+	 	  ("\nSRM-CLIENT: surl should start with gsiftp,ftp,http,srm,file",
+			logger,silent);
+        util.printMessage("SRM-CLIENT: skipping this file in the request.",
+			logger,silent);
         skip = true;
+        } 
       }
     }
     if(!skip) {
@@ -2712,8 +2763,8 @@ public void showUsage (boolean b) {
 			"\t                       [command line options]\n"+
             "\n"+
             "\t-conf              <path>\n"+
-		    "\t-serviceurl        <full wsdl service url> \n" +
-            "\t                      example srm://host:port/wsdlpath \n"+
+	    "\t-serviceurl        <full wsdl service url> \n" +
+            "\t                   example srm://host:port/wsdlpath \n"+
             "\t -s                <sourceurl> \n" +
             "\t -t                <targeturl> \n" +
             "\t -f                <inputfile> \n" +

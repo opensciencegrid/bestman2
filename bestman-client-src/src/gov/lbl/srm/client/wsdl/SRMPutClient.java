@@ -2471,7 +2471,7 @@ public int doStatus(String uid, Vector fileInfo, String rToken)
    }
 
    if(_debug) {
-     util.printMessage("\nSRM-CLIENT:  ....Input parameters for SrmStatusOfPutRequest...", logger,silent);
+     util.printMessage("\nSRM-CLIENT:  ....Input parameters for SrmStatusOfPutRequest temp ...", logger,silent);
      util.printMessage("\nSRM-CLIENT:  ....Input parameters for SrmStatusOfPutRequest...", pIntf);
      util.printMessage("SRM-CLIENT: UID="+uid, logger,silent);
      util.printMessage("SRM-CLIENT: UID="+uid, pIntf);
@@ -2482,6 +2482,7 @@ public int doStatus(String uid, Vector fileInfo, String rToken)
    SrmStatusOfPutRequestRequest r = new SrmStatusOfPutRequestRequest();
    int size = fileInfo.size();
    String sampleSURL = "";
+   System.out.println(">>>size="+size);
    URI[] tsurl = new URI[size];
    for(int i = 0; i < size; i++) {
      FileIntf fIntf = (FileIntf)fileInfo.elementAt(i);

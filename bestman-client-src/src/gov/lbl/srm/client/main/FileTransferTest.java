@@ -203,7 +203,6 @@ public void setNewConcurrency(int conc) {
 
 public void setTransferMode(SRMTransferMode mode) {
     this.mode = mode;
-    System.out.println(">>>MODE="+mode);
 }
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::

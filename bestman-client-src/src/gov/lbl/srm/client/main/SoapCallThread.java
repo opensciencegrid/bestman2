@@ -383,6 +383,12 @@ public class SoapCallThread extends Thread {
         System.exit(91);
       }
      }
+     else {
+        inputVec.clear(); 
+        inputVec.addElement("ExitStatus="+91);
+        util.printEventLog(_theLogger,"ExitCodeStatus",inputVec,silent,useLog);
+        System.exit(91);
+     }
     }
  }
 

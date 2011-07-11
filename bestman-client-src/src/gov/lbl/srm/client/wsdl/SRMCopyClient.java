@@ -2271,8 +2271,8 @@ public int doStatus(String uid, Vector fileInfo, String rToken)
    TReturnStatus rStatus = result.getReturnStatus();
    if(rStatus != null) {
      sCode = rStatus.getStatusCode();
-     util.printMessage("\nRequestStatus="+sCode.toString(),logger,silent);
-     util.printMessage("\nRequestExplanation="+rStatus.getExplanation(),logger,silent);
+     util.printMessage("\nRequestStatus1="+sCode.toString(),logger,silent);
+     util.printMessage("\nRequestExplanation1="+rStatus.getExplanation(),logger,silent);
      inputVec.clear();
      inputVec.addElement("RequestId="+rToken);
      inputVec.addElement("RequestStatus="+sCode.toString());
@@ -2286,7 +2286,7 @@ public int doStatus(String uid, Vector fileInfo, String rToken)
      inputVec.addElement("null status code for this request");
      util.printEventLog(_theLogger,"SrmCopy",inputVec,silent,useLog);
    }
-   return util.mapStatusCode(sCode);
+   //return util.mapStatusCode(sCode);
  }
 
  ArrayOfTCopyRequestFileStatus arrayFStatus = result.getArrayOfFileStatuses();
