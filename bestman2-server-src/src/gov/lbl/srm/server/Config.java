@@ -77,6 +77,7 @@ public class Config {
     public static String _DefCacheKeyword = "/srmcache";
     public static String _uploadQueueParameter = null;
     public static String _blockedLocalPath = "/;/etc/;/var";
+    public static String _sudoCommand = null;
 
     //public static 
     public static int _retryCountMax = 2;
@@ -146,6 +147,7 @@ public class Config {
     public static final String _DefConfigEntryUserFileAuthorization="userFileAuthorizationClass";
     public static final String _DefConfigEntryEventLogLevel="eventLogLevel";
     public static final String _DefConfigEntryValidateVoms="validateVomsProxy";
+    public static final String _DefConfigEntrySudoCommand="sudoCommand";
     public static final String _DefConfigStaticTokens="staticTokenList";
 
     public static StaticToken[] _staticTokenList = null;
@@ -704,6 +706,12 @@ public class Config {
 	_accessFileSysUsingSUDO = isTrue(prop, Config._DefConfigEntryAccessFileSysUsingSUDO);
 	_noSudoOnLs = isTrue(prop, Config._DefConfigEntryNoSudoOnLs);
 
+	_sudoCommand = prop.getProperty(Config._DefConfigEntrySudoCommand);
+	if (_sudoCommand == null) {
+	    _sudoCommand = "sudo";
+	}
+	System.out.println("sudo ="+_sudoCommand);
+
 	if (_accessFileSysUsingGSIFTP) {
 	    TSRMUtil.startUpInfo(".......local file system will be accessed through gsiftp");
 	} else if (_accessFileSysUsingSUDO) {
@@ -711,7 +719,8 @@ public class Config {
 	    if (_noSudoOnLs){
 		TSRMUtil.startUpInfo("       however, local _ls_ will not invoke sudo");
 	    }
-	    String sudoTest = "sudo -v -S";
+	    //String sudoTest = "sudo -v -S";
+	    String sudoTest = _sudoCommand +" -v -S";
 	    if (!TPlatformUtil.execCmdValidationWithReturn(sudoTest)) {
 		TSRMUtil.startUpInfo("Failed to verify sudo command:"+sudoTest+" Exiting.");
 		//System.exit(1);
