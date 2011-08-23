@@ -100,19 +100,29 @@ public class TSupportedURLWithFILE extends TSupportedURL {
 	}	
     }
     
-	public int getPort() {
-		return -1;
-	}
+    public int getPort() {
+	return -1;
+    }
+
     public void setFileAccessFS(){
 	if (!_lsAccess.isUsingFileSystem()) {
 	    _lsAccess = new TSRMFileAccessDefault();
+	    TSRMLog.info(this.getClass(), null, "event=setFileAccessDefault", null);
 	}
     }
 
     public void setFileAccessGsiftp() {
 	if (!_lsAccess.isUsingGsiftp()) {
 	    _lsAccess = new TSRMFileAccessGsiftp(this);
+	    TSRMLog.info(this.getClass(), null, "event=setFileAccessGsiftp", null);
 	}
+    }
+
+    public void setFileAccessSudoCaller(String uid) {
+	if (_lsAccess.isUsingFileSystem() || (_lsAccess.isUsingGsiftp())) {
+	    return;
+	}
+	_lsAccess.setUid(uid);
     }
 
     private static void agreeWithAllowedList(File f) {
@@ -655,6 +665,7 @@ public class TSupportedURLWithFILE extends TSupportedURL {
 
 
     private TMetaDataPathDetail listCurrent(File f, TSRMFileListingOption lsOption) {
+
 	//return gov.lbl.srm.storage.Volatile.TDiskDevice.ls(f, lsOption);	
 	TMetaDataPathDetail result = new TMetaDataPathDetail();
 	try {
@@ -1296,8 +1307,28 @@ class  TSRMFileAccessSudo extends ISRMFileAccess {
 	_uid = uid;
     }
 
-    public boolean exists(File f) {
-	return f.exists();
+    public boolean exists(File f) {	
+	//return f.exists();
+	/*if (f.exists()) {
+	    return true;
+	}
+	*/
+	TSRMLog.debug(this.getClass(), null, "event=checkExistsSudoStarts", null);
+	String path  = f.getPath();
+
+	String op = "/bin/ls -l ";
+	//String sudoCommand = "sudo -u "+uid+" "+op+path;
+	String sudoCommand = Config._sudoCommand + " -u "+_uid+" "+op+path;
+	TSRMLog.debug(this.getClass(), null, "event=sudoCommand", sudoCommand);
+	String out = TPlatformUtil.execCmdWithOutput(sudoCommand, true);
+	TSRMLog.debug(this.getClass(), null, "event=listAttrSudoOutputCollected", null);
+	if (out == null) {
+	    return false;
+	} else if (out.startsWith("ERROR")) {
+	    return false;
+	} else {
+	    return true;
+	}
     }
 
     public long getLength(File f) {
@@ -1325,7 +1356,8 @@ class  TSRMFileAccessSudo extends ISRMFileAccess {
 	String uid= lsOption.getUid();
 
 	String op = "/bin/ls -l --time-style=long-iso ";
-	String sudoCommand = "sudo -u "+uid+" "+op+path;
+	//String sudoCommand = "sudo -u "+uid+" "+op+path;
+	String sudoCommand = Config._sudoCommand + " -u"+uid+" "+op+path;
 
 	String out = TPlatformUtil.execCmdWithOutput(sudoCommand, true);
 	TSRMLog.debug(this.getClass(), null, "event=listAttrSudoOutputCollected", null);
@@ -1361,7 +1393,8 @@ class  TSRMFileAccessSudo extends ISRMFileAccess {
 
 	//String op = "/bin/ls -l ";
 	String op = "/bin/ls -l --time-style=long-iso ";
-	String sudoCommand = "sudo -u "+uid+" "+op+f.getPath();
+	//String sudoCommand = "sudo -u "+uid+" "+op+f.getPath();
+	String sudoCommand = Config._sudoCommand+" -u "+uid+" "+op+f.getPath();
 	String out = TPlatformUtil.execCmdWithOutput(sudoCommand, true);
 	if (out == null) {
 	    result.setStatus(TSRMUtil.createReturnStatus(TStatusCode.SRM_FAILURE, "Read nothing from disk through sudo"));
@@ -1408,7 +1441,8 @@ class  TSRMFileAccessSudo extends ISRMFileAccess {
 
 
     private TReturnStatus invokeSudo(String input, String uid, String command) {
-	String sudoCommand = "sudo -u "+uid+" "+command;
+	//String sudoCommand = "sudo -u "+uid+" "+command;
+	String sudoCommand = Config._sudoCommand + " -u "+uid+" "+command;
 	sudoCommand += input;
 	TSRMUtil.startUpInfo("invokeSudo=["+sudoCommand+"]");
 

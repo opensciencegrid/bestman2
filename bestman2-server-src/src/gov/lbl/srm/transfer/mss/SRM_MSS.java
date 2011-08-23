@@ -748,14 +748,17 @@ private void retryRequests(FileObj fObj, Object status,
 // checkStatus
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-public synchronized Object checkStatus (String requestToken) throws Exception {
+public synchronized Object checkStatus (String requestToken) 
+        throws Exception {
 
-   Object[] param = new Object[1];
+   Object[] param = new Object[2];
    param[0] = "REQUEST-TOKEN="+requestToken;
+   param[1] = "PROCESSTIMEOUT="+processTimeOutAllowed;
    _theLogger.log(java.util.logging.Level.FINE,
 	  "CHECK STATUS is called", (Object[]) param);
 
    Object statusObj = statusMap.get(requestToken);
+
    if(statusObj != null) {
        if(statusObj instanceof SRM_MSSFILE_STATUS) {
          SRM_MSSFILE_STATUS fileStatus = (SRM_MSSFILE_STATUS) statusObj; 
@@ -764,7 +767,7 @@ public synchronized Object checkStatus (String requestToken) throws Exception {
          fileStatus.setStatus(pftpmssg);  
          System.out.println(">>>CheckStatus("+requestToken+")="+pftpmssg);
          if(accessType != SRM_ACCESS_TYPE.SRM_ACCESS_GSI && 
-			pftpmssg == MSS_MESSAGE.SRM_MSS_REQUEST_QUEUED) {
+		pftpmssg == MSS_MESSAGE.SRM_MSS_REQUEST_QUEUED) {
            ExecScript p = fileStatus.getCurrentProcess();
            //System.out.println(">>>CheckStatus("+requestToken+")="+p);
            if(p != null) {
@@ -776,8 +779,21 @@ public synchronized Object checkStatus (String requestToken) throws Exception {
                  //startTimeStamp);
            //System.out.println(">>>CheckStatus("+requestToken+")="+
                 //processTimeOutAllowed*1000);
-           if(currentTimeStamp > startTimeStamp+(processTimeOutAllowed*1000)) {
-             System.out.println(">>>CheckStatus("+requestToken+")=processtimedout");
+
+           param = new Object[5];
+           param[0] = "REQUEST-TOKEN="+requestToken;
+           param[1] = "STARTTIMESTAMP="+startTimeStamp;
+           param[2] = "CURRENTTIMESTAMP="+currentTimeStamp;
+           param[3] = "PROCESSTIMEOUT="+processTimeOutAllowed;
+           param[4] = "IF_CONDITION="+
+		(currentTimeStamp > (startTimeStamp+(processTimeOutAllowed*1000)));
+           _theLogger.log(java.util.logging.Level.FINE,
+	        "CHECK STATUS is called", (Object[]) param);
+
+           if(currentTimeStamp > 
+                startTimeStamp+(processTimeOutAllowed*1000)) {
+             System.out.println(">>>CheckStatus("+
+		requestToken+")=processtimedout");
              String logFile = p.getLogFile();
              //if logfile does not exists, it is an error,
              //process might be hanging, if logfile exists and shows
@@ -802,10 +818,10 @@ public synchronized Object checkStatus (String requestToken) throws Exception {
                param[1] = "STATUS="+pftpmssg;
                _theLogger.log(java.util.logging.Level.FINE,
 	            "Process is killed", (Object[]) param);
-             }
-           }
-          }
-         }
+             }//end if
+           }//end if
+          }//end if
+         }//end if
          if(pftpmssg != MSS_MESSAGE.SRM_MSS_REQUEST_QUEUED) {   
             boolean b = fileStatus.getAlreadyReported();
             if(!b) {
@@ -816,11 +832,11 @@ public synchronized Object checkStatus (String requestToken) throws Exception {
               else {
                fileStatus.setAlreadyReported(true);
                statusMap.put(requestToken, 
-				MSS_MESSAGE.SRM_MSS_REQUEST_DONE);
+		   MSS_MESSAGE.SRM_MSS_REQUEST_DONE);
               }
             }
-         }
-       }
+         }//end if
+       }//end if
        else if(statusObj instanceof SRM_PATH) { 
          SRM_PATH fileStatus = (SRM_PATH) statusObj; 
          FileObj fObj = fileStatus.getFileObj();
@@ -841,12 +857,15 @@ public synchronized Object checkStatus (String requestToken) throws Exception {
            if(p != null) {
            long startTimeStamp = p.getStartTimeStamp();
            long currentTimeStamp = System.currentTimeMillis();
-           //System.out.println(">>>CheckStatus("+requestToken+")="+currentTimeStamp);
-           //System.out.println(">>>CheckStatus("+requestToken+")="+startTimeStamp);
+           //System.out.println(">>>CheckStatus("+requestToken+")="+
+		//currentTimeStamp);
+           //System.out.println(">>>CheckStatus("+requestToken+")="+
+		//startTimeStamp);
            //System.out.println(">>>CheckStatus("+requestToken+")="+
                 //processTimeOutAllowed*1000);
            if(currentTimeStamp > startTimeStamp+(processTimeOutAllowed*1000)) {
-             System.out.println(">>>CheckStatus("+requestToken+")=processtimedout");
+             System.out.println(">>>CheckStatus("+
+		requestToken+")=processtimedout");
              String logFile = p.getLogFile();
              //if logfile does not exists, it is an error,
              //process might be hanging, if logfile exists and shows
@@ -876,11 +895,14 @@ public synchronized Object checkStatus (String requestToken) throws Exception {
           }
          }
          if(pftpmssg != MSS_MESSAGE.SRM_MSS_REQUEST_QUEUED) {   
-            util.printMessage("\n***************************",logger,debugLevel);
+            util.printMessage("\n***************************",
+		logger,debugLevel);
             util.printMessage("Path=" + fileStatus.getDir(),logger,debugLevel);
             util.printMessage("isDir=" + fileStatus.isDir(),logger,debugLevel);
-            util.printMessage("Status=" + fileStatus.getStatus(),logger,debugLevel);
-            util.printMessage("***************************\n",logger,debugLevel);
+            util.printMessage("Status=" + fileStatus.getStatus(),
+		logger,debugLevel);
+            util.printMessage("***************************\n",
+		logger,debugLevel);
             boolean b = fileStatus.getAlreadyReported();
             if(!b) {
               int count = fileStatus.getAlreadyReportedCount();
@@ -902,20 +924,23 @@ public synchronized Object checkStatus (String requestToken) throws Exception {
          mkDirStatus.setStatus(pftpmssg);  
          System.out.println(">>>CheckStatus("+requestToken+")="+pftpmssg);
          if(accessType != SRM_ACCESS_TYPE.SRM_ACCESS_GSI && 
-			pftpmssg == MSS_MESSAGE.SRM_MSS_REQUEST_QUEUED) {
+		pftpmssg == MSS_MESSAGE.SRM_MSS_REQUEST_QUEUED) {
            ExecScript p = mkDirStatus.getCurrentProcess();
            if(p != null) {
            long startTimeStamp = p.getStartTimeStamp();
            long currentTimeStamp = System.currentTimeMillis();
-           //System.out.println(">>>CheckStatus("+requestToken+")="+currentTimeStamp);
-           //System.out.println(">>>CheckStatus("+requestToken+")="+startTimeStamp);
+           //System.out.println(">>>CheckStatus("+requestToken+")="+
+		//currentTimeStamp);
+           //System.out.println(">>>CheckStatus("+requestToken+")="+
+		//startTimeStamp);
            //System.out.println(">>>CheckStatus("+requestToken+")="+
                 //processTimeOutAllowed*1000);
            if(currentTimeStamp > startTimeStamp+(processTimeOutAllowed*1000)) {
              //if logfile does not exists, it is an error,
              //process might be hanging, if logfile exists and shows
              //HSI error, then the procees might be hanging too
-             System.out.println(">>>CheckStatus("+requestToken+")=processtimedout");
+             System.out.println(">>>CheckStatus("+requestToken+
+			")=processtimedout");
              String logFile = p.getLogFile();
              boolean b  = checkLogFileForErrors(logFile); 
              if(debugLevel >= 6000) {
@@ -1022,11 +1047,15 @@ public synchronized Object checkStatus (String requestToken) throws Exception {
 			"RequestToken " + requestToken);
        }
        return statusObj;
-   }
+   }//end if
    else {
      throw new Exception("RequestToken not found " + requestToken);
-   }
+   }//end else
 }
+
+//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+//abortRequest
+//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 protected boolean abortRequest (String rid) throws Exception
 {
@@ -2251,9 +2280,20 @@ protected SRM_PATH srmls
      }
    }
 
+   long startMemoryUse = getMemoryUse();
+
    FileObj fObj = new FileObj(accessType, accessInfo, 
 			                   mssintf, requestId, "ls", 
 							   srmMSSPath);
+   long endMemoryUse = getMemoryUse();
+
+   float approximateSize = ( endMemoryUse - startMemoryUse ) /100f;
+   long result = Math.round( approximateSize );
+
+   System.out.println(">>>approximateSize="+approximateSize);
+   System.out.println(">>>result="+result);
+
+
    fObj.setFilePath(path);
    fObj.setRecursive(recursive);
    fObj.setSRMNoCipher(srmnocipher);
@@ -2298,6 +2338,34 @@ protected SRM_PATH srmls
   return srmMSSPath;
 }
 
+private static long getMemoryUse(){
+    putOutTheGarbage();
+    long totalMemory = Runtime.getRuntime().totalMemory();
+
+    putOutTheGarbage();
+    long freeMemory = Runtime.getRuntime().freeMemory();
+
+    return (totalMemory - freeMemory);
+}
+
+private static void putOutTheGarbage() {
+    collectGarbage();
+    collectGarbage();
+}
+
+private static void collectGarbage() {
+    try {
+      System.gc();
+      long fSLEEP_INTERVAL = 100;
+      Thread.currentThread().sleep(fSLEEP_INTERVAL);
+      System.runFinalization();
+      Thread.currentThread().sleep(fSLEEP_INTERVAL);
+    }
+    catch (InterruptedException ex){
+      ex.printStackTrace();
+    }
+}
+
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 // processTransferAction
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -2311,13 +2379,13 @@ void processTransferAction(FileObj fObj, Object status) {
     "PROCESS_TRANSFER_ACTION",(Object[])param);
 
   if(!fObj.getHSIPath().equals("")) {
-         String temp = fObj.getHSIPath();
-         fObj.setHSIPath("");
+       String temp = fObj.getHSIPath();
+       fObj.setHSIPath("");
        MSS_MESSAGE mss_status =
          SRM_MSS_UTIL.findTapeId(temp, MSSHost, MSSPort, 
-			  fObj.getTarget(), fObj.getSource(), fObj, 
+		  fObj.getTarget(), fObj.getSource(), fObj, 
 	          fObj.getAccessType(), fObj.getAccessInfo(), 
-		      this, debugLevel,logPath);
+	          this, debugLevel,logPath);
        if(debugLevel >= 1000 && enableSearchTapeId) {
          util.printMessage("\n\n>>>>>>>>>", logger);
          util.printMessage("Found Tape ID for File " + fObj,logger);

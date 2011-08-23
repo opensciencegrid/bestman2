@@ -26,7 +26,6 @@
  * do so.
  *
 */
-
 /**
  *
  * Email questions to SRM@LBL.GOV
@@ -115,10 +114,12 @@ public class ConfigXrootd extends Config{
 	    _doCheckSizeWithGsiftp = true;
 	}
 
+	/*
 	if (!_doCheckSizeWithXrootdFS && !_doCheckSizeWithGsiftp) {
 	    TSRMUtil.startUpInfo("Configuration is invalid. Either verify file size through FS or Gsiftp or both");
 	    System.exit(1);
 	}
+	*/
 	TSRMUtil.startUpInfoSilent("Checking size through FS?"+_doCheckSizeWithXrootdFS+", gsiftp?"+_doCheckSizeWithGsiftp);
 
 	//TSRMUtil.startUpInfo("Accessing file system via gsiftp?"+Config._accessFileSysUsingGSIFTP);	       

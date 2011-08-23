@@ -229,6 +229,11 @@ public class SRMXrootd extends TSRMServerIdle {
 		ff.setFileAccessFS();
 	    } else if (ConfigXrootd._doCheckSizeWithGsiftp) {
 		ff.setFileAccessGsiftp();
+	    } else {
+		String dn = TSRMService.gGetUID("srmRmdir");
+		String uid= ConfigXrootd.getMappedID(dn,null);
+		System.out.println("::::::::::::::::::::::: "+uid);
+		ff.setFileAccessSudoCaller(uid);
 	    }
 	    ff.useCredential(creds);
 	    return ff.checkExistence();

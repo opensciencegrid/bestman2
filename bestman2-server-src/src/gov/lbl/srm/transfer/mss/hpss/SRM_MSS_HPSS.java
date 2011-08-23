@@ -698,7 +698,8 @@ public void mssGet(FileObj fObj,
        }
   }
   else {
-      util.printMessage("\nHPSS TYPE not implemented : " + mssType, logger,debugLevel);
+      util.printMessage("\nHPSS TYPE not implemented : " + mssType, 
+		logger,debugLevel);
       fObj.setPFTPStatus(MSS_MESSAGE.SRM_MSS_UNKNOWN_ERROR);
       fObj.setExplanation("Unknown MSS Type");
       status.setStatus(MSS_MESSAGE.SRM_MSS_UNKNOWN_ERROR);
@@ -718,7 +719,7 @@ public void mssGet(FileObj fObj,
       try {
        if(script.exists()) {
          Process p0 = 
-		   Runtime.getRuntime().exec("chmod 700 "+ script.getAbsolutePath());
+	   Runtime.getRuntime().exec("chmod 700 "+ script.getAbsolutePath());
          if(p0.waitFor() == 0) {
            p0.destroy(); 
            if(status.getStatus() == MSS_MESSAGE.SRM_MSS_TRANSFER_ABORTED) {
@@ -845,12 +846,32 @@ public void mssGet(FileObj fObj,
       File f = new File(ttemp); 
       MSS_MESSAGE_W_E pftpmssg_e = new MSS_MESSAGE_W_E ();
       if(mssType == SRM_ACCESS_TYPE.SRM_ACCESS_GSI) {
-	    SRM_MSS_UTIL.getMSSGSIError(gsiException, pftpmssg_e, debugLevel);
+	  SRM_MSS_UTIL.getMSSGSIError(gsiException, pftpmssg_e, debugLevel);
+          Object[] param = new Object[3]; 
+          param[0] = "REQUEST-ID="+fObj.getRequestToken();
+          param[1] = "STATUS="+pftpmssg_e.getStatus();
+          param[2] = "EXPLANATION="+pftpmssg_e.getExplanation();
+          _theLogger.log(java.util.logging.Level.FINE,
+	   "STATUS_AFTER_SCRIPT_RAN_SUCCESSFULLY",(Object[])param);
+          pftpmssg = pftpmssg_e.getStatus();
       }
       else {
-	    pftpmssg = SRM_MSS_UTIL.getMSSGetPutError(ftptransferlog, debugLevel);
+          StringBuffer buf = new StringBuffer();
+	  pftpmssg = 
+           SRM_MSS_UTIL.getMSSGetPutError(ftptransferlog, debugLevel,buf);
+          File ff = new File (ftptransferlog);
+          Object[] param = new Object[5]; 
+          param[0] = "REQUEST-ID="+fObj.getRequestToken();
+          param[1] = "LOGFILE="+ftptransferlog;
+          param[2] = "LOGFILE exists="+ff.exists();
+          param[3] = "STATUS="+pftpmssg;
+          param[4] = "EXPLANATION="+buf.toString();
+          _theLogger.log(java.util.logging.Level.FINE,
+	   "STATUS_AFTER_SCRIPT_RAN_SUCCESSFULLY",(Object[])param);
       }
-      pftpmssg = pftpmssg_e.getStatus();
+
+
+
       if(debugLevel >= 4000) {
         System.out.println(">>>pftpmssg="+pftpmssg.toString());
       }
@@ -920,8 +941,9 @@ public void mssGet(FileObj fObj,
            if(fileSize != 0 && f.length() != 0) { //partial transfer
             
              if(mssType != SRM_ACCESS_TYPE.SRM_ACCESS_GSI) {
+              StringBuffer buf = new StringBuffer();
               pftpmssg = 
-				  SRM_MSS_UTIL.getMSSGetPutError(ftptransferlog, debugLevel);
+		  SRM_MSS_UTIL.getMSSGetPutError(ftptransferlog,debugLevel,buf);
              }
              else {
                pftpmssg_e = new MSS_MESSAGE_W_E ();
@@ -1030,12 +1052,13 @@ public void mssGet(FileObj fObj,
            //client did not give fileSize   
 
            if(mssType != SRM_ACCESS_TYPE.SRM_ACCESS_GSI) {
+             StringBuffer buf = new StringBuffer();
              pftpmssg = 
-				SRM_MSS_UTIL.getMSSGetPutError(ftptransferlog, debugLevel);
+		SRM_MSS_UTIL.getMSSGetPutError(ftptransferlog, debugLevel,buf);
            }
            else {
              pftpmssg_e = new MSS_MESSAGE_W_E ();
-	         SRM_MSS_UTIL.getMSSGSIError(gsiException, 
+	        SRM_MSS_UTIL.getMSSGSIError(gsiException, 
 					pftpmssg_e, debugLevel);
              pftpmssg = pftpmssg_e.getStatus();
            }
@@ -1054,12 +1077,13 @@ public void mssGet(FileObj fObj,
     else { 
        //pftpmssg = MSS_MESSAGE.SRM_MSS_TRANSFER_DONE;
        if(mssType != SRM_ACCESS_TYPE.SRM_ACCESS_GSI) {
+          StringBuffer buf = new StringBuffer();
           pftpmssg = 
-				SRM_MSS_UTIL.getMSSGetPutError(ftptransferlog, debugLevel);
+	      SRM_MSS_UTIL.getMSSGetPutError(ftptransferlog, debugLevel,buf);
        }
        else {
           pftpmssg_e = new MSS_MESSAGE_W_E ();
-	      SRM_MSS_UTIL.getMSSGSIError(gsiException, 
+	  SRM_MSS_UTIL.getMSSGSIError(gsiException, 
 			pftpmssg_e, debugLevel);
           pftpmssg = pftpmssg_e.getStatus();
        }
@@ -1752,6 +1776,16 @@ public void mssCopy(FileObj fObj, SRM_STATUS status)
 	  SRM_MSS_UTIL.getMSSError(ftptransferlog,pftpmssg_e,debugLevel);
       pftpmssg = pftpmssg_e.getStatus();
 
+          File ff = new File (ftptransferlog);
+          param = new Object[5]; 
+          param[0] = "REQUEST-ID="+fObj.getRequestToken();
+          param[1] = "LOGFILE="+ftptransferlog;
+          param[2] = "LOGFILE exists="+ff.exists();
+          param[3] = "STATUS="+pftpmssg_e.getStatus();
+          param[4] = "EXPLANATION="+pftpmssg_e.getExplanation();
+          _theLogger.log(java.util.logging.Level.FINE,
+	   "STATUS_AFTER_SCRIPT_RAN_SUCCESSFULLY",(Object[])param);
+
       fObj.setPFTPStatus(pftpmssg);
       if(pftpmssg == MSS_MESSAGE.SRM_MSS_MSS_LIMIT_REACHED ||
          pftpmssg == MSS_MESSAGE.SRM_MSS_MSS_NOT_AVAILABLE) {
@@ -2283,6 +2317,7 @@ public void mssDelete(FileObj fObj, SRM_STATUS status) throws Exception {
      param[0] = "REQUEST-ID="+fObj.getRequestToken();
      _theLogger.log(java.util.logging.Level.FINE,
       "SCRIPT_RAN_SUCCESSFULLY",(Object[])param);
+
    }
 
    try {
@@ -2291,6 +2326,16 @@ public void mssDelete(FileObj fObj, SRM_STATUS status) throws Exception {
       if(mssType != SRM_ACCESS_TYPE.SRM_ACCESS_GSI) {
 	     SRM_MSS_UTIL.getMSSError(ftptransferlog,pftpmssg_e,debugLevel);
          pftpmssg = pftpmssg_e.getStatus();
+
+         File ff = new File (ftptransferlog);
+         Object[] param = new Object[5]; 
+         param[0] = "REQUEST-ID="+fObj.getRequestToken();
+         param[1] = "LOGFILE="+ftptransferlog;
+         param[2] = "LOGFILE exists="+ff.exists();
+         param[3] = "STATUS="+pftpmssg_e.getStatus();
+         param[4] = "EXPLANATION="+pftpmssg_e.getExplanation();
+         _theLogger.log(java.util.logging.Level.FINE,
+	   "STATUS_AFTER_SCRIPT_RAN_SUCCESSFULLY",(Object[])param);
       }
       else {
          if(gsiException.equals("")) {
@@ -2482,8 +2527,7 @@ public void mssGetFileSize(FileObj fObj, SRM_FILE srmFile)
     }
 
     if(!logPath.equals("")) {
-      logftpmssg = 
-			logPath+"/"+"srm_mss." + requestToken;
+      logftpmssg = logPath+"/"+"srm_mss." + requestToken;
     }
     else {
       logftpmssg = "srm_mss." + requestToken;
@@ -2518,7 +2562,7 @@ public void mssGetFileSize(FileObj fObj, SRM_FILE srmFile)
                               mssType, pftpPath,
                               MSSHost, MSSPort,
                               srmnocipher, srmnonpassivelisting, 
-							  setscipath,false,fObj,srmFile);
+			      setscipath,false,fObj,srmFile);
     }
     else {
       try {
@@ -2544,19 +2588,27 @@ public void mssGetFileSize(FileObj fObj, SRM_FILE srmFile)
 			ee.getMessage());
         mssresult.setStatus(MSS_MESSAGE.SRM_MSS_UNKNOWN_ERROR);
         mssresult.setExplanation(
-			"FAILED_TO_WRITE_PROXY to local file system. "+ee.getMessage());
+		"FAILED_TO_WRITE_PROXY to local file system. "+ee.getMessage());
         System.out.println("Exception="+ee.getMessage());
         return; 
       }
     }
 
-
     MSS_MESSAGE lsresult = mssresult.getStatus();
+
+    Object[] param = new Object[4]; 
+    param[0] = "REQUEST-ID="+fObj.getRequestToken();
+    param[1] = "LOGFILE="+logftpmssg;
+    param[2] = "mssresult="+mssresult.getStatus();
+    param[3] = "lsresult="+lsresult;
+    _theLogger.log(java.util.logging.Level.FINE,
+	   "GET_FILE_SIZE_STATUS_OF_MSSLISTING_RETURNED",(Object[])param);
 
     util.printMessage("MSSListing Result : " + lsresult.toString(), 
 		logger,debugLevel);
     util.printMessage("MSSListing Explanation : " + mssresult.getExplanation(), 
 		logger,debugLevel);
+
     if(lsresult == MSS_MESSAGE.SRM_MSS_MSS_NOT_AVAILABLE ||
        lsresult == MSS_MESSAGE.SRM_MSS_NOT_INITIALIZED) {
       srmPingStatus.setStatus(MSS_MESSAGE.SRM_MSS_STATUS_DOWN);
@@ -2570,7 +2622,7 @@ public void mssGetFileSize(FileObj fObj, SRM_FILE srmFile)
       //fObj.setPFTPStatus(MSS_MESSAGE.SRM_MSS_STATUS_UP);
       //fObj.setExplanation("MSS Up.");
     }
- 
+
     if(lsresult  == MSS_MESSAGE.SRM_MSS_TRANSFER_DONE) {
       if(mssType != SRM_ACCESS_TYPE.SRM_ACCESS_GSI) {
          int SIZE = 1024; //some buffer size;
@@ -2625,7 +2677,8 @@ public void mssGetFileSize(FileObj fObj, SRM_FILE srmFile)
             idx = ref.indexOf("hpss_Lstat: No such file or directory");
             if(idx != -1) {
               if(debugLevel >= 300) { 
-                util.printMessage("\ndirectory listing ends", logger,debugLevel);
+                util.printMessage
+                  ("\ndirectory listing ends", logger,debugLevel);
               }
               parseEnd = true;
               srmFile.setFile(path);
@@ -2639,7 +2692,8 @@ public void mssGetFileSize(FileObj fObj, SRM_FILE srmFile)
             idx = ref.indexOf("226 Transfer complete");
             if (idx != -1) {
               if(debugLevel >= 300) {
-                util.printMessage("\ndirectory listing ends", logger,debugLevel);
+                util.printMessage
+                  ("\ndirectory listing ends", logger,debugLevel);
               }  
               parseEnd = true;
             }
@@ -2679,7 +2733,18 @@ public void mssGetFileSize(FileObj fObj, SRM_FILE srmFile)
               } 
               srmFile.setTimeStamp(buf.toString().trim());
             }
-           }
+           }//end while
+
+             param = new Object[6]; 
+             param[0] = "REQUEST-ID="+fObj.getRequestToken();
+             param[1] = "LOGFILE="+logftpmssg;
+             param[2] = "PARSESTART="+parseStart;
+             param[3] = "PARSEEND="+parseEnd;
+             param[4] = "POSSIBLEDIRECTORYPATH="+possibleDirectoryPath;
+             param[5] = "POSSIBLEFILENOTEXISTS="+possibleFileNotExists;
+             _theLogger.log(java.util.logging.Level.FINE,
+	        "STATUS_OF_PARSING_MSSLISTING",(Object[])param);
+
            bis.close();
            fis.close();
             /*
@@ -2714,6 +2779,12 @@ public void mssGetFileSize(FileObj fObj, SRM_FILE srmFile)
              //do one more check, to make sure whether it is a blank
              //dir or non existing path.
 
+             param = new Object[2]; 
+             param[0] = "REQUEST-ID="+fObj.getRequestToken();
+             param[1] = "LOGFILE="+logftpmssg;
+             _theLogger.log(java.util.logging.Level.FINE,
+	        "BEFORE_CALLING_MSSLISTING_AGAIN",(Object[])param);
+
              util.printMessage("\nPossibly file not exists",
 					logger,debugLevel);
              util.printMessage("\nDoing one more check to make sure",
@@ -2724,11 +2795,19 @@ public void mssGetFileSize(FileObj fObj, SRM_FILE srmFile)
                                           mssType, pftpPath,
                                           MSSHost, MSSPort,
                                           srmnocipher,srmnonpassivelisting, 
-										  setscipath, true,fObj,srmFile);
+					  setscipath, true,fObj,srmFile);
 
-             util.printMessage("\nMSSListing Result " + lsresultpre.getStatus().toString(), logger,debugLevel);
+             param = new Object[3]; 
+             param[0] = "REQUEST-ID="+fObj.getRequestToken();
+             param[1] = "LOGFILE="+logftpmssg;
+             param[2] = "STATUS="+lsresultpre.getStatus(); 
+             _theLogger.log(java.util.logging.Level.FINE,
+	        "AFTER_CALLING_MSSLISTING_AGAIN",(Object[])param);
 
-             if(lsresultpre.getStatus() == MSS_MESSAGE.SRM_MSS_TRANSFER_DONE) {
+             util.printMessage("\nMSSListing Result " + 
+	       lsresultpre.getStatus().toString(), logger,debugLevel);
+
+             if(lsresultpre.getStatus() == MSS_MESSAGE.SRM_MSS_TRANSFER_DONE){
                 if(enableHSI) {
                   parseEnd = true;
                 }
@@ -2760,7 +2839,7 @@ public void mssGetFileSize(FileObj fObj, SRM_FILE srmFile)
               else {
                 util.printMessage("\n such path exists", logger,debugLevel);
                 util.printMessage("\n may be parsing error, (parsing failure)" 
-					+ "look in to pftp output file", logger,debugLevel);
+			+ "look in to pftp output file", logger,debugLevel);
                 srmFile.setFile(path);
                 srmFile.setSize(-1);
                 srmFile.setStatus(MSS_MESSAGE.SRM_MSS_UNKNOWN_ERROR);
@@ -2771,16 +2850,18 @@ public void mssGetFileSize(FileObj fObj, SRM_FILE srmFile)
             }
           }
         }
+
+
       }catch(Exception e) {
         util.printMessage("\nCould not read " + logftpmssg, 
 			logger,debugLevel);
         srmFile.setExplanation(
-			"could not read the output file produced by hpss command" + 
+	    "could not read the output file produced by hpss command" + 
 				logftpmssg);
         srmFile.setStatus(MSS_MESSAGE.SRM_MSS_UNKNOWN_ERROR); 
         fObj.setPFTPStatus(MSS_MESSAGE.SRM_MSS_UNKNOWN_ERROR); 
         fObj.setExplanation(
-			"could not read the output file produced by hpss command" + 
+	    "could not read the output file produced by hpss command" + 
 				logftpmssg);
       }
       /*
@@ -2789,6 +2870,17 @@ public void mssGetFileSize(FileObj fObj, SRM_FILE srmFile)
         f.delete();
       }
       */
+
+      param = new Object[7]; 
+      param[0] = "REQUEST-ID="+fObj.getRequestToken();
+      param[1] = "LOGFILE="+logftpmssg;
+      param[2] = "lsresult="+lsresult;
+      param[3] = "PFTPSTATUS="+fObj.getPFTPStatus();
+      param[4] = "PFTPEXPLANATION="+fObj.getExplanation();
+      param[5] = "STATUS="+srmFile.getStatus();
+      param[6] = "EXPLANATION="+srmFile.getExplanation();
+      _theLogger.log(java.util.logging.Level.FINE,
+	   "STATUS_PARSED_FROM_LOGFILE",(Object[])param);
      }
      else {
         SRMLsClient srmLsClient = new SRMLsClient(path,credential,
@@ -2804,7 +2896,8 @@ public void mssGetFileSize(FileObj fObj, SRM_FILE srmFile)
           srmFile.setExplanation(mssresult.getExplanation());
           fObj.setPFTPStatus(mssresult.getStatus());
           fObj.setExplanation(mssresult.getExplanation());
-          Object[] param = new Object[3]; 
+
+          param = new Object[3]; 
           param[0] = "SOURCE="+fObj; 
           param[1] = "REQUEST-ID="+srmFile.getRequestToken();
           param[2] = "SIZE="+size;
@@ -2822,12 +2915,12 @@ public void mssGetFileSize(FileObj fObj, SRM_FILE srmFile)
         }
      }
      if(debugLevel <= 6000) {
-     File f = new File(proxyFile);
-     if(f.exists()) {
-       f.delete();
+       File f = new File(proxyFile);
+       if(f.exists()) {
+         f.delete();
+       }
      }
-     }
-   }
+   }//end if
    else if((lsresult == MSS_MESSAGE.SRM_MSS_MSS_NOT_AVAILABLE) ||
             (lsresult == MSS_MESSAGE.SRM_MSS_MSS_LIMIT_REACHED)) {
        util.printMessage("\nrid="+ fObj.getRequestToken(),logger,debugLevel);
@@ -2849,13 +2942,13 @@ public void mssGetFileSize(FileObj fObj, SRM_FILE srmFile)
           if(monitorThread == null) {
             threadDisable = false;
             monitorThreadPool = 
-				new MonitorThreadPool(1,(SRM_MSS)this);
+			new MonitorThreadPool(1,(SRM_MSS)this);
             monitorThread = 
-				new MonitorThreadMain(monitorThreadPool,(SRM_MSS)this);
+			new MonitorThreadMain(monitorThreadPool,(SRM_MSS)this);
             monitorThread.start();
           }
 
-          Object[] param = new Object[2]; 
+          param = new Object[2]; 
           param[0] = "SOURCE="+fObj; 
           param[1] = "REQUEST-ID="+srmFile.getRequestToken();
           _theLogger.log(java.util.logging.Level.FINE,
@@ -3662,7 +3755,7 @@ private MSS_MESSAGE_W_E mssListing (String rPath,
                         String srmmsshost, int srmmssport,
                         boolean nocipher, boolean srmnonpassivelisting,
                         String siteSpecific, 
-						boolean preCheck,FileObj fObj, Object s) {
+			boolean preCheck,FileObj fObj, Object s) {
 
   /*
   _completed = false;
@@ -3687,6 +3780,11 @@ private MSS_MESSAGE_W_E mssListing (String rPath,
 
    if(mssType == SRM_ACCESS_TYPE.SRM_ACCESS_GSI) {
        proxyFile=logftpmssg+".proxy";
+
+       Object[] param = new Object[1]; 
+       param[0] = "REQUEST-ID="+fObj.getRequestToken();
+       _theLogger.log(java.util.logging.Level.FINE,
+		  "GOING_TO_WRITE_PROXY_FILE",(Object[])param);
        try { 
         writeProxyFile(proxyFile,accessInfo.getPasswd());
         credential = createAndCheckProxyIsValid(proxyFile,true);
@@ -3704,7 +3802,7 @@ private MSS_MESSAGE_W_E mssListing (String rPath,
          return result;
        }
 
-       Object[] param = new Object[1]; 
+       param = new Object[1]; 
        param[0] = "REQUEST-ID="+fObj.getRequestToken();
        _theLogger.log(java.util.logging.Level.FINE,
 		  "WROTE_PROXY_FILE",(Object[])param);
@@ -3733,9 +3831,11 @@ private MSS_MESSAGE_W_E mssListing (String rPath,
 
        if(debugLevel >= 1000) {
           util.printMessage("\n+++ begin script ++++\n", logger,debugLevel); 
-          util.printMessage("Date: " + SRM_MSS.printDate() + "\n",logger,debugLevel);
+          util.printMessage("Date: " + SRM_MSS.printDate() + "\n",
+                logger,debugLevel);
           util.printMessage("#!/bin/sh\n\n",logger,debugLevel);
-          util.printMessage("X509_USER_PROXY="+proxyFile+"\n",logger,debugLevel);
+          util.printMessage("X509_USER_PROXY="+proxyFile+"\n",
+                logger,debugLevel);
           util.printMessage("export X509_USER_PROXY\n",logger,debugLevel);
           util.printMessage ("LD_LIBRARY_PATH=" + 
 		    this.javaLibraryPath +"\n", logger,debugLevel);
@@ -3757,6 +3857,11 @@ private MSS_MESSAGE_W_E mssListing (String rPath,
        }
       }//end ACCESS_TYPE_GSI
       else if(mssType == SRM_ACCESS_TYPE.SRM_ACCESS_ENCRYPT) { 
+
+        Object[] param = new Object[1]; 
+        param[0] = "REQUEST-ID="+fObj.getRequestToken();
+        _theLogger.log(java.util.logging.Level.FINE,
+	    "GOING_TO_WRITE_SCRIPT_FILE",(Object[])param);
 
         script = File.createTempFile("script","",scriptPathDir);
         //script.deleteOnExit();
@@ -3805,12 +3910,17 @@ private MSS_MESSAGE_W_E mssListing (String rPath,
           util.printMessage("END ", logger,debugLevel); 
           util.printMessage("+++ end script ++++\n", logger,debugLevel); 
        }
-       Object[] param = new Object[1]; 
+
+       param = new Object[1]; 
        param[0] = "REQUEST-ID="+fObj.getRequestToken();
        _theLogger.log(java.util.logging.Level.FINE,
 	    "WROTE_SCRIPT_FILE",(Object[])param);
       }//end access type encrypt
       else if(mssType == SRM_ACCESS_TYPE.SRM_ACCESS_PLAIN) { 
+        Object[] param = new Object[1]; 
+        param[0] = "REQUEST-ID="+fObj.getRequestToken();
+        _theLogger.log(java.util.logging.Level.FINE,
+	    "GOING_TO_WRITE_SCRIPT_FILE",(Object[])param);
           String myLogin="";
           String myPasswd="";
           if(accessInfo.getLogin().length() == 0 || 
@@ -3861,14 +3971,16 @@ private MSS_MESSAGE_W_E mssListing (String rPath,
 
          if(debugLevel >= 1000) {
           util.printMessage("\n+++ begin script ++++\n", logger,debugLevel); 
-          util.printMessage("Date: " + SRM_MSS.printDate() + "\n",logger,debugLevel);
+          util.printMessage("Date: " + SRM_MSS.printDate() + "\n",logger,
+                debugLevel);
           util.printMessage("#!/bin/sh\n\n",logger,debugLevel);
           util.printMessage ("LD_LIBRARY_PATH=" + 
 		    this.javaLibraryPath +"\n", logger,debugLevel);
           util.printMessage ("export LD_LIBRARY_PATH\n", logger,debugLevel); 
           util.printMessage (srmlsPath + 
 	        " -vn << END > "+ logftpmssg, logger,debugLevel);
-          util.printMessage("open " + srmmsshost + " " + srmmssport, logger,debugLevel);
+          util.printMessage("open " + srmmsshost + " " + srmmssport, 
+                logger,debugLevel);
           if(srmnonpassivelisting) {
             util.printMessage("passive\n",logger,debugLevel);
           }
@@ -3885,12 +3997,18 @@ private MSS_MESSAGE_W_E mssListing (String rPath,
           util.printMessage("END ", logger,debugLevel); 
           util.printMessage("+++ end script ++++\n", logger,debugLevel); 
         }
-       Object[] param = new Object[1]; 
+
+       param = new Object[1]; 
        param[0] = "REQUEST-ID="+fObj.getRequestToken();
        _theLogger.log(java.util.logging.Level.FINE,
 	    "WROTE_SCRIPT_FILE",(Object[])param);
       }
       else if(mssType == SRM_ACCESS_TYPE.SRM_ACCESS_NONE) { 
+        Object[] param = new Object[1]; 
+        param[0] = "REQUEST-ID="+fObj.getRequestToken();
+        _theLogger.log(java.util.logging.Level.FINE,
+	    "GOING_TO_WRITE_SCRIPT_FILE",(Object[])param);
+
         //writeLogFile(logftpmssg,"opening logfile");
         script = File.createTempFile("script","",scriptPathDir);
         //script.deleteOnExit();
@@ -3906,7 +4024,8 @@ private MSS_MESSAGE_W_E mssListing (String rPath,
 
         if(debugLevel >= 1000) {
           util.printMessage("\n+++ begin script ++++\n", logger,debugLevel); 
-          util.printMessage("Date: " + SRM_MSS.printDate() + "\n",logger,debugLevel);
+          util.printMessage("Date: " + SRM_MSS.printDate() + "\n",
+                logger,debugLevel);
           util.printMessage("#!/bin/sh\n\n",logger,debugLevel);
           util.printMessage (hsiPath + 
 	        //" -q \"out "+logftpmssg+";" + "pwd;" + 
@@ -3916,7 +4035,7 @@ private MSS_MESSAGE_W_E mssListing (String rPath,
 			       logger,debugLevel);
           util.printMessage("+++ end script ++++\n", logger,debugLevel); 
        }
-       Object[] param = new Object[1]; 
+       param = new Object[1]; 
        param[0] = "REQUEST-ID="+fObj.getRequestToken();
        _theLogger.log(java.util.logging.Level.FINE,
 	    "WROTE_SCRIPT_FILE",(Object[])param);
@@ -3940,7 +4059,7 @@ private MSS_MESSAGE_W_E mssListing (String rPath,
        try {
           if(script.exists()) {
             Process p0 = 
-		    Runtime.getRuntime().exec("chmod 700 "+ script.getAbsolutePath());
+	    Runtime.getRuntime().exec("chmod 700 "+ script.getAbsolutePath());
             if(p0.waitFor() == 0) {
 		      p0.destroy();
               MSS_MESSAGE currentStatus = fObj.getPFTPStatus();
@@ -3948,7 +4067,7 @@ private MSS_MESSAGE_W_E mssListing (String rPath,
                    Object[] param = new Object[1]; 
                    param[0] = "REQUEST-ID="+fObj.getRequestToken();
                    _theLogger.log(java.util.logging.Level.FINE,
-				       "NO_NEED_TO_EXECUTE_SCRIPT_TRANSFER_ABORTED",
+			       "NO_NEED_TO_EXECUTE_SCRIPT_TRANSFER_ABORTED",
 							(Object[])param);
                    fObj.setExplanation("Transfer aborted");
                    fObj.setPFTPStatus(MSS_MESSAGE.SRM_MSS_TRANSFER_ABORTED);
@@ -3960,7 +4079,7 @@ private MSS_MESSAGE_W_E mssListing (String rPath,
                    Object[] param = new Object[1]; 
                    param[0] = "REQUEST-ID="+fObj.getRequestToken();
                    _theLogger.log(java.util.logging.Level.FINE,
-				       "GOING_TO_EXECUTE_SCRIPT",(Object[])param);
+			       "GOING_TO_EXECUTE_SCRIPT",(Object[])param);
                    ExecScript process = 
 	  	             new ExecScript(script.getAbsolutePath(), 
 	                 this.javaLibraryPath, true,this,_theLogger);
@@ -4042,15 +4161,28 @@ private MSS_MESSAGE_W_E mssListing (String rPath,
     }catch(Exception e) {}
 
 
-     Object[] param = new Object[1]; 
-     param[0] = "REQUEST-ID="+fObj.getRequestToken();
-     _theLogger.log(java.util.logging.Level.FINE,
+      Object[] param = new Object[1]; 
+      param[0] = "REQUEST-ID="+fObj.getRequestToken();
+      _theLogger.log(java.util.logging.Level.FINE,
 	   "SCRIPT_RAN_SUCCESSFULLY",(Object[])param);
       
       MSS_MESSAGE_W_E estatus = new MSS_MESSAGE_W_E();
       SRM_MSS_UTIL.getMSSError(logftpmssg, estatus, debugLevel);
       result.setStatus(estatus.getStatus());
       result.setExplanation(estatus.getExplanation());
+
+      File ff = new File (logftpmssg);
+
+      param = new Object[7]; 
+      param[0] = "REQUEST-ID="+fObj.getRequestToken();
+      param[1] = "LOGFILE="+logftpmssg;
+      param[2] = "LOGFILE EXISTS="+ff.exists();
+      param[3] = "STATUS="+estatus.getStatus();
+      param[4] = "EXPLANATION="+estatus.getExplanation();
+      param[5] = "RESULT_STATUS="+result.getStatus();
+      param[6] = "RESULT_EXPLANATION="+result.getExplanation();
+      _theLogger.log(java.util.logging.Level.FINE,
+	   "STATUS_AFTER_SCRIPT_RAN_SUCCESSFULLY",(Object[])param);
 
       util.printMessage("HPSS Path : "+rPath, logger,debugLevel); 
 
@@ -4062,7 +4194,7 @@ private MSS_MESSAGE_W_E mssListing (String rPath,
 				logger,debugLevel); 
          }
       }
-      else if(estatus.getStatus() == MSS_MESSAGE.SRM_MSS_AUTHORIZATION_FAILED) {
+      else if(estatus.getStatus() == MSS_MESSAGE.SRM_MSS_AUTHORIZATION_FAILED){
          result.setStatus(estatus.getStatus());
          result.setExplanation("File has no read permission in HPSS");
          if(debugLevel >= 10) {
@@ -4070,7 +4202,8 @@ private MSS_MESSAGE_W_E mssListing (String rPath,
 				logger,debugLevel); 
          }
       }
-      else if(estatus.getStatus() == MSS_MESSAGE.SRM_MSS_AUTHENTICATION_FAILED) {
+      else if(estatus.getStatus() == 
+                MSS_MESSAGE.SRM_MSS_AUTHENTICATION_FAILED) {
          result.setStatus(estatus.getStatus());
          result.setExplanation("GSI proxy has a problem/Authenticaion failed.");
          if(debugLevel >= 10) {
@@ -4113,7 +4246,9 @@ private MSS_MESSAGE_W_E mssListing (String rPath,
          }
       }
       else {
-         MSS_MESSAGE sss = SRM_MSS_UTIL.getMSSGetPutError(logftpmssg, debugLevel);
+         StringBuffer buf = new StringBuffer();
+         MSS_MESSAGE sss =      
+                SRM_MSS_UTIL.getMSSGetPutError(logftpmssg, debugLevel,buf);
          result.setStatus(sss);
          result.setExplanation("MSS listing done.");
          if(debugLevel >= 10) {
@@ -4128,6 +4263,15 @@ private MSS_MESSAGE_W_E mssListing (String rPath,
            }
          }
       }
+
+      param = new Object[5]; 
+      param[0] = "REQUEST-ID="+fObj.getRequestToken();
+      param[1] = "LOGFILE="+logftpmssg;
+      param[2] = "LOGFILE EXISTS="+ff.exists();
+      param[3] = "STATUS="+result.getStatus();
+      param[4] = "EXPLANATION="+result.getExplanation();
+      _theLogger.log(java.util.logging.Level.FINE,
+	   "BEFORE_RETURNING_RESULT",(Object[])param);
       return result;
   }catch(Exception e) {
     e.printStackTrace();
@@ -4693,11 +4837,23 @@ public void mssPut(FileObj fObj,
      MSS_MESSAGE_W_E pftpmssg_e = new MSS_MESSAGE_W_E ();
      if(mssType == SRM_ACCESS_TYPE.SRM_ACCESS_GSI) {
 	   SRM_MSS_UTIL.getMSSGSIError(gsiException, pftpmssg_e, debugLevel);
+           pftpmssg = pftpmssg_e.getStatus();
      }
      else {
-	   pftpmssg = SRM_MSS_UTIL.getMSSGetPutError(ftptransferlog, debugLevel);
+           StringBuffer buf = new StringBuffer();
+	   pftpmssg = 
+                SRM_MSS_UTIL.getMSSGetPutError(ftptransferlog, debugLevel,buf);
+           File ff = new File (ftptransferlog);
+           Object[] param = new Object[5]; 
+           param[0] = "REQUEST-ID="+fObj.getRequestToken();
+           param[1] = "LOGFILE="+ftptransferlog;
+           param[2] = "LOGFILE exists="+ff.exists();
+           param[3] = "STATUS="+pftpmssg;
+           param[4] = "EXPLANATION="+buf.toString();
+           _theLogger.log(java.util.logging.Level.FINE,
+	    "STATUS_AFTER_SCRIPT_RAN_SUCCESSFULLY",(Object[])param);
      }
-     pftpmssg = pftpmssg_e.getStatus();
+
      if(debugLevel >= 4000) {
         System.out.println(">>>>pftpmssg="+pftpmssg);
      }
@@ -4720,8 +4876,10 @@ public void mssPut(FileObj fObj,
        //should I care about that.
        if(remoteFileSize != 0) {
          if(mssType != SRM_ACCESS_TYPE.SRM_ACCESS_GSI) {
-           pftpmssg = SRM_MSS_UTIL.getMSSGetPutError(ftptransferlog, debugLevel);
-		   if(pftpmssg == MSS_MESSAGE.SRM_MSS_TRANSFER_DONE) { 
+           StringBuffer buf = new StringBuffer();
+           pftpmssg = 
+              SRM_MSS_UTIL.getMSSGetPutError(ftptransferlog, debugLevel,buf);
+	        if(pftpmssg == MSS_MESSAGE.SRM_MSS_TRANSFER_DONE) { 
 				//partial transfer
              if(debugLevel >= 10) {
                util.printMessage("\nFile " + localFileName + 
@@ -4858,7 +5016,9 @@ public void mssPut(FileObj fObj,
          else {
              status.setTransferRate(0.0);
              if(mssType != SRM_ACCESS_TYPE.SRM_ACCESS_GSI) {
-               pftpmssg = SRM_MSS_UTIL.getMSSGetPutError(ftptransferlog, debugLevel);
+               StringBuffer buf = new StringBuffer();
+               pftpmssg = SRM_MSS_UTIL.getMSSGetPutError
+                        (ftptransferlog, debugLevel,buf);
                //check one more time to make sure the tarsfer is complete
                if(debugLevel >= 10) { 
                   util.printMessage ("\n"+pftpmssg.toString(),
@@ -4883,7 +5043,9 @@ public void mssPut(FileObj fObj,
       // and that time, we cannot simply says transfer done.
       //we have to check pftpmssg also.
       if(mssType != SRM_ACCESS_TYPE.SRM_ACCESS_GSI) {
-        pftpmssg = SRM_MSS_UTIL.getMSSGetPutError(ftptransferlog, debugLevel);
+        StringBuffer buf = new StringBuffer();
+        pftpmssg = SRM_MSS_UTIL.getMSSGetPutError
+                (ftptransferlog, debugLevel,buf);
       } 
       else {
         pftpmssg_e = new MSS_MESSAGE_W_E ();
@@ -5534,6 +5696,15 @@ public void mssGetHomeDir(FileObj fObj,
      pftpmssg = mssresult.getStatus();
    }
 
+         File ff = new File (ftptransferlog);
+         Object[] param = new Object[4]; 
+         param[0] = "REQUEST-ID="+fObj.getRequestToken();
+         param[1] = "LOGFILE="+ftptransferlog;
+         param[2] = "LOGFILE exists="+ff.exists();
+         param[3] = "STATUS="+pftpmssg;
+         _theLogger.log(java.util.logging.Level.FINE,
+	   "STATUS_AFTER_SCRIPT_RAN_SUCCESSFULLY",(Object[])param);
+
    if(pftpmssg == MSS_MESSAGE.SRM_MSS_MSS_NOT_AVAILABLE ||
      pftpmssg == MSS_MESSAGE.SRM_MSS_NOT_INITIALIZED) { 
      srmPingStatus.setStatus(MSS_MESSAGE.SRM_MSS_STATUS_DOWN);
@@ -5578,7 +5749,7 @@ public void mssGetHomeDir(FileObj fObj,
               monitorThread.start();
             }
 
-            Object[] param = new Object[2]; 
+            param = new Object[2]; 
             param[0] = "SOURCE="+fObj; 
             param[1] = "REQUEST-ID="+status.getRequestToken(); 
             _theLogger.log(java.util.logging.Level.FINE,
@@ -6222,16 +6393,28 @@ public void mssMkDir(FileObj fObj,
       "SCRIPT_RAN_SUCCESSFULLY",(Object[])param);
   }//(mssType != SRM_ACCESS_TYPE.SRM_ACCESS_GSI) 
 
+
   try {
 
       MSS_MESSAGE_W_E pftpmssg_e = new MSS_MESSAGE_W_E ();
       if(mssType == SRM_ACCESS_TYPE.SRM_ACCESS_GSI) {
-	    SRM_MSS_UTIL.getMSSGSIError(gsiException,pftpmssg_e,debugLevel);
+	   SRM_MSS_UTIL.getMSSGSIError(gsiException,pftpmssg_e,debugLevel);
       }
       else {
-	    SRM_MSS_UTIL.getMSSError(ftptransferlog,pftpmssg_e,debugLevel);
+	   SRM_MSS_UTIL.getMSSError(ftptransferlog,pftpmssg_e,debugLevel);
+           File ff = new File (ftptransferlog);
+           Object[] param = new Object[5]; 
+           param[0] = "REQUEST-ID="+fObj.getRequestToken();
+           param[1] = "LOGFILE="+ftptransferlog;
+           param[2] = "LOGFILE exists="+ff.exists();
+           param[3] = "STATUS="+pftpmssg_e.getStatus();
+           param[4] = "EXPLANATION="+pftpmssg_e.getExplanation();
+           _theLogger.log(java.util.logging.Level.FINE,
+	    "STATUS_AFTER_SCRIPT_RAN_SUCCESSFULLY",(Object[])param);
       }
       pftpmssg = pftpmssg_e.getStatus();
+
+
       if(pftpmssg == MSS_MESSAGE.SRM_MSS_MSS_NOT_AVAILABLE ||
         pftpmssg == MSS_MESSAGE.SRM_MSS_NOT_INITIALIZED) { 
         srmPingStatus.setStatus(MSS_MESSAGE.SRM_MSS_STATUS_DOWN);

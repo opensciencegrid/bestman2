@@ -26,7 +26,6 @@
  * do so.
  *
 */
-
 /**
  *
  * Email questions to SRM@LBL.GOV
@@ -127,7 +126,7 @@ public  class TSRMContactRemoteSRM {
 	    }
 	} catch (Exception e) {	    
 	    TSRMLog.exception(TSRMContactRemoteSRM.class, "details", e);
-	    throw new TSRMException(e.getMessage(), false);
+	    //throw new TSRMException(e.getMessage(), false);
 	} finally {
 	    tt.setFinished();
 	    tt.alarm();

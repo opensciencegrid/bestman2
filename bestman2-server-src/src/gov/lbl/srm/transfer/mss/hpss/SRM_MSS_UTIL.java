@@ -1,38 +1,29 @@
 /**
  *
- * *** Copyright Notice ***
+ * BeStMan Copyright (c) 2007, The Regents of the University of California,
+ * through Lawrence Berkeley National Laboratory (subject to receipt of any
+ * required approvals from the U.S. Dept. of Energy).  All rights reserved.
  *
- * BeStMan Copyright (c) 2010, The Regents of the University of California, 
- * through Lawrence Berkeley National Laboratory (subject to receipt of any 
- * required approvals from the U.S. Dept. of Energy).  This software was 
- * developed under funding from the U.S. Department of Energy and is 
- * associated with the Berkeley Lab Scientific Data Management Group projects.
- * All rights reserved.
- * 
- * If you have questions about your rights to use or distribute this software, 
+ * If you have questions about your rights to use or distribute this software,
  * please contact Berkeley Lab's Technology Transfer Department at TTD@lbl.gov.
- * 
- * NOTICE.  This software was developed under funding from the 
- * U.S. Department of Energy.  As such, the U.S. Government has been granted 
- * for itself and others acting on its behalf a paid-up, nonexclusive, 
- * irrevocable, worldwide license in the Software to reproduce, prepare 
- * derivative works, and perform publicly and display publicly.  
- * Beginning five (5) years after the date permission to assert copyright is 
- * obtained from the U.S. Department of Energy, and subject to any subsequent 
- * five (5) year renewals, the U.S. Government is granted for itself and others
- * acting on its behalf a paid-up, nonexclusive, irrevocable, worldwide license
- * in the Software to reproduce, prepare derivative works, distribute copies to
- * the public, perform publicly and display publicly, and to permit others to
- * do so.
  *
-*/
-
-/**
+ * NOTICE.  This software was developed under partial funding from the
+ * U.S. Department of Energy.  As such, the U.S. Government has been
+ * granted for itself and others acting on its behalf a paid-up,
+ * nonexclusive, irrevocable, worldwide license in the Software to
+ * reproduce, prepare derivative works, and perform publicly and
+ * display publicly.  Beginning five (5) years after the date permission
+ * to assert copyright is obtained from the U.S. Department of Energy,
+ * and subject to any subsequent five (5) year renewals, the
+ * U.S. Government is granted for itself and others acting on its
+ * behalf a paid-up, nonexclusive, irrevocable, worldwide license in
+ * the Software to reproduce, prepare derivative works, distribute
+ * copies to the public, perform publicly and display publicly, and
+ * to permit others to do so.
  *
  * Email questions to SRM@LBL.GOV
  * Scientific Data Management Research Group
  * Lawrence Berkeley National Laboratory
- * http://sdm.lbl.gov/bestman
  *
 */
 
@@ -428,15 +419,13 @@ ftp> quit
 // output to try to find the reason for failure.
 //
 
-//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 // getMSSGetPutError
 // used for mssGet, mssPut, calls etc
-//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 public static MSS_MESSAGE getMSSGetPutError
-		(String ftptransferlog, int debugLevel) {
-
-   StringBuffer buf = new StringBuffer();
+		(String ftptransferlog, int debugLevel, StringBuffer buf) {
 
    MSS_MESSAGE okdone = MSS_MESSAGE.SRM_MSS_UNKNOWN_ERROR;
 
@@ -451,27 +440,114 @@ public static MSS_MESSAGE getMSSGetPutError
         if(idx != -1 || idx1 != -1) { 
           util.printMessage("\nLooks like everything is okay.",logger);
           okdone = MSS_MESSAGE.SRM_MSS_TRANSFER_DONE;
+          buf.append("Transfer is successful");
           return okdone;
         }
         idx = ref.indexOf("is a directory - ignored");
         if(idx != -1) {
           okdone = MSS_MESSAGE.SRM_MSS_MSS_ERROR;
+          buf.append("is a directory - ignored");
           return okdone;
         }
         idx = ref.indexOf("HSI_ERROR_CODE=64");
         if(idx != -1) {
-		  okdone = MSS_MESSAGE.SRM_MSS_AUTHENTICATION_FAILED;
+          okdone = MSS_MESSAGE.SRM_MSS_MSS_ERROR;
+          buf.append("Command line usage error.");
+          return okdone;
+        }
+        idx = ref.indexOf("HSI_ERROR_CODE=65");
+        if(idx != -1) {
+          okdone = MSS_MESSAGE.SRM_MSS_MSS_ERROR;
+          buf.append("Data format error.");
+          return okdone;
+        }
+        idx = ref.indexOf("HSI_ERROR_CODE=66");
+        if(idx != -1) {
+          okdone = MSS_MESSAGE.SRM_MSS_MSS_ERROR;
+          buf.append("Cannot open input, user's input file did not exist.");
+          return okdone;
+        }
+        idx = ref.indexOf("HSI_ERROR_CODE=67");
+        if(idx != -1) {
+          okdone = MSS_MESSAGE.SRM_MSS_MSS_ERROR;
+          buf.append("Addressee unknown, user specified does not exist.");
+          return okdone;
+        }
+        idx = ref.indexOf("HSI_ERROR_CODE=68");
+        if(idx != -1) {
+          okdone = MSS_MESSAGE.SRM_MSS_MSS_ERROR;
+          buf.append("Host name unknown, Host specified does not exist.");
+          return okdone;
+        }
+        idx = ref.indexOf("HSI_ERROR_CODE=70");
+        if(idx != -1) {
+          okdone = MSS_MESSAGE.SRM_MSS_MSS_ERROR;
+          buf.append("Internal software error inconsistency etc. in HSI code.");
+          return okdone;
+        }
+        idx = ref.indexOf("HSI_ERROR_CODE=71");
+        if(idx != -1) {
+          okdone = MSS_MESSAGE.SRM_MSS_MSS_ERROR;
+          buf.append("OS error, such as cannot fork, pipe etc.");
           return okdone;
         }
         idx = ref.indexOf("HSI_ERROR_CODE=72");
         if(idx != -1) {
-		  okdone = MSS_MESSAGE.SRM_MSS_NO_SUCH_PATH;
+	  okdone = MSS_MESSAGE.SRM_MSS_NO_SUCH_PATH;
+          buf.append("Critical OS file missing, cannot be opened.");
+          return okdone;
+        }
+        idx = ref.indexOf("HSI_ERROR_CODE=73");
+        if(idx != -1) {
+          okdone = MSS_MESSAGE.SRM_MSS_MSS_ERROR;
+          buf.append("Cannot create user output file.");
+          return okdone;
+        }
+        idx = ref.indexOf("HSI_ERROR_CODE=74");
+        if(idx != -1) {
+          okdone = MSS_MESSAGE.SRM_MSS_MSS_ERROR;
+          buf.append
+            ("Input/output error, occurred while doing I/O on some file.");
+          return okdone;
+        }
+        idx = ref.indexOf("HSI_ERROR_CODE=75");
+        if(idx != -1) {
+          okdone = MSS_MESSAGE.SRM_MSS_MSS_ERROR;
+          buf.append
+            ("Temporary failure. User is invited to retry.");
+          return okdone;
+        }
+        idx = ref.indexOf("HSI_ERROR_CODE=76");
+        if(idx != -1) {
+          okdone = MSS_MESSAGE.SRM_MSS_MSS_ERROR;
+          buf.append 
+           ("Remote error in protocol. " +
+                "The remote system returned something that was not possible"+
+                " during a protocol exchange");
+          return okdone;
+        }
+        idx = ref.indexOf("HSI_ERROR_CODE=77");
+        if(idx != -1) {
+          okdone = MSS_MESSAGE.SRM_MSS_MSS_ERROR;
+          buf.append ("Permission denied");
           return okdone;
         }
         idx = ref.indexOf("HSI_ERROR_CODE=69");
         if(idx != -1) { 
           util.printMessage("\nMSS Service not available.",logger);
           okdone=MSS_MESSAGE.SRM_MSS_MSS_NOT_AVAILABLE;
+          break;
+        }
+        idx = ref.toLowerCase().indexOf("error -1 on transfer");
+        if(idx != -1) { 
+          util.printMessage("\nMSS Error",logger);
+          okdone = MSS_MESSAGE.SRM_MSS_MSS_ERROR;
+          break;
+        }
+        idx = ref.toLowerCase().indexOf("i/o error");
+        if(idx != -1) { 
+          util.printMessage("\nMSS Error",logger);
+          okdone = MSS_MESSAGE.SRM_MSS_MSS_ERROR;
           break;
         }
      }
@@ -659,9 +735,116 @@ public synchronized static void getMSSError(String ftptransferlog, MSS_MESSAGE_W
 
         idx = ref.indexOf("HSI_ERROR_CODE=64");
         if(idx != -1) { 
-          util.printMessage("\nAuthorization failed.",logger);
-          okdone.setStatus(MSS_MESSAGE.SRM_MSS_AUTHORIZATION_FAILED);
-          okdone.setExplanation("Permission denied.");
+          util.printMessage("\nCommand line usage error.",logger);
+          //okdone.setStatus(MSS_MESSAGE.SRM_MSS_AUTHORIZATION_FAILED);
+          okdone.setStatus(MSS_MESSAGE.SRM_MSS_MSS_ERROR);
+          okdone.setExplanation("Command line usage error.");
+          break;
+        }
+
+        idx = ref.indexOf("HSI_ERROR_CODE=65");
+        if(idx != -1) { 
+          util.printMessage("\nData format error.",logger);
+          okdone.setStatus(MSS_MESSAGE.SRM_MSS_MSS_ERROR);
+          okdone.setExplanation("Data Format ERROR.");
+          break;
+        }
+
+        idx = ref.indexOf("HSI_ERROR_CODE=66");
+        if(idx != -1) { 
+          util.printMessage("\nCannot open input.",logger);
+          okdone.setStatus(MSS_MESSAGE.SRM_MSS_MSS_ERROR);
+          okdone.setExplanation("Cannot open input.");
+          break;
+        }
+
+        idx = ref.indexOf("HSI_ERROR_CODE=67");
+        if(idx != -1) { 
+          util.printMessage("\nAddressee unknown.",logger);
+          okdone.setStatus(MSS_MESSAGE.SRM_MSS_MSS_ERROR);
+          okdone.setExplanation("Addresse unknown.");
+          break;
+        }
+
+        idx = ref.indexOf("HSI_ERROR_CODE=68");
+        if(idx != -1) { 
+          util.printMessage("\nHost name unknown.",logger);
+          okdone.setStatus(MSS_MESSAGE.SRM_MSS_MSS_ERROR);
+          okdone.setExplanation("Host name unknown.");
+          break;
+        }
+
+        idx = ref.indexOf("HSI_ERROR_CODE=70");
+        if(idx != -1) { 
+          util.printMessage("\n Internal software error inconsistency",logger);
+          okdone.setStatus(MSS_MESSAGE.SRM_MSS_MSS_ERROR);
+          okdone.setExplanation("Internal software error inconsistency.");
+          break;
+        }
+
+        idx = ref.indexOf("HSI_ERROR_CODE=71");
+        if(idx != -1) { 
+          util.printMessage("\n OS error, such as cannot fork, pipe etc.",
+                logger);
+          okdone.setStatus(MSS_MESSAGE.SRM_MSS_MSS_ERROR);
+          okdone.setExplanation("OS error, such as cannot fork, pipe etc.");
+          break;
+        }
+
+        idx = ref.indexOf("HSI_ERROR_CODE=72");
+        if(idx != -1) { 
+          util.printMessage("\n Critical OS file missing, cannot be opened "+
+                " or has some sort of error", logger);
+          okdone.setStatus(MSS_MESSAGE.SRM_MSS_MSS_ERROR);
+          okdone.setExplanation("Critical OS file missing, cannot be opened "+
+                " or has some sort of error.");
+          break;
+        }
+
+        idx = ref.indexOf("HSI_ERROR_CODE=73");
+        if(idx != -1) { 
+          util.printMessage("\n Cannot create user output file. ", logger);
+          okdone.setStatus(MSS_MESSAGE.SRM_MSS_MSS_ERROR);
+          okdone.setExplanation("Cannot create user output file.");
+          break;
+        }
+
+        idx = ref.indexOf("HSI_ERROR_CODE=74");
+        if(idx != -1) { 
+          util.printMessage
+           ("\n Input/output error, occured while doing I/O on some file", 
+                        logger);
+          okdone.setStatus(MSS_MESSAGE.SRM_MSS_MSS_ERROR);
+          okdone.setExplanation
+           ("Input/output error, occured while doing I/O on some file");
+          break;
+        }
+
+        idx = ref.indexOf("HSI_ERROR_CODE=75");
+        if(idx != -1) { 
+          util.printMessage
+           ("\n Temporary failure, User is invited to retry", logger);
+          okdone.setStatus(MSS_MESSAGE.SRM_MSS_MSS_ERROR);
+          okdone.setExplanation
+           ("Temporary failure, User is invited to retry");
+          break;
+        }
+
+        idx = ref.indexOf("HSI_ERROR_CODE=76");
+        if(idx != -1) { 
+          util.printMessage
+           ("\nRemote error in protocol.", logger);
+          okdone.setStatus(MSS_MESSAGE.SRM_MSS_MSS_ERROR);
+          okdone.setExplanation ("Remote error in protocol.");
+          break;
+        }
+
+        idx = ref.indexOf("HSI_ERROR_CODE=77");
+        if(idx != -1) { 
+          util.printMessage
+           ("\nPermission denied.", logger);
+          okdone.setStatus(MSS_MESSAGE.SRM_MSS_MSS_ERROR);
+          okdone.setExplanation ("Permission denied.");
           break;
         }
 
@@ -669,11 +852,12 @@ public synchronized static void getMSSError(String ftptransferlog, MSS_MESSAGE_W
         if(idx != -1) {
           if(debugLevel > 1) {
             util.printMessage
-				("\nUser not logged in, loginname or password incorrect." 
-			        + " a file.",logger);
+	      ("\nUser not logged in, loginname or password incorrect." 
+	        + " a file.",logger);
           }
           okdone.setStatus(MSS_MESSAGE.SRM_MSS_AUTHENTICATION_FAILED);
-          okdone.setExplanation("User not logged in, loginname or password incorrect");
+          okdone.setExplanation
+           ("User not logged in, loginname or password incorrect");
           commandOk = false;
           break;
         }
@@ -682,7 +866,7 @@ public synchronized static void getMSSError(String ftptransferlog, MSS_MESSAGE_W
         if(idx != -1) {
           if(debugLevel > 1) {
             util.printMessage("\nGiven filePath is a directory and " 
-			 + " not a file.",logger);
+		 + " not a file.",logger);
           }
           okdone.setStatus(MSS_MESSAGE.SRM_MSS_MSS_ERROR);
           okdone.setExplanation("Given filepath is a directory and not a file");
@@ -690,7 +874,8 @@ public synchronized static void getMSSError(String ftptransferlog, MSS_MESSAGE_W
           break;
         }
 
-        idx = ref.indexOf("425 Can't build data connection: Connection refused");
+        idx = ref.indexOf
+           ("425 Can't build data connection: Connection refused");
         if(idx != -1) {
           if(debugLevel > 1) {
             util.printMessage(ref,logger);
@@ -730,10 +915,11 @@ public synchronized static void getMSSError(String ftptransferlog, MSS_MESSAGE_W
         if(idx != -1) {
           if(debugLevel > 1) {
             util.printMessage
-			 ("\nTrying to copy a directory without recursive option",logger);
+	     ("\nTrying to copy a directory without recursive option",logger);
           }
           okdone.setStatus(MSS_MESSAGE.SRM_MSS_IS_A_DIRECTORY);
-          okdone.setExplanation("Trying to copy a directory without recursive option");
+          okdone.setExplanation
+           ("Trying to copy a directory without recursive option");
           commandOk = false;
           break;
         }
@@ -795,22 +981,22 @@ public synchronized static void getMSSError(String ftptransferlog, MSS_MESSAGE_W
             util.printMessage("\nHPSS Error : " + hpsserror, logger);
           }
           if(hpsserror == 2) {
-			okdone.setStatus(MSS_MESSAGE.SRM_MSS_NO_SUCH_PATH);
+	    okdone.setStatus(MSS_MESSAGE.SRM_MSS_NO_SUCH_PATH);
             okdone.setExplanation("HPSS Error " + hpsserror);
           }
           //file does not exist
           else if(hpsserror == 21) { 
-			okdone.setStatus(MSS_MESSAGE.SRM_MSS_NO_SUCH_PATH);
+	    okdone.setStatus(MSS_MESSAGE.SRM_MSS_NO_SUCH_PATH);
             okdone.setExplanation("HPSS Error " + hpsserror);
           } 
           //not a file
           else if(hpsserror == 13) {
-			okdone.setStatus(MSS_MESSAGE.SRM_MSS_AUTHORIZATION_FAILED);
+	    okdone.setStatus(MSS_MESSAGE.SRM_MSS_AUTHORIZATION_FAILED);
             okdone.setExplanation("HPSS Error " + hpsserror);
           } 
           //cannot read file for GET, cannot write file for PUT
           else {
-			okdone.setStatus(MSS_MESSAGE.SRM_MSS_MSS_ERROR);
+	    okdone.setStatus(MSS_MESSAGE.SRM_MSS_MSS_ERROR);
             okdone.setExplanation("HPSS Error " + hpsserror);
           }
           commandOk = false;
@@ -908,7 +1094,8 @@ Not connected.
             
           if(idx != -1 || idx1 != -1) {
             if(debugLevel > 1) {
-              util.printMessage("\nHPSS DOWN: Cannot get shared memory", logger);
+              util.printMessage
+                ("\nHPSS DOWN: Cannot get shared memory", logger);
             }
             okdone.setStatus(MSS_MESSAGE.SRM_MSS_MSS_NOT_AVAILABLE);
             okdone.setExplanation(ref);
@@ -929,7 +1116,7 @@ Not connected.
 
           //limit of pftps reached at LBNL
           idx = ref.indexOf
-			("421 Service not available - maximum number of sessions exceeded");
+	    ("421 Service not available - maximum number of sessions exceeded");
           if(idx != -1) {
              util.printMessage("\nLimit of pftps reached.", logger);     
              okdone.setStatus(MSS_MESSAGE.SRM_MSS_MSS_LIMIT_REACHED);
@@ -959,7 +1146,7 @@ GSSAPI error minor: GSS Minor Status Error Chain:
            idx = ref.indexOf("GSSAPI error: No local mapping for Globus ID");
            if(idx != -1) {
               util.printMessage ("\nGSSAPI error: " +
-				"No Local mapping for DN. Check the GSS proxy.",logger);
+		"No Local mapping for DN. Check the GSS proxy.",logger);
               okdone.setStatus(MSS_MESSAGE.SRM_MSS_AUTHENTICATION_FAILED);
               okdone.setExplanation(ref);
               commandOk = false;
@@ -978,13 +1165,15 @@ GSSAPI error minor: GSS Minor Status Error Chain:
               break;
            }
 
-           idx = ref.indexOf("GSSAPI error major: GSS Major Status: Authentication Failed");
-           idx1 = ref.indexOf("GSSAPI error minor: GSS Minor Status  Error Chain");
+           idx = ref.indexOf
+            ("GSSAPI error major: GSS Major Status: Authentication Failed");
+           idx1 = ref.indexOf
+            ("GSSAPI error minor: GSS Minor Status  Error Chain");
            idx2 = ref.indexOf("Invalid CRL: The available CRL has expired");
 
            if(idx != -1 || idx1 != -1 || idx2 != -1) {
               util.printMessage("\nGSSAPI error " +
-					"Check the GSS proxy or may CRL has expired.",logger);
+		"Check the GSS proxy or may CRL has expired.",logger);
               okdone.setStatus(MSS_MESSAGE.SRM_MSS_AUTHENTICATION_FAILED);
               okdone.setExplanation(ref);
               commandOk = false;
@@ -1002,7 +1191,7 @@ GSSAPI error minor: GSS Minor Status Error Chain:
            idx = ref.indexOf("529 Bad Data Transfer");
            if(idx != -1) {
               util.printMessage
-				("\nHPSS ports are closed by firewall possibly.",logger);
+		("\nHPSS ports are closed by firewall possibly.",logger);
               okdone.setStatus(MSS_MESSAGE.SRM_MSS_MSS_ERROR);
               okdone.setExplanation(ref);
               commandOk = false;
