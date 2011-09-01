@@ -661,7 +661,7 @@ private boolean checkLogFileForErrors(String ftptransferlog) {
               Integer ii = new Integer(temp);
               if(debugLevel >= 6000) {
                 System.out.println(
-					"DEBUG:checkLogFileForErrors:HSI_ERROR_CODE="+ii);
+			"DEBUG:checkLogFileForErrors:HSI_ERROR_CODE="+ii);
               }
               if(ii.intValue() != 0) { 
                 return true; 
@@ -792,13 +792,13 @@ public synchronized Object checkStatus (String requestToken)
 
            if(currentTimeStamp > 
                 startTimeStamp+(processTimeOutAllowed*1000)) {
-             System.out.println(">>>CheckStatus("+
-		requestToken+")=processtimedout");
-             String logFile = p.getLogFile();
              //if logfile does not exists, it is an error,
              //process might be hanging, if logfile exists and shows
              //HSI error, then the procees might be hanging too
+             String logFile = p.getLogFile();
              boolean b  = checkLogFileForErrors(logFile); 
+             System.out.println(">>>CheckStatus("+
+		requestToken+")=processtimedout" + " logfilerrors="+b);
              if(debugLevel >= 6000) {
                System.out.println(
 		"\nDEBUG:checkStatus.checkLogFileForErrors.returnValue="+b);
@@ -819,6 +819,11 @@ public synchronized Object checkStatus (String requestToken)
                _theLogger.log(java.util.logging.Level.FINE,
 	            "Process is killed", (Object[]) param);
              }//end if
+             else {
+               fObj.setPFTPStatus(MSS_MESSAGE.SRM_MSS_TRANSFER_DONE);
+               pftpmssg = fObj.getPFTPStatus();  
+               fileStatus.setStatus(pftpmssg);  
+             }
            }//end if
           }//end if
          }//end if
@@ -864,13 +869,13 @@ public synchronized Object checkStatus (String requestToken)
            //System.out.println(">>>CheckStatus("+requestToken+")="+
                 //processTimeOutAllowed*1000);
            if(currentTimeStamp > startTimeStamp+(processTimeOutAllowed*1000)) {
-             System.out.println(">>>CheckStatus("+
-		requestToken+")=processtimedout");
-             String logFile = p.getLogFile();
              //if logfile does not exists, it is an error,
              //process might be hanging, if logfile exists and shows
-             //HSI error, then the procees might be hanging too
+             //HSI error, then the process might be hanging too
+             String logFile = p.getLogFile();
              boolean b  = checkLogFileForErrors(logFile); 
+             System.out.println(">>>CheckStatus("+
+		requestToken+")=processtimedout" + " logfileerrors="+b);
              if(debugLevel >= 6000) {
                System.out.println(
 		"\nDEBUG:checkStatus.checkLogFileForErrors.returnValue="+b);
@@ -890,6 +895,11 @@ public synchronized Object checkStatus (String requestToken)
                param[1] = "STATUS="+pftpmssg;
                _theLogger.log(java.util.logging.Level.FINE,
 	            "Process is killed", (Object[]) param);
+             }
+             else {
+               fObj.setPFTPStatus(MSS_MESSAGE.SRM_MSS_TRANSFER_DONE);
+               pftpmssg = fObj.getPFTPStatus();  
+               fileStatus.setStatus(pftpmssg);  
              }
            }
           }
@@ -939,10 +949,10 @@ public synchronized Object checkStatus (String requestToken)
              //if logfile does not exists, it is an error,
              //process might be hanging, if logfile exists and shows
              //HSI error, then the procees might be hanging too
-             System.out.println(">>>CheckStatus("+requestToken+
-			")=processtimedout");
              String logFile = p.getLogFile();
              boolean b  = checkLogFileForErrors(logFile); 
+             System.out.println(">>>CheckStatus("+requestToken+
+			")=processtimedout" + " logfileerrors="+b);
              if(debugLevel >= 6000) {
                System.out.println(
 		  "\nDEBUG:checkStatus.checkLogFileForErrors.returnValue="+b);
@@ -962,6 +972,11 @@ public synchronized Object checkStatus (String requestToken)
                param[1] = "STATUS="+pftpmssg;
                _theLogger.log(java.util.logging.Level.FINE,
 	            "Process is killed", (Object[]) param);
+             }
+             else {
+               fObj.setPFTPStatus(MSS_MESSAGE.SRM_MSS_TRANSFER_DONE);
+               pftpmssg = fObj.getPFTPStatus();  
+               mkDirStatus.setStatus(pftpmssg);  
              }
            }
           }
@@ -1001,9 +1016,11 @@ public synchronized Object checkStatus (String requestToken)
            //System.out.println(">>>CheckStatus("+requestToken+")="+
 		//processTimeOutAllowed*1000);
            if(currentTimeStamp > startTimeStamp+(processTimeOutAllowed*1000)) {
-             System.out.println(">>>CheckStatus("+requestToken+")=processtimedout");
              String logFile = p.getLogFile();
              boolean b  = checkLogFileForErrors(logFile); 
+             System.out.println
+                (">>>CheckStatus("+requestToken+")=processtimedout" +
+                        " logfileerrors="+b);
              if(debugLevel >= 6000) {
 	        System.out.println
 		  ("\nDEBUG:checkStatus.checkLogFileForErrors.returnValue="+b);
@@ -1023,6 +1040,11 @@ public synchronized Object checkStatus (String requestToken)
                param[1] = "STATUS="+pftpmssg;
                _theLogger.log(java.util.logging.Level.FINE,
 	            "Process is killed", (Object[]) param);
+             }
+             else {
+               fObj.setPFTPStatus(MSS_MESSAGE.SRM_MSS_TRANSFER_DONE);
+               pftpmssg = fObj.getPFTPStatus();  
+               status.setStatus(pftpmssg);  
              }
            }
           }

@@ -2623,6 +2623,14 @@ public void mssGetFileSize(FileObj fObj, SRM_FILE srmFile)
       //fObj.setExplanation("MSS Up.");
     }
 
+    //Aug 25, 11
+    if((lsresult != MSS_MESSAGE.SRM_MSS_MSS_NOT_AVAILABLE) &&
+       (lsresult != MSS_MESSAGE.SRM_MSS_MSS_LIMIT_REACHED) &&
+       (lsresult != MSS_MESSAGE.SRM_MSS_TRANSFER_DONE)) {
+       srmFile.setStatus(lsresult);
+       fObj.setPFTPStatus(lsresult);
+    }
+
     if(lsresult  == MSS_MESSAGE.SRM_MSS_TRANSFER_DONE) {
       if(mssType != SRM_ACCESS_TYPE.SRM_ACCESS_GSI) {
          int SIZE = 1024; //some buffer size;
@@ -2981,6 +2989,15 @@ public void mssGetFileSize(FileObj fObj, SRM_FILE srmFile)
        srmFile.setSize(-1);
        srmFile.setStatus(lsresult);
        fObj.setPFTPStatus(lsresult);
+
+       param = new Object[5]; 
+       param[0] = "REQUEST-ID="+fObj.getRequestToken();
+       param[1] = "LOGFILE="+logftpmssg;
+       param[2] = "srmFileStatus="+srmFile.getStatus();
+       param[3]=  "fObjStatus="+fObj.getPFTPStatus();
+       param[4] = "lsresult="+lsresult;
+       _theLogger.log(java.util.logging.Level.FINE,
+	   "SRM_FILE_STATUS_SET_NOW",(Object[])param);
 
        if(lsresult == MSS_MESSAGE.SRM_MSS_NO_SUCH_PATH) {
          srmFile.setExplanation("NO such file or directory");

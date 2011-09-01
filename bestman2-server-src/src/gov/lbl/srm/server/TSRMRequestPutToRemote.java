@@ -137,6 +137,8 @@ public class TSRMRequestPutToRemote extends TSRMRequestPut {
     }
 
     protected void handleFileDone(boolean checkTxfFile) {
+	_tgtSite.getLocalDestination().getTxfFile().updateToken();
+
 	doQuickPin();
 	
 	TSRMLog.info(this.getClass(), null, "action=handleFileDone", "code="+getReturnStatus().getStatusCode());

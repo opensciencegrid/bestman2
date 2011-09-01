@@ -718,6 +718,10 @@ public class TSRMLocalFile implements ISRMLocalPath {
     public void updateToken() {
 	//TSizeInBytes size = new TSizeInBytes();
 	//size.setValue(getCurrentSize());
+	if (isReady()) {
+	    return;
+	}
+	TSRMLog.info(this.getClass(), null, "event=updateToken", stampPath());
 	_detail.setSize(TSRMUtil.createTSizeInBytes(getCurrentSize()));
 	
 	if ((_token != null) &&  !_token.fileIsSettled(this)) {
@@ -1226,6 +1230,9 @@ public class TSRMLocalFile implements ISRMLocalPath {
     }
     
     public TSRMLocalFile getTxfFile() {
+	if (getPhysicalLocation() == null) {
+	    return null;
+	}
 	TSRMLocalFile stagingFile = this.getPhysicalLocation().getStagingFile();
 	
 	if (stagingFile == null) {		
