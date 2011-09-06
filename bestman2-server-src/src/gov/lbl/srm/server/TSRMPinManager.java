@@ -68,7 +68,9 @@ public class TSRMPinManager  {
     boolean addPin(TSRMPin p) {
 	boolean result = false;
 
-	TSRMUtil.acquireSync(_pinMutex);
+	if (!TSRMUtil.acquireSync(_pinMutex)) {
+	    return false;
+	}
 
 	try {
 	    if (!_isClosed) {
@@ -92,28 +94,39 @@ public class TSRMPinManager  {
 
     public TSRMPin unpin(TSRMRequest r) {
 	TSRMPin result = null;
-	TSRMUtil.acquireSync(_pinMutex);
+	if (!TSRMUtil.acquireSync(_pinMutex)) {
+	    return null;
+	}
 	
-	_pinCollection.remove(r);
-	TSRMUtil.releaseSync(_pinMutex);
+	try {
+	    _pinCollection.remove(r);
+	} finally {
+	    TSRMUtil.releaseSync(_pinMutex);
+	}
 
 	return result;
     }
     
     public TSRMPin getPin(TSRMRequest r) {
 	TSRMPin result = null;
-	TSRMUtil.acquireSync(_pinMutex);
-	
-	result = (TSRMPin)(_pinCollection.get(r));
-	TSRMUtil.releaseSync(_pinMutex);
+	if (!TSRMUtil.acquireSync(_pinMutex)) {
+	    return null;
+	}
 
+	try {
+	    result = (TSRMPin)(_pinCollection.get(r));
+	} finally {
+	    TSRMUtil.releaseSync(_pinMutex);
+	}
 	return result;
     }
     
     public TSRMPin getPinOnSurl() {
 	TSRMPin result = null;
 
-	TSRMUtil.acquireSync(_pinMutex);
+	if (!TSRMUtil.acquireSync(_pinMutex)) {
+	    return null;
+	}
 
 	try {
 	    Iterator iter = _pinCollection.values().iterator();
@@ -183,25 +196,32 @@ public class TSRMPinManager  {
     }
 
     void clearAllPins(boolean doSetStatusRelease) {
-	if (!_isClosed) {
-	    TSRMUtil.acquireSync(_pinMutex);
-	}
+	TSRMLog.info(this.getClass(), null, "event=clearAllPins size="+_pinCollection.size(), "isClosed="+_isClosed);
 
-	Iterator iter = _pinCollection.values().iterator();
-	while (iter.hasNext()) {
-	    TSRMPin p = (TSRMPin)(iter.next());
-
-	    if (doSetStatusRelease) {		
-		if (p.getIssuer().getCurrentReturnStatus().getStatusCode() != TStatusCode.SRM_FILE_IN_CACHE) {
-		    p.getIssuer().setStatusReleased("system clears pin");
-		}	       
-		p.getIssuer().getReturnStatus();
+	if (!_isClosed) {	    
+	    if (!TSRMUtil.acquireSync(_pinMutex)) {
+		return;
 	    }
 	}
-	_pinCollection.clear();
 
-	if (!_isClosed) {
-	    TSRMUtil.releaseSync(_pinMutex);
+	try {
+	    Iterator iter = _pinCollection.values().iterator();
+	    while (iter.hasNext()) {
+		TSRMPin p = (TSRMPin)(iter.next());
+		
+		if (doSetStatusRelease) {		
+		    if (p.getIssuer().getCurrentReturnStatus().getStatusCode() != TStatusCode.SRM_FILE_IN_CACHE) {
+			p.getIssuer().setStatusReleased("system clears pin");
+		    }	       
+		    p.getIssuer().getReturnStatus();
+		}
+	    }
+	    _pinCollection.clear();
+
+	} finally {
+	    if (!_isClosed) {
+		TSRMUtil.releaseSync(_pinMutex);
+	    }
 	}
     }
         
@@ -219,7 +239,10 @@ public class TSRMPinManager  {
     boolean tryClose() {
 	boolean result = false;
 	
-	TSRMUtil.acquireSync(_pinMutex);	
+	if (!TSRMUtil.acquireSync(_pinMutex)) {
+	    return false;
+	}
+
 	if (doesActivePinExist()) {
 	    TSRMLog.debug(this.getClass(), null, "event=closeFailed", _pinTarget.stampPath());
 	    TSRMUtil.releaseSync(_pinMutex);
@@ -307,9 +330,14 @@ public class TSRMPinManager  {
     boolean hasActivePin() {
 	boolean result = false;
 	
-	TSRMUtil.acquireSync(_pinMutex);	
-	result = doesActivePinExist();
-	TSRMUtil.releaseSync(_pinMutex);
+	if (!TSRMUtil.acquireSync(_pinMutex)) {
+	    return false;
+	}
+	try {
+	    result = doesActivePinExist();
+	} finally {
+	    TSRMUtil.releaseSync(_pinMutex);
+	}
 		
 	return result;
     }

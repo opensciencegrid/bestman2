@@ -491,6 +491,8 @@ public class TSRMRequestPut extends TSRMRequest {
     }
 
     protected void handleFileDone(boolean checkTxfFile) {
+	 _tgtSite.getLocalDestination().getTxfFile().updateToken();
+
 	if (!TSRMUtil.acquireSync(_pinMutex)) {
 	    return;
 	}

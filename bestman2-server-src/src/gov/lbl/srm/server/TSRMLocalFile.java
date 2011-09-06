@@ -925,11 +925,11 @@ public class TSRMLocalFile implements ISRMLocalPath {
 	if (compactIsFeasible()) {
 	    result = getCurrentSize();
 	    // 03-20-2007 getToken().removeMe(this, true);
-		if (TSRMLog.getCacheLog() != null) {
-	    if (!TSRMLog.getCacheLog().removeFile(this)) {
-		result = 0;
-	    }
+	    if (TSRMLog.getCacheLog() != null) {
+		if (!TSRMLog.getCacheLog().removeFile(this)) {
+		    result = 0;
 		}
+	    }
 	    
 	    this.activate(true);
 	    

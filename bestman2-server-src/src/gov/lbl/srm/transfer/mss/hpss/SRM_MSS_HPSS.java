@@ -2,36 +2,28 @@
  *
  * *** Copyright Notice ***
  *
- * BeStMan Copyright (c) 2010, The Regents of the University of California, 
- * through Lawrence Berkeley National Laboratory (subject to receipt of any 
- * required approvals from the U.S. Dept. of Energy).  This software was 
- * developed under funding from the U.S. Department of Energy and is 
+ * BeStMan Copyright (c) 2010, The Regents of the University of California,
+ * through Lawrence Berkeley National Laboratory (subject to receipt of any
+ * required approvals from the U.S. Dept. of Energy).  This software was
+ * developed under funding from the U.S. Department of Energy and is
  * associated with the Berkeley Lab Scientific Data Management Group projects.
  * All rights reserved.
- * 
- * If you have questions about your rights to use or distribute this software, 
+ *
+ * If you have questions about your rights to use or distribute this software,
  * please contact Berkeley Lab's Technology Transfer Department at TTD@lbl.gov.
- * 
- * NOTICE.  This software was developed under funding from the 
- * U.S. Department of Energy.  As such, the U.S. Government has been granted 
- * for itself and others acting on its behalf a paid-up, nonexclusive, 
- * irrevocable, worldwide license in the Software to reproduce, prepare 
- * derivative works, and perform publicly and display publicly.  
- * Beginning five (5) years after the date permission to assert copyright is 
- * obtained from the U.S. Department of Energy, and subject to any subsequent 
+ *
+ * NOTICE.  This software was developed under funding from the
+ * U.S. Department of Energy.  As such, the U.S. Government has been granted
+ * for itself and others acting on its behalf a paid-up, nonexclusive,
+ * irrevocable, worldwide license in the Software to reproduce, prepare
+ * derivative works, and perform publicly and display publicly.
+ * Beginning five (5) years after the date permission to assert copyright is
+ * obtained from the U.S. Department of Energy, and subject to any subsequent
  * five (5) year renewals, the U.S. Government is granted for itself and others
  * acting on its behalf a paid-up, nonexclusive, irrevocable, worldwide license
  * in the Software to reproduce, prepare derivative works, distribute copies to
  * the public, perform publicly and display publicly, and to permit others to
  * do so.
- *
-*/
-/**
- *
- * Email questions to SRM@LBL.GOV
- * Scientific Data Management Research Group
- * Lawrence Berkeley National Laboratory
- * http://sdm.lbl.gov/bestman
  *
 */
 
@@ -1470,12 +1462,12 @@ public void mssCopy(FileObj fObj, SRM_STATUS status)
 
     if(overwritemode == SRM_OVERWRITE_MODE.SRM_MSS_OVERWRITE_NO) {
        MSS_MESSAGE_W_E lsresultpre = mssListing(target, accessInfo, 
-                                      ftptransferlog, debugLevel,
-                                      mssType, pftpPath,
-                                      MSSHost, MSSPort,
-                                      srmnocipher,srmnonpassivelisting, 
-									  setscipath,true,
-									  fObj, status);
+                   ftptransferlog, debugLevel,
+                   mssType, pftpPath,
+                   MSSHost, MSSPort,
+                   srmnocipher,srmnonpassivelisting, 
+		   setscipath,true,
+		   fObj, status);
 
       if(lsresultpre.getStatus() == 
 			MSS_MESSAGE.SRM_MSS_TRANSFER_ABORTED) {
@@ -1542,7 +1534,8 @@ public void mssCopy(FileObj fObj, SRM_STATUS status)
 
        if(debugLevel >= 1000) {
          util.printMessage("\n+++ begin script ++++\n", logger,debugLevel);
-         util.printMessage("Date: " + SRM_MSS.printDate() + "\n", logger,debugLevel);  
+         util.printMessage("Date: " + SRM_MSS.printDate() + "\n", logger,
+                debugLevel);  
          util.printMessage("#!/bin/sh\n\n",logger,debugLevel);
          util.printMessage("X509_USER_PROXY="+proxyFile+"\n",logger,debugLevel);
          util.printMessage("export X509_USER_PROXY\n",logger,debugLevel);
@@ -1550,7 +1543,7 @@ public void mssCopy(FileObj fObj, SRM_STATUS status)
             this.javaLibraryPath +"\n", logger,debugLevel);
          util.printMessage ("export LD_LIBRARY_PATH\n", logger,debugLevel); 
          util.printMessage(srmmsspath + " \"out " + 
-		    ftptransferlog + "; " +copyCommand + "\"", logger,debugLevel);
+	    ftptransferlog + "; " +copyCommand + "\"", logger,debugLevel);
         util.printMessage("\n+++ end script ++++\n", logger,debugLevel);
        }
     }
@@ -1567,7 +1560,8 @@ public void mssCopy(FileObj fObj, SRM_STATUS status)
 
        if(debugLevel >= 1000) {
         util.printMessage("\n+++ begin script ++++\n", logger,debugLevel);
-        util.printMessage("Date: " + SRM_MSS.printDate() + "\n",logger,debugLevel);
+        util.printMessage("Date: " + SRM_MSS.printDate() + "\n",logger,
+                debugLevel);
         util.printMessage("#!/bin/sh\n\n",logger,debugLevel);
         util.printMessage ("LD_LIBRARY_PATH=" + this.javaLibraryPath +"\n", 
 			logger,debugLevel);
@@ -1589,7 +1583,7 @@ public void mssCopy(FileObj fObj, SRM_STATUS status)
 		mypasswd == null || mypasswd.length() == 0) {
          if(debugLevel >= 10) {
             util.printMessage
-				("WARNING: Either userid or password wrong.",logger,debugLevel);
+	     ("WARNING: Either userid or password wrong.",logger,debugLevel);
          }
          status.setStatus(MSS_MESSAGE.SRM_MSS_FAILED); 
          fObj.setPFTPStatus(MSS_MESSAGE.SRM_MSS_FAILED);
@@ -1611,12 +1605,14 @@ public void mssCopy(FileObj fObj, SRM_STATUS status)
       writer.println("#!/bin/sh\n\n");
       writer.println("LD_LIBRARY_PATH=" + javaLibraryPath +"\n");
       writer.println("export LD_LIBRARY_PATH\n");
-      writer.println(srmmsspath + " \"out " + ftptransferlog + "; " +copyCommand + "\"");
+      writer.println
+        (srmmsspath + " \"out " + ftptransferlog + "; " +copyCommand + "\"");
       writer.close();
 
       if(debugLevel >= 1000) {
         util.printMessage("\n+++ begin script ++++\n", logger,debugLevel);
-        util.printMessage("Date: " + SRM_MSS.printDate() + "\n",logger,debugLevel);
+        util.printMessage("Date: " + SRM_MSS.printDate() + "\n",logger,
+                debugLevel);
         util.printMessage("#!/bin/sh\n\n",logger,debugLevel);
         util.printMessage ("LD_LIBRARY_PATH=" + this.javaLibraryPath +"\n", 
 			logger,debugLevel);

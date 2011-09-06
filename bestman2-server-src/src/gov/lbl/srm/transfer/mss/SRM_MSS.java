@@ -1,30 +1,29 @@
 /**
  *
- * BeStMan Copyright (c) 2007-2008, 
- * The Regents of the University of California,
+ * *** Copyright Notice ***
+ *
+ * BeStMan Copyright (c) 2010, The Regents of the University of California,
  * through Lawrence Berkeley National Laboratory (subject to receipt of any
- * required approvals from the U.S. Dept. of Energy).  All rights reserved.
+ * required approvals from the U.S. Dept. of Energy).  This software was
+ * developed under funding from the U.S. Department of Energy and is
+ * associated with the Berkeley Lab Scientific Data Management Group projects.
+ * All rights reserved.
  *
  * If you have questions about your rights to use or distribute this software,
  * please contact Berkeley Lab's Technology Transfer Department at TTD@lbl.gov.
  *
- * NOTICE.  This software was developed under partial funding from the
- * U.S. Department of Energy.  As such, the U.S. Government has been
- * granted for itself and others acting on its behalf a paid-up,
- * nonexclusive, irrevocable, worldwide license in the Software to
- * reproduce, prepare derivative works, and perform publicly and
- * display publicly.  Beginning five (5) years after the date permission
- * to assert copyright is obtained from the U.S. Department of Energy,
- * and subject to any subsequent five (5) year renewals, the
- * U.S. Government is granted for itself and others acting on its
- * behalf a paid-up, nonexclusive, irrevocable, worldwide license in
- * the Software to reproduce, prepare derivative works, distribute
- * copies to the public, perform publicly and display publicly, and
- * to permit others to do so.
- *
- * Email questions to SRM@LBL.GOV
- * Scientific Data Management Research Group
- * Lawrence Berkeley National Laboratory
+ * NOTICE.  This software was developed under funding from the
+ * U.S. Department of Energy.  As such, the U.S. Government has been granted
+ * for itself and others acting on its behalf a paid-up, nonexclusive,
+ * irrevocable, worldwide license in the Software to reproduce, prepare
+ * derivative works, and perform publicly and display publicly.
+ * Beginning five (5) years after the date permission to assert copyright is
+ * obtained from the U.S. Department of Energy, and subject to any subsequent
+ * five (5) year renewals, the U.S. Government is granted for itself and others
+ * acting on its behalf a paid-up, nonexclusive, irrevocable, worldwide license
+ * in the Software to reproduce, prepare derivative works, distribute copies to
+ * the public, perform publicly and display publicly, and to permit others to
+ * do so.
  *
 */
 
@@ -770,8 +769,10 @@ public synchronized Object checkStatus (String requestToken)
 		pftpmssg == MSS_MESSAGE.SRM_MSS_REQUEST_QUEUED) {
            ExecScript p = fileStatus.getCurrentProcess();
            //System.out.println(">>>CheckStatus("+requestToken+")="+p);
+           long startTimeStamp = fileStatus.getStartTimeStamp();
            if(p != null) {
-           long startTimeStamp = p.getStartTimeStamp();
+             startTimeStamp = p.getStartTimeStamp();
+           }
            long currentTimeStamp = System.currentTimeMillis();
            //System.out.println(">>>CheckStatus("+requestToken+")="+
                 //currentTimeStamp);
@@ -786,7 +787,7 @@ public synchronized Object checkStatus (String requestToken)
            param[2] = "CURRENTTIMESTAMP="+currentTimeStamp;
            param[3] = "PROCESSTIMEOUT="+processTimeOutAllowed;
            param[4] = "IF_CONDITION="+
-		(currentTimeStamp > (startTimeStamp+(processTimeOutAllowed*1000)));
+	    (currentTimeStamp > (startTimeStamp+(processTimeOutAllowed*1000)));
            _theLogger.log(java.util.logging.Level.FINE,
 	        "CHECK STATUS is called", (Object[]) param);
 
@@ -806,6 +807,7 @@ public synchronized Object checkStatus (String requestToken)
              if(b) {
                String requestType = getRequestType(requestToken);
                p.setStartTimeStamp(System.currentTimeMillis());
+               fileStatus.setStartTimeStamp(System.currentTimeMillis());        
                //System.out.println(">>>BEFORE RETRY(1)");
                retryRequests(fObj,fileStatus,p,requestType);
                pftpmssg = fObj.getPFTPStatus();  
@@ -825,7 +827,6 @@ public synchronized Object checkStatus (String requestToken)
                fileStatus.setStatus(pftpmssg);  
              }
            }//end if
-          }//end if
          }//end if
          if(pftpmssg != MSS_MESSAGE.SRM_MSS_REQUEST_QUEUED) {   
             boolean b = fileStatus.getAlreadyReported();
@@ -859,8 +860,10 @@ public synchronized Object checkStatus (String requestToken)
          if(accessType != SRM_ACCESS_TYPE.SRM_ACCESS_GSI && 
 			pftpmssg == MSS_MESSAGE.SRM_MSS_REQUEST_QUEUED) {
            ExecScript p = fileStatus.getCurrentProcess();
+           long startTimeStamp = fileStatus.getStartTimeStamp();
            if(p != null) {
-           long startTimeStamp = p.getStartTimeStamp();
+             startTimeStamp = p.getStartTimeStamp();
+           }
            long currentTimeStamp = System.currentTimeMillis();
            //System.out.println(">>>CheckStatus("+requestToken+")="+
 		//currentTimeStamp);
@@ -882,6 +885,7 @@ public synchronized Object checkStatus (String requestToken)
              }
              if(b) {
                p.setStartTimeStamp(System.currentTimeMillis());
+               fileStatus.setStartTimeStamp(System.currentTimeMillis());        
                String requestType = getRequestType(requestToken);
                //System.out.println(">>>BEFORE RETRY(2)");
                retryRequests(fObj,fileStatus,p,requestType);
@@ -901,8 +905,7 @@ public synchronized Object checkStatus (String requestToken)
                pftpmssg = fObj.getPFTPStatus();  
                fileStatus.setStatus(pftpmssg);  
              }
-           }
-          }
+           }//end if
          }
          if(pftpmssg != MSS_MESSAGE.SRM_MSS_REQUEST_QUEUED) {   
             util.printMessage("\n***************************",
@@ -936,8 +939,10 @@ public synchronized Object checkStatus (String requestToken)
          if(accessType != SRM_ACCESS_TYPE.SRM_ACCESS_GSI && 
 		pftpmssg == MSS_MESSAGE.SRM_MSS_REQUEST_QUEUED) {
            ExecScript p = mkDirStatus.getCurrentProcess();
+           long startTimeStamp = mkDirStatus.getStartTimeStamp();
            if(p != null) {
-           long startTimeStamp = p.getStartTimeStamp();
+             startTimeStamp = p.getStartTimeStamp();
+           }
            long currentTimeStamp = System.currentTimeMillis();
            //System.out.println(">>>CheckStatus("+requestToken+")="+
 		//currentTimeStamp);
@@ -959,6 +964,7 @@ public synchronized Object checkStatus (String requestToken)
              }
              if(b) {
                p.setStartTimeStamp(System.currentTimeMillis());
+               mkDirStatus.setStartTimeStamp(System.currentTimeMillis());      
                String requestType = getRequestType(requestToken);
                //System.out.println(">>>BEFORE RETRY(3)");
                retryRequests(fObj,mkDirStatus,p,requestType);
@@ -978,8 +984,7 @@ public synchronized Object checkStatus (String requestToken)
                pftpmssg = fObj.getPFTPStatus();  
                mkDirStatus.setStatus(pftpmssg);  
              }
-           }
-          }
+           }//end if
          } 
          if(pftpmssg != MSS_MESSAGE.SRM_MSS_REQUEST_QUEUED) {
             boolean b = mkDirStatus.getAlreadyReported();
@@ -1003,11 +1008,13 @@ public synchronized Object checkStatus (String requestToken)
          status.setStatus(pftpmssg);  
          System.out.println(">>>CheckStatus("+requestToken+")="+pftpmssg);
          if(accessType != SRM_ACCESS_TYPE.SRM_ACCESS_GSI && 
-			pftpmssg == MSS_MESSAGE.SRM_MSS_REQUEST_QUEUED) {
+		pftpmssg == MSS_MESSAGE.SRM_MSS_REQUEST_QUEUED) {
            ExecScript p = status.getCurrentProcess();
            //System.out.println(">>>CheckStatus("+requestToken+")="+p);
+           long startTimeStamp = status.getStartTimeStamp();
            if(p != null) {
-           long startTimeStamp = p.getStartTimeStamp();
+             startTimeStamp = p.getStartTimeStamp();
+           }
            long currentTimeStamp = System.currentTimeMillis();
            //System.out.println(">>>CheckStatus("+requestToken+")="+
 		//currentTimeStamp);
@@ -1027,6 +1034,7 @@ public synchronized Object checkStatus (String requestToken)
              }
              if(b) {
                p.setStartTimeStamp(System.currentTimeMillis());
+               status.setStartTimeStamp(System.currentTimeMillis());      
                String requestType = getRequestType(requestToken);
                //System.out.println(">>>BEFORE RETRY(4)");
                retryRequests(fObj,status,p,requestType);
@@ -1046,9 +1054,8 @@ public synchronized Object checkStatus (String requestToken)
                pftpmssg = fObj.getPFTPStatus();  
                status.setStatus(pftpmssg);  
              }
-           }
-          }
-         }
+           }//end if
+         }//end if
          if(pftpmssg != MSS_MESSAGE.SRM_MSS_REQUEST_QUEUED) {
             boolean b = status.getAlreadyReported();
             if(!b) {
