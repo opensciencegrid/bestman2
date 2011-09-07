@@ -692,7 +692,9 @@ private void retryRequests(FileObj fObj, Object status,
      //kills the previous process,
      //starts a new process, and adds in the appropriate queue
      fObj.setPFTPStatus(MSS_MESSAGE.SRM_MSS_REQUEST_QUEUED);
-     p.getProcess().destroy();
+     if(p != null) {
+       p.getProcess().destroy();
+     }
      Object[] param = new Object[2]; 
      param[0] = "SOURCE="+fObj; 
      param[1] = "REQUEST-ID="+fObj.getRequestToken(); 
@@ -732,7 +734,9 @@ private void retryRequests(FileObj fObj, Object status,
      //kills the process, and set the status to process killed
      System.out.println(">>>process is killed for requestid="+
 		fObj.getRequestToken());
-     p.getProcess().destroy();
+     if(p != null) {
+       p.getProcess().destroy();
+     }
      Object[] param = new Object[2]; 
      param[0] = "SOURCE="+fObj; 
      param[1] = "REQUEST-ID="+fObj.getRequestToken(); 
@@ -796,17 +800,27 @@ public synchronized Object checkStatus (String requestToken)
              //if logfile does not exists, it is an error,
              //process might be hanging, if logfile exists and shows
              //HSI error, then the procees might be hanging too
-             String logFile = p.getLogFile();
-             boolean b  = checkLogFileForErrors(logFile); 
+             boolean b = false;
+             String logFile = "";
+             if(p != null) {
+               logFile = p.getLogFile();
+               b  = checkLogFileForErrors(logFile); 
+             }
+             else {
+               b = true;
+             }
              System.out.println(">>>CheckStatus("+
-		requestToken+")=processtimedout" + " logfilerrors="+b);
+		requestToken+")=processtimedout" + " logfilerrors="+b + " " +
+			"process info="+p);
              if(debugLevel >= 6000) {
                System.out.println(
 		"\nDEBUG:checkStatus.checkLogFileForErrors.returnValue="+b);
              }
              if(b) {
                String requestType = getRequestType(requestToken);
-               p.setStartTimeStamp(System.currentTimeMillis());
+               if(p != null) {
+                 p.setStartTimeStamp(System.currentTimeMillis());
+               }
                fileStatus.setStartTimeStamp(System.currentTimeMillis());        
                //System.out.println(">>>BEFORE RETRY(1)");
                retryRequests(fObj,fileStatus,p,requestType);
@@ -875,16 +889,26 @@ public synchronized Object checkStatus (String requestToken)
              //if logfile does not exists, it is an error,
              //process might be hanging, if logfile exists and shows
              //HSI error, then the process might be hanging too
-             String logFile = p.getLogFile();
-             boolean b  = checkLogFileForErrors(logFile); 
+             String logFile = "";
+             boolean b = false;
+             if(p != null) {
+               logFile = p.getLogFile();
+               b  = checkLogFileForErrors(logFile); 
+             }
+             else {
+               b = true;
+             }
              System.out.println(">>>CheckStatus("+
-		requestToken+")=processtimedout" + " logfileerrors="+b);
+		requestToken+")=processtimedout" + " logfileerrors="+b + " "+
+			"process info="+p);
              if(debugLevel >= 6000) {
                System.out.println(
 		"\nDEBUG:checkStatus.checkLogFileForErrors.returnValue="+b);
              }
              if(b) {
-               p.setStartTimeStamp(System.currentTimeMillis());
+               if(p != null) {
+                 p.setStartTimeStamp(System.currentTimeMillis());
+               }
                fileStatus.setStartTimeStamp(System.currentTimeMillis());        
                String requestType = getRequestType(requestToken);
                //System.out.println(">>>BEFORE RETRY(2)");
@@ -954,16 +978,28 @@ public synchronized Object checkStatus (String requestToken)
              //if logfile does not exists, it is an error,
              //process might be hanging, if logfile exists and shows
              //HSI error, then the procees might be hanging too
-             String logFile = p.getLogFile();
-             boolean b  = checkLogFileForErrors(logFile); 
+             String logFile = "";
+             boolean b = false;
+
+             if( p != null) {
+               logFile = p.getLogFile();
+               b  = checkLogFileForErrors(logFile); 
+             }
+             else {
+               b = true;
+             }
              System.out.println(">>>CheckStatus("+requestToken+
-			")=processtimedout" + " logfileerrors="+b);
+			")=processtimedout" + " logfileerrors="+b + 
+		        "process info="+p);
              if(debugLevel >= 6000) {
                System.out.println(
 		  "\nDEBUG:checkStatus.checkLogFileForErrors.returnValue="+b);
              }
+ 
              if(b) {
-               p.setStartTimeStamp(System.currentTimeMillis());
+               if( p != null) {
+                 p.setStartTimeStamp(System.currentTimeMillis());
+               }  
                mkDirStatus.setStartTimeStamp(System.currentTimeMillis());      
                String requestType = getRequestType(requestToken);
                //System.out.println(">>>BEFORE RETRY(3)");
@@ -1023,17 +1059,28 @@ public synchronized Object checkStatus (String requestToken)
            //System.out.println(">>>CheckStatus("+requestToken+")="+
 		//processTimeOutAllowed*1000);
            if(currentTimeStamp > startTimeStamp+(processTimeOutAllowed*1000)) {
-             String logFile = p.getLogFile();
-             boolean b  = checkLogFileForErrors(logFile); 
+             String logFile="";  
+             boolean b = false;
+
+             if( p != null) {
+               logFile = p.getLogFile();
+               b  = checkLogFileForErrors(logFile); 
+             }
+             else {   
+               b =true;
+             }
+
              System.out.println
                 (">>>CheckStatus("+requestToken+")=processtimedout" +
-                        " logfileerrors="+b);
+                        " logfileerrors="+b + "process info="+p);
              if(debugLevel >= 6000) {
 	        System.out.println
 		  ("\nDEBUG:checkStatus.checkLogFileForErrors.returnValue="+b);
              }
              if(b) {
-               p.setStartTimeStamp(System.currentTimeMillis());
+               if(p != null) { 
+                 p.setStartTimeStamp(System.currentTimeMillis());
+               }  
                status.setStartTimeStamp(System.currentTimeMillis());      
                String requestType = getRequestType(requestToken);
                //System.out.println(">>>BEFORE RETRY(4)");

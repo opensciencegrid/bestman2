@@ -26,7 +26,6 @@
  * do so.
  *
 */
-
 /**
  *
  * Email questions to SRM@LBL.GOV
@@ -244,6 +243,7 @@ public class TSupportedURLWithSRMRefToRemote extends TSupportedURLWithSRM {
 	    return checkIsDir();
 	}	   
 	
+	String err = "BeStMan: Unable to list dir.";
 	if (TSRMUtil.acquireSync(_remoteContactMutex)) {
 	    try {
 		TSRMContactRemoteSRM srmContact = new TSRMContactRemoteSRM(getStubHolder(), getCredential());
@@ -256,7 +256,8 @@ public class TSupportedURLWithSRMRefToRemote extends TSupportedURLWithSRM {
 		SrmLsResponse result = srmContact.ls(r);
 	    
 		TStatusCode status = result.getReturnStatus().getStatusCode();
-		TSRMLog.debug(this.getClass(), null, "remoteCall=srmls status="+status.toString()+" exp="+result.getReturnStatus().getExplanation(), "url=\""+getURLString()+"\"");	
+		TSRMLog.debug(this.getClass(), null, "remoteCall=srmls status="+status.toString()+" exp="+result.getReturnStatus().getExplanation(), 
+			      "url=\""+getURLString()+"\"");	
 	  
 		while (status == TStatusCode.SRM_REQUEST_INPROGRESS) {
 		    TSRMUtil.sleep(60000);
@@ -264,7 +265,6 @@ public class TSupportedURLWithSRMRefToRemote extends TSupportedURLWithSRM {
 		    status = result.getReturnStatus().getStatusCode();
 		    TSRMLog.debug(this.getClass(), null, "remoteCall=srmLs status="+status.toString(), "url=\""+getURLString()+"\"");	
 		}
-
 
 		if (status == TStatusCode.SRM_SUCCESS) {	    
 		    TMetaDataPathDetail[] details = result.getDetails().getPathDetailArray();	    
@@ -275,13 +275,15 @@ public class TSupportedURLWithSRMRefToRemote extends TSupportedURLWithSRM {
 		    //looks like a dir is invalid? we should return to user!!
 		    
 		    TSRMLog.debug(this.getClass(), null, "remoteCall=srmLs conclusion=\"got no info/or failed. Assuming false\"", null);
+		    err += "remoteLs call status:"+status.toString();
 		}
 	    } catch (Exception e) {
 		TSRMLog.exception(this.getClass(), "Error when calling srmLs()", e);
+		err +=" Unable to call srmLs()";
 	    } finally {
 		TSRMUtil.releaseSync(_remoteContactMutex);
 	    }	    
-	    throw new TSRMException("Invalid dir listing."+getURLString(), false);	
+	    throw new TSRMException(err+getURLString(), false);	
 	} else {
 	    TSRMLog.debug(this.getClass(), null, "remoteCall=srmLs event=failed error=\"cannt lock mutex\"", null);
 	    return false;
