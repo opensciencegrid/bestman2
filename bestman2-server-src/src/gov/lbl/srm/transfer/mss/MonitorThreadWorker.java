@@ -151,7 +151,7 @@ private void runWork () {
               */
              if(!fObj.getAlreadyReported()) {
                if(pftpmssg == MSS_MESSAGE.SRM_MSS_TRANSFER_DONE ||
-					pftpmssg == MSS_MESSAGE.SRM_MSS_REQUEST_DONE) {
+			pftpmssg == MSS_MESSAGE.SRM_MSS_REQUEST_DONE) {
                   Object[] param = new Object[2];
                   param[0] = "SOURCE="+fObj;
                   param[1] ="REQUEST-ID="+fObj.getRequestToken();
@@ -187,7 +187,7 @@ private void runWork () {
                   //System.out.println(">>>Calling remove from statusMap");
                   _parent.removeFromStatusMap(fObj); 
              } 
-           } 
+           }//end if 
            else {
              if(_debugLevel >= 300) { 
                Object[] param = new Object[2];
@@ -196,8 +196,8 @@ private void runWork () {
                _theLogger.log(java.util.logging.Level.FINE,
 			     "REQUEST-QUEUED",(Object[])param);
              }
-           }
-         }
+           }//end else
+         }//end for
 
          //System.out.println(">>> isNextTransferAvailable()="+_parent.isNextTransferAvailable()); 
          //System.out.println(">>> _parent.getMSSPending()="+_parent.getMSSPending()); 

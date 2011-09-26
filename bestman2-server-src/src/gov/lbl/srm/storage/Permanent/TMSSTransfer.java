@@ -26,7 +26,6 @@
  * do so.
  *
 */
-
 /**
  *
  * Email questions to SRM@LBL.GOV
@@ -77,7 +76,7 @@ public class TMSSTransfer implements IMSSTxf {
     }
 
     private boolean isDone(String currMethodName, MSS_MESSAGE status) {		
-	if ((status != null) && (status != MSS_MESSAGE.SRM_MSS_REQUEST_QUEUED)) {
+	if ((status != null) && (status != MSS_MESSAGE.SRM_MSS_REQUEST_QUEUED) && (status != MSS_MESSAGE.SRM_MSS_PROCESS_KILLED)) {
 	    TSRMLog.debug(this.getClass(), null, "isDone", "method="+currMethodName+" status="+status.toString());
 	    return true;
 	}

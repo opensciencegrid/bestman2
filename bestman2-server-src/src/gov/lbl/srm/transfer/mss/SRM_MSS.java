@@ -85,9 +85,12 @@ public class SRM_MSS implements callerIntf {
  protected int MSSWaitTime=120; //re-trial time in seconds
  protected int debugLevel=10;
 
- protected ObjectFIFO retrieveQueue = new ObjectFIFO(maximumQueueSize);
- protected ObjectFIFO archiveQueue  = new ObjectFIFO(maximumQueueSize);
- protected ObjectFIFO othersQueue   = new ObjectFIFO(maximumQueueSize);
+ //protected ObjectFIFO retrieveQueue = new ObjectFIFO(sizeOfRetrieveQueue);
+ //protected ObjectFIFO archiveQueue  = new ObjectFIFO(sizeOfArchiveQueue);
+ //protected ObjectFIFO othersQueue   = new ObjectFIFO(sizeOfOthersQueue);
+ protected ObjectFIFO retrieveQueue = null;
+ protected ObjectFIFO archiveQueue  = null;
+ protected ObjectFIFO othersQueue   = null;
  protected Hashtable statusMap = new Hashtable(); 
  protected int nextQueueTurn;
  protected Hashtable userInfo = new Hashtable();
@@ -383,29 +386,33 @@ public void init(Properties sys_config) throws Exception {
       }catch(NumberFormatException nfe) {}
     }
 
+    retrieveQueue = new ObjectFIFO(sizeOfRetrieveQueue);
+    archiveQueue  = new ObjectFIFO(sizeOfArchiveQueue);
+    othersQueue   = new ObjectFIFO(sizeOfOthersQueue);
+
     if(MSSMaxAllowed > sizeOfOthersQueue ) {
       System.out.println
 		("MSSMaxAllowed="+MSSMaxAllowed + 
-			" cannot be more than sizeOfOthersQueue="+ sizeOfOthersQueue);
+	" cannot be more than sizeOfOthersQueue="+ sizeOfOthersQueue);
       throw new SRM_MSS_Exception
 		("MSSMaxAllowed="+MSSMaxAllowed + 
-			" cannot be more than sizeOfOthersQueue="+ sizeOfOthersQueue);
+	" cannot be more than sizeOfOthersQueue="+ sizeOfOthersQueue);
     }
     if(MSSMaxAllowed > sizeOfRetrieveQueue ) {
       System.out.println
-		("MSSMaxAllowed="+MSSMaxAllowed + 
-			" cannot be more than sizeOfRetrieveQueue="+ sizeOfRetrieveQueue);
+		("MSSMaxAllowed="+MSSMaxAllowed +
+	" cannot be more than sizeOfRetrieveQueue="+ sizeOfRetrieveQueue);
       throw new SRM_MSS_Exception
 		("MSSMaxAllowed="+MSSMaxAllowed + 
-			" cannot be more than sizeOfRetrieveQueue="+ sizeOfRetrieveQueue);
+	" cannot be more than sizeOfRetrieveQueue="+ sizeOfRetrieveQueue);
     }
     if(MSSMaxAllowed > sizeOfArchiveQueue ) {
       System.out.println
 		("MSSMaxAllowed="+MSSMaxAllowed + 
-			" cannot be more than sizeOfArchiveQueue="+ sizeOfArchiveQueue);
+	" cannot be more than sizeOfArchiveQueue="+ sizeOfArchiveQueue);
       throw new SRM_MSS_Exception
 		("MSSMaxAllowed="+MSSMaxAllowed + 
-			" cannot be more than sizeOfArchiveQueue="+ sizeOfArchiveQueue);
+	" cannot be more than sizeOfArchiveQueue="+ sizeOfArchiveQueue);
     }
 
     if(!logPath.equals("")) {
@@ -687,7 +694,8 @@ private void retryRequests(FileObj fObj, Object status,
   fObj.setExplanation("Will retry again"); 
   fObj.incrementNumRetry();
   fObj.setTimeStamp(new GregorianCalendar());
-  fObj.setRetryTime(MSSWaitTime*2);
+  //fObj.setRetryTime(MSSWaitTime*2);
+  fObj.setRetryTime(1);
   if(fObj.getNumRetry() < getMSSMaxRetrial()) {
      //kills the previous process,
      //starts a new process, and adds in the appropriate queue
@@ -710,7 +718,7 @@ private void retryRequests(FileObj fObj, Object status,
      if(monitorThread == null) {
        threadDisable = false;
        monitorThreadPool = new MonitorThreadPool(1,(SRM_MSS)this);
-       monitorThread = new MonitorThreadMain(monitorThreadPool,this);
+       monitorThread = new MonitorThreadMain(monitorThreadPool,(SRM_MSS)this);
        monitorThread.start();
     }
 
@@ -811,7 +819,7 @@ public synchronized Object checkStatus (String requestToken)
              }
              System.out.println(">>>CheckStatus("+
 		requestToken+")=processtimedout" + " logfilerrors="+b + " " +
-			"process info="+p);
+			" process info="+p);
              if(debugLevel >= 6000) {
                System.out.println(
 		"\nDEBUG:checkStatus.checkLogFileForErrors.returnValue="+b);
@@ -829,9 +837,10 @@ public synchronized Object checkStatus (String requestToken)
                fileStatus.setStatus(pftpmssg);  
                System.out.println(">>>CheckStatus("+requestToken+")="+
 					pftpmssg);
-               param = new Object[2];
+               param = new Object[3];
                param[0] = "REQUEST-TOKEN="+requestToken;
                param[1] = "STATUS="+pftpmssg;
+               param[2] = "PROCESS_INFO="+p;
                _theLogger.log(java.util.logging.Level.FINE,
 	            "Process is killed", (Object[]) param);
              }//end if
@@ -918,9 +927,10 @@ public synchronized Object checkStatus (String requestToken)
                fileStatus.setStatus(pftpmssg);  
                //System.out.println(
 			//">>>CheckStatus("+requestToken+")="+pftpmssg);
-               param = new Object[2];
+               param = new Object[3];
                param[0] = "REQUEST-TOKEN="+requestToken;
                param[1] = "STATUS="+pftpmssg;
+               param[2] = "PROCESS_INFO="+p;
                _theLogger.log(java.util.logging.Level.FINE,
 	            "Process is killed", (Object[]) param);
              }
@@ -1009,9 +1019,10 @@ public synchronized Object checkStatus (String requestToken)
                mkDirStatus.setStatus(pftpmssg);  
                //System.out.println(
 			//">>>CheckStatus("+requestToken+")="+pftpmssg);
-               param = new Object[2];
+               param = new Object[3];
                param[0] = "REQUEST-TOKEN="+requestToken;
                param[1] = "STATUS="+pftpmssg;
+               param[2] = "PROCESS_INFO="+p;
                _theLogger.log(java.util.logging.Level.FINE,
 	            "Process is killed", (Object[]) param);
              }
@@ -1090,9 +1101,10 @@ public synchronized Object checkStatus (String requestToken)
                status.setStatus(pftpmssg);  
                //System.out.println(">>>CheckStatus("+
 				//requestToken+")="+pftpmssg);
-               param = new Object[2];
+               param = new Object[3];
                param[0] = "REQUEST-TOKEN="+requestToken;
                param[1] = "STATUS="+pftpmssg;
+               param[2] = "PROCESS_INFO="+p;
                _theLogger.log(java.util.logging.Level.FINE,
 	            "Process is killed", (Object[]) param);
              }
@@ -1374,17 +1386,17 @@ protected SRM_STATUS mssGetHomeDir(String path,
    String source ="";
    SRM_STATUS status = new SRM_STATUS();
 
-   if(othersQueue.getSize() >= maximumQueueSize) {
+   if(othersQueue.getSize() >= sizeOfOthersQueue) {
      param = new Object[3];
      param[0] = 
-		"EXPLANATION=Others queue is full, please try this request later";
+	"EXPLANATION=Others queue is full, please try this request later";
      param[1] = "size = " + othersQueue.getSize() + " and maximumQueueSize " 
-			+ maximumQueueSize;
+			+ sizeOfOthersQueue;
      param[2] = "contents " + othersQueue;
      _theLogger.log(java.util.logging.Level.FINE,
 		"TRANSFER_FAILED", (Object[]) param);
      throw new SRM_MSS_Exception
-			("Others queue is full, please try this request later");
+	("Others queue is full, please try this request later");
    }
    
    Object obj = userInfo.get(accessInfo.getUserId());
@@ -1489,18 +1501,18 @@ protected SRM_STATUS mssMakeDirectory
       status.setSourcePath(source);
    }
 
-   if(othersQueue.getSize() >= maximumQueueSize) {
+   if(othersQueue.getSize() >= sizeOfOthersQueue) {
      param = new Object[4];
      param[0] = "DIRS="+dirs.getDir();
      param[1] = 
-		"EXPLANATION=Others queue is full, please try this request later";
+	"EXPLANATION=Others queue is full, please try this request later";
      param[2] = "size = " + othersQueue.getSize() + " and maximumQueueSize " 
-			+ maximumQueueSize;
+			+ sizeOfOthersQueue;
      param[3] = "contents " + othersQueue;
      _theLogger.log(java.util.logging.Level.FINE,
 		"TRANSFER_FAILED", (Object[]) param);
      throw new SRM_MSS_Exception
-			("Others queue is full, please try this request later");
+	("Others queue is full, please try this request later");
    }
    
    Object obj = userInfo.get(accessInfo.getUserId());
@@ -1633,13 +1645,13 @@ protected SRM_MSSFILE_STATUS mssFilePut
    _theLogger.log(java.util.logging.Level.FINE,"PUT_REQUEST_COMES", 
 		(Object[]) param);
 
-   if(archiveQueue.getSize() >= maximumQueueSize) {
+   if(archiveQueue.getSize() >= sizeOfArchiveQueue) {
       param = new Object[4];
       param[0] = "SOURCE="+source;
       param[1] = 
 		"EXPLANATION=Archive queue is full, please try this request later."; 
-      param[2] = "size = " + archiveQueue.getSize() + " and maximumQueueSize " 
-			+ maximumQueueSize;
+      param[2] = "size = " + archiveQueue.getSize() + 
+                " and maximumQueueSize " + sizeOfArchiveQueue;
       param[3] = "contents = "+archiveQueue;
 	  _theLogger.log(java.util.logging.Level.FINE,
 			"TRANSFER_FAILED", (Object[]) param);
@@ -1806,13 +1818,13 @@ protected SRM_MSSFILE_STATUS mssFileGet
    _theLogger.log(java.util.logging.Level.FINE,"GET_REQUEST_COMES", 
 		(Object[]) param);
 
-   if(retrieveQueue.getSize() >= maximumQueueSize) {
+   if(retrieveQueue.getSize() >= sizeOfRetrieveQueue) {
      param = new Object[4];
      param[0] = "SOURCE="+source;
      param[1] = 
-		"EXPLANATION=Retrieve queue is full, please try this request later";
-     param[2] = "size = " + retrieveQueue.getSize() + " and maximumQueueSize " 
-			+ maximumQueueSize;
+	"EXPLANATION=Retrieve queue is full, please try this request later";
+     param[2] = "size = " + retrieveQueue.getSize() + 
+                " and maximumQueueSize " + sizeOfRetrieveQueue;
      param[3] = "contents = "+retrieveQueue;
      _theLogger.log(java.util.logging.Level.FINE,"TRANSFER_FAILED", 
 	    (Object[]) param);
@@ -1965,19 +1977,20 @@ protected SRM_STATUS srmCopy (String sourcePath,
        param = new Object[2];
        param[0] = "SOURCE="+sourcePath;
        param[1] = 
-		"EXPLANATION=Copy function is allowed only with enableSearchTapeId option";
+	"EXPLANATION=Copy function "+
+          "is allowed only with enableSearchTapeId option";
        _theLogger.log(java.util.logging.Level.FINE,
 		"TRANSFER_FAILED", (Object[]) param);
        throw new SRM_MSS_Exception
-			("Copy is allowed only with enableSearchTapeId option");
+	  ("Copy is allowed only with enableSearchTapeId option");
    }
 
-   if(othersQueue.getSize() >= maximumQueueSize) {
+   if(othersQueue.getSize() >= sizeOfOthersQueue) {
      param = new Object[4];
      param[0] = "SOURCE="+sourcePath;
      param[1] = "EXPLANATION=SRM MSS Queue is busy";
      param[2] = "size = " + othersQueue.getSize() + " and maximumQueueSize " 
-			+ maximumQueueSize;
+			+ sizeOfOthersQueue;
      param[3] = "contents " + othersQueue;
      _theLogger.log(java.util.logging.Level.FINE,
 		"TRANSFER_FAILED", (Object[]) param);
@@ -2014,7 +2027,7 @@ protected SRM_STATUS srmCopy (String sourcePath,
    }
 
    FileObj fObj = new FileObj(accessType,accessInfo,mssintf,
-								requestId, "copy",status);
+			requestId, "copy",status);
 
    fObj.setSource(sourcePath);
    fObj.setTarget(targetPath);
@@ -2084,12 +2097,12 @@ protected SRM_STATUS srmDelete
 		(java.util.logging.Level.FINE, "DELETE_REQUEST_COMES", 
 		 (Object[]) param);
 
-   if(othersQueue.getSize() >= maximumQueueSize) {
+   if(othersQueue.getSize() >= sizeOfOthersQueue) {
      param = new Object[4];
      param[0] = "SOURCE="+dirPath;
      param[1] = "EXPLANATION=Others Queue is busy";
      param[2] = "size = " + othersQueue.getSize() + " and maximumQueueSize " 
-			+ maximumQueueSize;
+			+ sizeOfOthersQueue;
      param[3] = "contents " + othersQueue;
      _theLogger.log(java.util.logging.Level.FINE,
 		"TRANSFER_FAILED", (Object[]) param);
@@ -2212,7 +2225,7 @@ protected SRM_FILE srmGetFileSize
    _theLogger.log(java.util.logging.Level.FINE,
 			"GET_FILE_SIZE_REQUEST_COMES", (Object[]) param);
 
-   if(othersQueue.getSize() >= maximumQueueSize) {
+   if(othersQueue.getSize() >= sizeOfOthersQueue) {
      param = new Object[3];
      param[0] = "SOURCE="+path;
      param[1] = "EXPLANATION=Others Queue is busy";
@@ -2315,12 +2328,12 @@ protected SRM_PATH srmls
    _theLogger.log(java.util.logging.Level.FINE,"LS_REQUEST_COMES", 
 			(Object[]) param);
 
-   if(othersQueue.getSize() >= maximumQueueSize) {
+   if(othersQueue.getSize() >= sizeOfOthersQueue) {
      param = new Object[4];
      param[0] = "SOURCE="+path;
      param[1] = "EXPLANATION=SRM MSS Queue is busy";
      param[2] = "size = " + othersQueue.getSize() + " and maximumQueueSize " 
-			+ maximumQueueSize;
+			+ sizeOfOthersQueue;
      param[3] = "contents " + othersQueue;
      _theLogger.log(java.util.logging.Level.FINE,
 		"TRANSFER_FAILED", (Object[]) param);
