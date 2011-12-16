@@ -1,0 +1,149 @@
+#!/bin/sh
+
+# either BESTMAN_SYSCONF or BESTMAN_ENV_PATH must be defined in the env
+# otherwise, SRM_HOME configuration default will be used
+
+# Contributions from Brian Bockelman at UNL
+# chkconfig: 345 99 10
+# description: Bestman server
+### BEGIN INIT INFO
+# Provides: bestman
+# Required-Start: $network
+# Required-Stop: 
+# Default-Start: 3 4 5
+# Default-Stop: 1 2 6
+# Description: Bestman server
+### END INIT INFO
+
+# Source function library.
+if [ -f "/etc/rc.d/init.d/functions" ]; then
+. /etc/rc.d/init.d/functions
+fi
+
+# BESTMAN_SYSCONF must be defined in the env for site specific env to be effective
+# otherwise, SRM_HOME configuration default will be used
+#        Use BESTMAN_SYSCONF wisely
+#
+# bestman2 configuration definition file
+# BESTMAN2_CONF must be defined in the env 
+#         to the configuration path for internal configuration options
+# Checking BESTMAN_SYSCONF for external environment variables 
+# For different setup than configured, set BESTMAN_SYSCONF
+if [ "x$BESTMAN_SYSCONF" = "x" ] ; then
+   if test ! "$SRM_HOME" ; then
+      SRM_HOME=@SRM_HOME@
+   fi
+   BESTMAN_SYSCONF="$SRM_HOME/etc/bestman2"
+fi
+if [ ! -f "$BESTMAN_SYSCONF" ]; then
+#  e.g. /etc/sysconfig/bestman2
+#  e.g. SRM_HOME/etc/bestman2
+   echo "ERROR: Cannot find the bestman2 configuration file: $BESTMAN_SYSCONF"
+   exit 1;
+fi
+
+############################################################################
+# Collecting external env variables from $BESTMAN_SYSCONF
+if [ "x$SRM_HOME" = "x" ] ; then
+    SRM_HOME=`grep SRM_HOME $BESTMAN_SYSCONF | tr '=' ' ' | awk '$1 !~ /#/' | awk '{printf $2}'`
+fi
+if [ "x$BESTMAN_LOG" = "x" ] ; then
+    BESTMAN_LOG=`grep BESTMAN_LOG $BESTMAN_SYSCONF | tr '=' ' ' | awk '$1 !~ /#/' | awk '{printf $2}'`
+fi
+if [ "x$BESTMAN_PID" = "x" ] ; then
+    BESTMAN_PID=`grep BESTMAN_PID $BESTMAN_SYSCONF | tr '=' ' ' | awk '$1 !~ /#/' | awk '{printf $2}'`
+fi
+if [ "x$BESTMAN_LOCK" = "x" ] ; then
+    BESTMAN_LOCK=`grep BESTMAN_LOCK $BESTMAN_SYSCONF | tr '=' ' ' | awk '$1 !~ /#/' | awk '{printf $2}'`
+fi
+if [ "x$SRM_OWNER" = "x" ] ; then
+    SRM_OWNER=`grep SRM_OWNER $BESTMAN_SYSCONF | tr '=' ' ' | awk '$1 !~ /#/' | awk '{printf $2}'`
+fi
+if [ "x$BESTMAN_OPTIONS" = "x" ] ; then
+    BESTMAN_OPTIONS=`grep BESTMAN_OPTIONS $BESTMAN_SYSCONF | tr '=' ' ' | awk '$1 !~ /#/' | awk '{printf $2}'`
+fi
+
+########################################################################
+# Below vars are defined in BESTMAN_SYSCONF
+if [ "x$SRM_HOME" = "x" ]; then
+    SRM_HOME=@SRM_HOME@
+fi
+if [ "x$BESTMAN_LOG" = "x" ]; then
+    # default to /var/log/bestman2.log
+    BESTMAN_LOG=/var/log/bestman2.log
+fi
+if [ "x$BESTMAN_PID" = "x" ]; then
+    # default to /var/run/bestman2.pid
+    BESTMAN_PID=/var/run/bestman2.pid
+fi
+if [ "x$BESTMAN_LOCK" = "x" ]; then
+    # default to /var/lock/bestman2
+    BESTMAN_LOCK=/var/lock/bestman2
+fi
+if [ "x$SRM_OWNER" = "x" ]; then
+    # default to bestman
+    SRM_OWNER=bestman
+fi
+################# DO NOT MODIFY BELOW THIS LINE #######################
+# unless you know what you are doing
+
+if [ ! -f "$SRM_HOME/sbin/bestman.server" ]; then
+  echo "Cannot find the $SRM_HOME location,"
+  echo "Please define \$SRM_HOME correctly"
+  exit 1;
+fi
+
+start() {
+        ulimit -n 65536
+        echo -n "Starting bestman2: "
+        touch $BESTMAN_PID
+        chown $SRM_OWNER: $BESTMAN_PID
+        daemon --user $SRM_OWNER --pidfile $BESTMAN_PID $SRM_HOME/sbin/bestman.server $BESTMAN_OPTIONS 
+        RETVAL=$?
+        chown root: $BESTMAN_PID
+        echo
+        [ $RETVAL -eq 0 ] && touch $BESTMAN_LOCK
+        return $RETVAL
+}
+
+# A function to stop a program.
+stop() {
+        echo -n "Shutting down bestman2: "
+        killproc bestman.server
+        RETVAL=$?
+        echo
+  	    rm -f $BESTMAN_LOCK
+        return $RETVAL
+}
+
+restart() {
+    stop
+    start
+    return $?
+}
+
+
+case $1 in 
+'start')
+    start
+    ;;
+'stop')
+    stop
+    ;;
+'status')
+    status bestman.server
+    ;;
+'reload' | 'restart')
+    restart
+    ;;
+'condrestart')
+    [ -f $BESTMAN_LOCK ] && restart
+    ;;
+*)
+    echo "usage: $0 {start|stop|status|restart}"
+    ;;
+esac
+
+exit $?
+
+

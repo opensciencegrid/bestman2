@@ -1,0 +1,529 @@
+*** Copyright Notice ***
+ 
+BeStMan Copyright (c) 2010-2011, The Regents of the University of California, 
+through Lawrence Berkeley National Laboratory (subject to receipt of any 
+required approvals from the U.S. Dept. of Energy).  This software was 
+developed under funding from the U.S. Department of Energy and is associated 
+with the Berkeley Lab Scientific Data Management Group projects. 
+All rights reserved.
+
+If you have questions about your rights to use or distribute this software, 
+please contact Berkeley Lab's Technology Transfer Department at  TTD@lbl.gov.
+
+NOTICE.  This software was developed under funding from the U.S. Department
+of Energy.  As such, the U.S. Government has been granted for itself and
+others acting on its behalf a paid-up, nonexclusive, irrevocable, worldwide
+license in the Software to reproduce, prepare derivative works, and perform 
+publicly and display publicly.  Beginning five (5) years after the date 
+permission to assert copyright is obtained from the U.S. Department of Energy, 
+and subject to any subsequent five (5) year renewals, the U.S. Government is 
+granted for o itself and others acting on its behalf a paid-up, nonexclusive, 
+irrevocable, worldwide license in the Software to reproduce, prepare 
+derivative works, distribute copies to the public, perform publicly and 
+display publicly, and to permit others to do so.
+
+############################################################################
+LAWRENCE BERKELEY NATIONAL LABORATORY
+Software: Berkeley Storage Manager (BeStMan)
+
+*** License agreement ***
+
+"BeStMan Copyright (c) 2010-2011, The Regents of the University of California, 
+through Lawrence Berkeley National Laboratory (subject to receipt of any 
+required approvals from the U.S. Dept. of Energy).  This software was 
+developed under funding from the U.S. Department of Energy and is associated 
+with the Berkeley Lab Scientific Data Management Group projects. 
+All rights reserved."
+
+1. Redistribution and use in source and binary forms, with or without 
+modification, are permitted provided that the following conditions are met:
+
+(1) Redistributions in binary form must reproduce the copyright notice 
+associated with the Software, this list of conditions and the following 
+disclaimer in the documentation and/or other materials provided with the 
+distribution.
+
+(2) Redistributions of source code must retain the copyright notice associated 
+with the Software, this list of conditions and the following disclaimer.
+
+(3) Neither the name of the University of California, Lawrence Berkeley 
+National Laboratory, U.S. Dept. of Energy nor the names of its contributors 
+may be used to endorse or promote products derived from this software without 
+specific prior written permission.
+
+(4) You are under no obligation whatsoever to provide any bug fixes, patches, 
+or upgrades to the features, functionality or performance of the Software 
+(“Enhancements”) to anyone; however, if you choose to distribute your 
+Enhancements to any third party, at the time of the distribution you must 
+provide Berkeley Lab with a copy of the Enhancements in binary and source code 
+and you hereby grant Berkeley Lab the following license: a non-exclusive, 
+royalty-free perpetual license to install, use, modify, prepare derivative 
+works, incorporate into other computer software, distribute, and sublicense 
+such Enhancements or derivative works thereof, in binary and source code form. 
+Berkeley Lab shall provide, as consideration for the non-exclusive license 
+described above, upon your request, attribution to you in any software package 
+distributed by Berkeley Lab that incorporates the Enhancements. Berkeley Lab 
+agrees that it will only distribute Enhancements in conjunction with 
+distribution of the Software.
+
+2. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" 
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE 
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
+ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES 
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; 
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON 
+ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT 
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS 
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+BY DOWNLOADING, INSTALLING, OR USING THE SOFTWARE, YOU ARE INDICATING YOUR 
+ACCEPTANCE OF THE TERMS AND CONDITIONS HEREIN.
+
+############################################################################
+
+User's guide on http://sdm.lbl.gov/bestman
+General support and bug report to <srm@lbl.gov>
+
+Open Science Grid (OSG) support:  osg-software@opensciencegrid.org
+All Tier 3 sites and users
+    for ATLAS, Doug Benjamin <benjamin@phy.duke.edu>
+    for CMS, Rob Snihur <snihur@fnal.gov>
+
+############################################################################
+**** Notes on version 2.2.0 
+############################################################################
+1. Oracle/SUN Java 1.6.0_27 or later support
+   Oracle/SUN Java 1.7.0 support
+   OpenJDK 1.7.0 support
+
+2. GUMS XACML service support
+   No support on GUMS SAML service (use bestman2-2.1.3 release)
+
+3. No support on SHA-2 based GSI
+   Java CoG JGlobus 1.8 does not support SHA-2 based GSI
+   Java CoG JGlobus 2.0 does not support HTTPG
+
+############################################################################
+**** To make a custom configure after the installation
+############################################################################
+
+1. Make sure Oracle/SUN or IBM Java 1.6.0_01 or higher version installed
+   OpenJDK 1.7.0 would be ok too.
+2. cd ./setup
+3. ./configure --help  # to see the options
+   Sample configure command options:
+
+   e.g.1. % ./configure \
+            --enable-gateway-mode \
+            --with-globus-tcp-port-range=6201,6299 \
+            --with-https-port=6288 \
+            --with-eventlog-path=/data/bestman/log \
+            --with-cachelog-path=/data/bestman/log \
+            --with-certfile-path=/etc/grid-security/hostcert.pem \
+            --with-keyfile-path=/etc/grid-security/hostkey.pem \
+            --enable-sudofsmng \
+            --enable-gums \
+            --with-gums-url="https://gumsserver.lbl.gov:8443/gums/services/GUMSXACMLAuthorizationServicePort"
+
+   e.g.2. % ./configure \
+            --enable-gateway-mode \
+            --with-globus-tcp-port-range=6201,6299 \
+            --with-https-port=6288 \
+            --with-eventlog-path=/data/bestman/log \
+            --with-cachelog-path=/data/bestman/log \
+            --with-certfile-path=/etc/grid-security/hostcert.pem \
+            --with-keyfile-path=/etc/grid-security/hostkey.pem \
+            --with-tokens-list="USATLASDATA1[desc:USATLASDATA1][owner:atlas][retention:REPLICA][latency:ONLINE][path:/data/atlas][12]" \
+            --with-allowed-paths="/data/atlas;/tmp" \
+            --enable-checksum-listing \
+            --enable-sudofsmng \
+            --enable-gums \
+            --with-gums-url="https://gumsserver.fnal.gov:8443/gums/services/GUMSXACMLAuthorizationServicePort"
+
+   e.g.3. % ./configure \
+            --enable-gateway-mode \
+            --with-globus-tcp-port-range=6201,6299 \
+            --with-https-port=6288 \
+            --with-eventlog-path=/data/bestman/log \
+            --with-cachelog-path=/data/bestman/log \
+            --with-certfile-path=/etc/grid-security/hostcert.pem \
+            --with-keyfile-path=/etc/grid-security/hostkey.pem \
+            --with-allowed-paths="/data/atlas;/tmp" \
+            --enable-gums \
+            --with-gums-url="https://gumsserver.lbl.gov:8443/gums/services/GUMSXACMLAuthorizationServicePort" \
+            --with-tokens-list="USATLASDATA1[desc:USATLASDATA1][path:/data/atlas][120]" \
+            --enable-sudofsmng \
+            --with-extra-libs="-Dedu.unl.rcf.BestmanGridftpSelector.host=localhost -Dedu.unl.rcf.BestmanGridftpSelector.port=8649"
+
+   e.g.4.  % ./configure \
+           --enable-full-mode \
+           --with-replica-storage-path=/data/bestman/cache \
+           --with-replica-storage-size=2000 \
+           --with-globus-tcp-port-range=6201,6299 \
+           --with-https-port=6288 \
+           --with-eventlog-path=/data2/bestman/log \
+           --with-cachelog-path=/data2/bestman/log \
+           --with-certfile-path=/etc/grid-security/srm/srmcert.pem \
+           --with-keyfile-path=/etc/grid-security/srm/srmkey.pem 
+
+   e.g.5. % ./configure \
+            --enable-gateway-mode \
+            --with-globus-tcp-port-range=6201,6299 \
+            --with-https-port=6288 \
+            --with-eventlog-path=/data/asim/bestman/log \
+            --with-cachelog-path=/data/asim/bestman/log \
+            --with-certfile-path=/etc/grid-security/hostcert.pem \
+            --with-keyfile-path=/etc/grid-security/hostkey.pem \
+            --enable-gums \
+            --with-gums-url="https://gumsserver.lbl.gov:8443/gums/services/GUMSXACMLAuthorizationServicePort" \
+            --with-tokens-list="USATLASDATA1[desc:USATLASDATA1][owner:atlas][retention:REPLICA][latency:ONLINE][path:/data/atlas][120]" \
+            --with-allowed-paths=/data/atlas \
+            --enable-checksum-listing \
+            --enable-sudofsmng 
+
+   e.g.6.  % ./configure \
+           --enable-full-mode \
+           --with-replica-storage-path=/data/bestman/cache \
+           --with-replica-storage-size=2000 \
+           --with-globus-tcp-port-range=6201,6299 \
+           --with-https-port=6288 \
+           --with-eventlog-path=/data2/bestman/log \
+           --with-cachelog-path=/data2/bestman/log \
+           --with-certfile-path=/etc/grid-security/srm/srmcert.pem \
+           --with-keyfile-path=/etc/grid-security/srm/srmkey.pem \
+           --enable-gums \
+           --with-gums-url="https://gumsserver.lbl.gov:8443/gums/services/GUMSXACMLAuthorizationServicePort" \
+           --with-globus-location=/software/globus-4.0.3
+
+   e.g.7. % ./configure \
+           --enable-gateway-mode \
+           --with-globus-tcp-port-range=6201,6299 \
+           --with-https-port=6288 \
+           --with-eventlog-path=/data/bestman/log \
+           --with-certfile-path=/etc/gridtest/srmcert.pem \
+           --with-keyfile-path=/etc/gridtest/srmkey.pem \
+           --with-transfer-servers="gsiftp://host1.domain.tld;gsiftp://host2;domain.tld" \
+           --enable-gsiftpfsmng
+
+   e.g.8.  % ./configure \
+            --enable-gateway-mode \
+            --with-globus-tcp-port-range=6201,6299 \
+            --with-https-port=6288 \
+            --with-eventlog-path=/data/bestman/log \
+            --with-certfile-path=/etc/gridtest/srmcert.pem \
+            --with-keyfile-path=/etc/gridtest/srmkey.pem \
+            --enable-sudofsmng \
+            --disable-pathfortoken \
+            --with-tokens-list="DATA1[desc:USATLASDATA1][1000000];DATA2[desc:USATLASDATA2][1200000]"
+
+   e.g.9.  % ./configure \
+            --enable-gateway-mode \
+            --with-globus-tcp-port-range=6201,6299 \
+            --with-https-port=6288 \
+            --with-eventlog-path=/data/bestman/log \
+            --with-certfile-path=/etc/gridtest/srmcert.pem \
+            --with-keyfile-path=/etc/gridtest/srmkey.pem \
+            --enable-sudofsmng \
+            --with-tokens-list="DATA1[desc:USATLASDATA1][1000000];DATA2[desc:USATLASDATA2][1200000]"
+
+   e.g.10. % /configure \
+           --enable-gateway-mode \
+           --with-globus-tcp-port-range=6201,6299 \
+           --with-https-port=6288 \
+           --with-eventlog-path=/data/bestman/log \
+           --with-cachelog-path=/data/bestman/log \
+           --with-certfile-path=/etc/gridtest/srmcert.pem \
+           --with-keyfile-path=/etc/gridtest/srmkey.pem \
+           --with-blocked-paths=/home \
+           --enable-sudofsmng \
+           --enable-sudols
+
+   e.g.11. % ./configure \
+           --enable-gateway-mode \
+           --with-globus-tcp-port-range=6201,6299 \
+           --with-https-port=6288 \
+           --with-eventlog-path=/data/bestman/log \
+           --with-cachelog-path=/data/bestman/log \
+           --with-certfile-path=/etc/gridtest/srmcert.pem \
+           --with-keyfile-path=/etc/gridtest/srmkey.pem \
+           --with-tokens-list="USATLASDATA1[desc:USATLASDATA1][owner:atlas][retention:REPLICA][latency:ONLINE][path:/data/atlas][120]" \
+           --with-globus-location=/software/globus-4.0.3 \
+           --enable-gsiftpfsmng \
+           --with-allowed-paths=/data/atlas 
+
+   e.g.12. % ./configure \
+            --enable-gateway-mode \
+            --with-globus-tcp-port-range=6201,6299 \
+            --with-https-port=6288 \
+            --with-eventlog-path=/data/bestman/log \
+            --with-cachelog-path=/data/bestman/log \
+            --with-certfile-path=/etc/gridtest/srmcert.pem \
+            --with-keyfile-path=/etc/gridtest/srmkey.pem \
+            --enable-gsiftpfsmng \
+            --with-tokens-list="data[desc:mydata][10];data2[desc:mydata2][12]" \
+            --with-allowed-paths=/data/atlas
+
+   e.g.13. % ./configure \
+            --enable-clientonly \
+            --with-globus-tcp-port-range=6201,6299 
+
+   e.g.14. % ./configure \
+            --enable-testeronly \
+            --with-globus-tcp-port-range=6201,6299 
+
+4. When user controlled storage spaces are accessible through BeStMan,
+   --enable-sudofsmng would be good to have as one of configure options.
+   It will enable sudo access to the user controlled storage space for BeStMan,
+   so that mkdir, rmdir, rm, mv and cp can be executed under the user 
+   credential. When this option is used, /etc/sudoers file needs to be modified
+   when non-root account runs BeStMan server.  Suppose "daemon" account 
+   runs BeStMan server, and the following additional entries are needed in 
+   /etc/sudoers file:
+
+   Cmnd_Alias SRM_CMD = /bin/rm,/bin/mkdir,/bin/rmdir,/bin/mv,/bin/cp,/bin/ls 
+   Runas_Alias SRM_USR = ALL, !root
+   daemon	ALL=(SRM_USR) NOPASSWD: SRM_CMD
+
+   --enable-sudols is also available for ls to be executed under the user
+   credential. Becuase sudo access is an expensive operation and ls is one of
+   the frequently used operation, there can be a performance issue when it
+   is turned on.
+
+   An example of SURL in such case to access user managed storage space:  
+      srm://host:port/srm/v2/server\?SFN=/user_dir/user_path/user_file
+   An example of SURL in BeStMan managed cache:
+      srm://host:port/srmv2/server\?SFN=/srmcache/mapped_login/file_name
+
+
+Note: More information can be found on http://sdm.lbl.gov/bestman
+
+############################################################################
+Note: When space reservation needs to be configured other than the default,
+############################################################################
+
+consider adding the following parameters in conf/bestman.rc after configure.
+# for 5 GB quota allocation per user
+ReplicaQualityStorageUserQuotaMB=5000
+# for 40% of the storage that can be reserved
+PublicSpaceProportion=60
+# 1GB quota allocation per request 
+DefaultMBPerToken=1000
+
+
+
+############################################################################
+**** Note: When srm-client programs exit, it has exit codes as following:
+############################################################################
+
+// 0 SRM_SUCCESS
+// 51 SRM_FAILURE
+// 52 SRM_AUTHENTICATION_FAILURE       
+// 53 SRM_AUTHORIZATION_FAILURE    
+// 54 SRM_INVALID_REQUEST     
+// 55 SRM_INVALID_PATH      
+// 56 SRM_FILE_LIFETIME_EXPIRED       
+// 57 SRM_SPACE_LIFETIME_EXPIRED     
+// 58 SRM_EXCEED_ALLOCATION
+// 59 SRM_NO_USER_SPACE
+// 60 SRM_NO_FREE_SPACE     
+// 61 SRM_DUPLICATION_ERROR      
+// 62 SRM_NON_EMPTY_DIRECTORY      
+// 63 SRM_TOO_MANY_RESULTS       
+// 64 SRM_INTERNAL_ERROR     
+// 65 SRM_FATAL_INTERNAL_ERROR     
+// 66 SRM_NOT_SUPPORTED
+// 67 SRM_REQUEST_QUEUED    
+// 68 SRM_REQUEST_INPROGRESS      
+// 69 SRM_REQUEST_SUSPENDED      
+// 70 SRM_ABORTED      
+// 71 SRM_RELEASED       
+// 72 SRM_FILE_PINNED      
+// 73 SRM_FILE_IN_CACHE
+// 74 SRM_SPACE_AVAILABLE       
+// 75 SRM_LOWER_SPACE_GRANTED
+// 76 SRM_DONE     
+// 77 SRM_PARTIAL_SUCCESS       
+// 78 SRM_REQUEST_TIMED_OUT     
+// 79 SRM_LAST_COPY    
+// 80 SRM_FILE_BUSY   
+// 81 SRM_FILE_LOST
+// 82 SRM_FILE_UNAVAILABLE
+// 83 SRM_UNKNOWN_ERROR
+// 90 : connection refused
+// 91 : GSI mapping not found
+// 92 : general unpreditable exception
+// 93 : input error
+// 94 : other error, not reached SRM yet.
+// 100 : SRM returned no status, but it is a failure
+
+
+############################################################################
+**** Note for scalability:
+############################################################################
+
+1. Adjust Sysctl values on the node where bestman server runs
+Put these in /etc/sysctl.conf then run sysctl -p to apply them. 
+No need to reboot, now your kernel should be able to handle a lot more open connections.
+Ref: http://fasterdata.es.net/tuning.html
+     http://fasterdata.es.net/TCP-tuning/linux.html
+
+# General gigabit tuning:
+net.core.rmem_max = 16777216
+net.core.wmem_max = 16777216
+net.ipv4.tcp_rmem = 4096 87380 16777216
+net.ipv4.tcp_wmem = 4096 65536 16777216
+net.ipv4.tcp_syncookies = 1
+# this gives the kernel more memory for tcp
+# which you need with many (100k+) open socket connections
+net.ipv4.tcp_mem = 50576   64768   98152
+net.core.netdev_max_backlog = 2500
+# I was also masquerading the port comet was on, you might not need this
+net.ipv4.netfilter.ip_conntrack_max = 1048576
+
+In addition to above, check and changes these:
+/sbin/sysctl -w net.core.somaxconn=256
+/sbin/sysctl -w net.core.netdev_max_backlog=2500
+
+Also, check these values for long timeout values.  If relatively short, keep them longer.
+% sysctl \
+net.ipv4.tcp_keepalive_time \
+net.ipv4.tcp_keepalive_intvl \
+net.ipv4.tcp_keepalive_probes
+
+net.ipv4.tcp_keepalive_time = 1800
+net.ipv4.tcp_keepalive_intvl = 75
+net.ipv4.tcp_keepalive_probes = 9 
+
+
+2. Adjust Jetty web server control values
+2.1 Increase the maximum container thread pool size for the jetty server
+  --with-max-container-threads=<INT>
+  e.g. configure --with-max-container-threads=1024
+
+2.2 Have large size for jetty http connection acceptor threads
+   --with-connection-acceptor-thread-size=<INT> Specify the number of acceptor threads available 
+                                 for the server's channel connector
+  e.g. configure --with-connection-acceptor-thread-size=8
+
+2.3 Have large size for jetty http connection waiting queue
+   --with-connector-queue-size=<INT>   Specify the size of the http connector queue size
+  e.g. configure --with-connector-queue-size=512
+
+
+3. Increase the max java heap memory size
+   --with-max-java-heap=<INT>
+  e.g. configure --with-max-java-heap=4096
+
+4. Client side http connection timeout control - bestman clients (only)
+  e.g. srm-copy -sethttptimeout 1800
+
+5. Each connection we make requires an ephemeral port, and thus a file descriptor,
+and by default this is limited to 1024.
+To avoid the Too many open files problem you'll need to modify the ulimit for your shell.
+
+limit descriptors  65535
+Or
+unlimit
+
+This can be changed in /etc/security/limits.conf, but requires a logout/login.
+For now you can just sudo and modify the current shell
+(su back to your non-priv'ed user after calling ulimit if you don't want to run as root):
+
+$ sudo bash
+# ulimit -n 999999
+# erl
+
+###################################################################
+
+Berkeley Storage Manager (BeStMan) v2.2.2.x (a.k.a. BeStMan2 v2.2.x)
+BeStMan SRM Clients
+SRM-Tester
+http://sdm.lbl.gov/bestman
+Questions: srm@lbl.gov
+
+BeStMan LICENSE: https://sdm.lbl.gov/wiki/Software/BeStMan/License
+BeStMan COPYRIGHT: https://sdm.lbl.gov/wiki/Software/BeStMan/Copyright
+
+Binary package and sources are available on 
+https://codeforge.lbl.gov/projects/bestman/
+Note: Support is not available for the sources.
+
+BeStMan server dependency requirements are following,
+and each software package follows its own license and copyright:
+JDK 1.6.0_27 or 1.7.0
+Apache ant 1.8.2
+Axis 1.4
+WSDL4j-1.6.2
+Xerces-2.11.0
+Jetty 8.0.1.v20110908
+Java CoG JGlobus 1.8.0
+Java Servlet API 3.0
+Slf4j-1.6.2
+Berkeley DB 4.1.10
+which4j-0.21
+vomsjapi 2.0.6
+commons collections 3.2.1
+commons lang 2.6
+esapi 2.0.1
+joda-time 1.6.2
+opensaml 2.5.2
+openws 1.4.3
+privilege-xacml 2.2.5
+glite-security-trustmanager 2.5.5
+glite-security-util-java 2.8.0
+velocity 1.7
+Xalan 2.7.1
+XML-security 1.4.5
+Bouncy Castle crypto lib 1.4.6
+
+BeStMan SRM Clients dependency requirements are following,
+and each software package follows its own license and copyright:
+JDK 1.6.0_27 or 1.7.0
+Apache ant 1.8.2
+Axis 1.4
+WSDL4j-1.6.2
+Xerces-2.11.0
+Java CoG JGlobus 1.8.0
+
+SRM-Tester dependency requirements are following,
+and each software package follows its own license and copyright:
+JDK 1.6.0_27 or 1.7.0
+Apache ant 1.8.2
+Axis 1.4
+WSDL4j-1.6.2
+Xerces-2.11.0
+Java CoG JGlobus 1.8.0
+
+#######################################################################
+# Building process
+###########################################################################
+
+1. To build bestman2 from the source, 
+   one of the following JDK and Apache ANT 1.8.2 are required:
+   Oracle/SUN JDK 1.6.0_26+, or 
+   Oracle/SUN 1.7.0, or 
+   OpenJDK 1.7.0
+
+2. CLASSPATH must be defined in the env, 
+   including all dependent libraries indicated above.
+
+e.g.  echo $CLASSPATH
+.:/software/bestman2/lib/axis/axis.jar:/software/bestman2/lib/axis/commons-discovery-0.2.jar:/software/bestman2/lib/axis/commons-logging-1.1.jar:/software/bestman2/lib/axis/jaxrpc.jar:/software/bestman2/lib/axis/wsdl4j-1.6.2.jar:/software/bestman2/lib/axis/xercesImpl-2.11.0.jar:/software/bestman2/lib/axis/xml-apis-2.11.0.jar:/software/bestman2/lib/gums2/commons-collections-3.2.1.jar:/software/bestman2/lib/gums2/commons-lang-2.6.jar/software/bestman2/lib/gums2/esapi-2.0.1.jar:/software/bestman2/lib/gums2/joda-time-1.6.2.jar:/software/bestman2/lib/gums2/opensaml-2.5.2.jar:/software/bestman2/lib/gums2/openws-1.4.3.jar:/software/bestman2/lib/gums2/privilege-xacml-2.2.5.jar:/software/bestman2/lib/gums2/velocity-1.7.jar:/software/bestman2/lib/gums2/xalan-2.7.1.jar:/software/bestman2/lib/gums2/xmlsec-1.4.5.jar:/software/bestman2/lib/gums2/xmltooling-1.3.3.jar:/software/bestman2/lib/gums2/glite-security-trustmanager-2.5.5.jar:/software/bestman2/lib/gums2/glite-security-util-java-2.8.0.jar:/software/bestman2/lib/jetty/jetty-client-8.0.1.v20110908.jar:/software/bestman2/lib/jetty/jetty-continuation-8.0.1.v20110908.jar:/software/bestman2/lib/jetty/jetty-deploy-8.0.1.v20110908.jar:/software/bestman2/lib/jetty/jetty-http-8.0.1.v20110908.jar:/software/bestman2/lib/jetty/jetty-io-8.0.1.v20110908.jar:/software/bestman2/lib/jetty/jetty-security-8.0.1.v20110908.jar:/software/bestman2/lib/jetty/jetty-server-8.0.1.v20110908.jar:/software/bestman2/lib/jetty/jetty-servlet-8.0.1.v20110908.jar:/software/bestman2/lib/jetty/jetty-util-8.0.1.v20110908.jar:/software/bestman2/lib/jetty/jetty-webapp-8.0.1.v20110908.jar:/software/bestman2/lib/jetty/jetty-xml-8.0.1.v20110908.jar:/software/bestman2/lib/jglobus/cog-axis-1.8.0.jar:/software/bestman2/lib/jglobus/cog-jglobus-1.8.0.jar:/software/bestman2/lib/jglobus/cog-url-1.8.0.jar:/software/bestman2/lib/jglobus/cryptix32.jar:/software/bestman2/lib/jglobus/cryptix-asn1.jar:/software/bestman2/lib/jglobus/jce-jdk13-131.jar:/software/bestman2/lib/jglobus/log4j-1.2.15.jar:/software/bestman2/lib/jglobus/puretls.jar:/software/bestman2/lib/others/jcl-over-slf4j-1.6.0.jar:/software/bestman2/lib/others/je-4.1.10.jar:/software/bestman2/lib/others/servlet-api-3.0.jar:/software/bestman2/lib/others/slf4j-api-1.6.2.jar:/software/bestman2/lib/others/slf4j-log4j12-1.6.2.jar:/software/bestman2/lib/others/slf4j-simple-1.6.2.jar:/software/bestman2/lib/others/which4j.jar:/software/bestman2/lib/voms/bcprov-jdk15-146.jar:/software/bestman2/lib/voms/vomsjapi-2.0.6.jar
+
+3. Run "./configure"
+   Default distribution directory is ./dist/
+   Other configure options are available with --help.
+   e.g. ./configure --prefix=/usr/local/bestman2
+
+4. Run "ant all"
+   It will build all bestman2 libraries, 
+      install all bestman2 libraries to the distribution directory, and
+      install all bestman2 executable setup files to the distribution directory.
+
+5. (optional) To run all operations separately,
+   Run the following in sequence:
+      ant build     # build bestman2 libraries
+      ant install   # install bestman2 libraries
+      ant deploy    # deploy setup files including configuration entries
+
