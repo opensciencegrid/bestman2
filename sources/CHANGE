@@ -1,5 +1,5 @@
 * Current version
-2.2.2.2.0   Wed Dec 14 11:45:28 PST 2011
+2.2.2.2.0   Fri Jan 13 08:05:56 PST 2012
 BeStMan and SRM-Clients Copyright(c) 2007-2011,
 Lawrence Berkeley National Laboratory. All rights reserved.
 Support at SRM@LBL.GOV and documents at http://sdm.lbl.gov/bestman
@@ -9,7 +9,7 @@ All Tier 3 sites and users
     for ATLAS, Doug Benjamin <benjamin@phy.duke.edu>
     for CMS, Rob Snihur <snihur@fnal.gov>
 
-2.2.2.2.0 Wed Dec 14 11:45:28 PST 2011
+2.2.2.2.0  Fri Jan 13 08:05:56 PST 2012
 * bestman server/client/tester
 1. all libs updates to the latest
 2. $distribution/etc/bestman2 contains all external environment variables
@@ -23,6 +23,8 @@ All Tier 3 sites and users
 7. No support on SHA-2 based GSI
    Java CoG JGlobus 1.8 does not support SHA-2 based GSI
    Java CoG JGlobus 2.0 does not support HTTPG
+8. added/checked gsiftp/file protocol support in srm-rm/srm-mkdir/srm-rmdir
+9. updated status logging in server
 
 2.2.2.1.3  Mon Sep 26 14:08:48 PDT 2011
 * bestman server
