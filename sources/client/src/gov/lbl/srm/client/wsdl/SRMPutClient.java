@@ -769,7 +769,8 @@ public void putDone(String siteUrl, String rid, int label) throws Exception {
     TStatusCode temp = null;
 
     if(result == null) {
-      inputVec.addElement("SRM returned null result for the srmPutDone request");
+      inputVec.addElement
+          ("SRM returned null result for the srmPutDone request");
       util.printEventLog(_theLogger,"Response from srmPutDone", 
 	inputVec,silent,useLog);
       util.printMessage("\nSRM-CLIENT: " + new Date() + 
@@ -791,18 +792,23 @@ public void putDone(String siteUrl, String rid, int label) throws Exception {
       return;
     }
 
-    util.printMessage("Result.status="+result.getReturnStatus().getStatusCode(),logger,silent);
-    util.printMessage("Result.status="+result.getReturnStatus().getStatusCode(),pIntf);
-    util.printMessage("Result.Explanation="+result.getReturnStatus().getExplanation(),logger,silent);
-    util.printMessage("Result.Explanation="+result.getReturnStatus().getExplanation(),pIntf);
+    util.printMessage("Result.status="+
+        result.getReturnStatus().getStatusCode(),logger,silent);
+    util.printMessage("Result.status="+
+        result.getReturnStatus().getStatusCode(),pIntf);
+    util.printMessage("Result.Explanation="+
+        result.getReturnStatus().getExplanation(),logger,silent);
+    util.printMessage("Result.Explanation="+
+        result.getReturnStatus().getExplanation(),pIntf);
 
     if(result.getArrayOfFileStatuses() == null) {
        inputVec.clear();
        util.printMessage("\nSRM-CLIENT: " + new Date() + 
-		" SRM returned null getArrayOfFileStatus for srmPutDone request",
-          logger,silent);
+		" SRM returned null getArrayOfFileStatus " +
+                "for srmPutDone request", logger,silent);
        util.printMessage("\nSRM-CLIENT: " + new Date() + 
-	" SRM returned null getArrayOfFileStatus for srmPutDone request", pIntf);
+	" SRM returned null getArrayOfFileStatus for " +
+          "srmPutDone request", pIntf);
        inputVec.addElement
         ("SRM returned null getArrayOfFileStatus for srmPutDone request");
        util.printEventLog
@@ -815,7 +821,8 @@ public void putDone(String siteUrl, String rid, int label) throws Exception {
     temp = status.getStatus().getStatusCode();
     checkUrl = status.getSurl().toString();
     if(_debug) {
-      util.printMessage("SRM-CLIENT: " + "### Output of SRM ### ", logger,silent);
+      util.printMessage("SRM-CLIENT: " + "### Output of SRM ### ", 
+                logger,silent);
       util.printMessage("SRM-CLIENT: " + "### Output of SRM ### ", pIntf);
     }
     inputVec.clear();
@@ -832,7 +839,8 @@ public void putDone(String siteUrl, String rid, int label) throws Exception {
            fInfo.setFileExplanation(status.getStatus().getExplanation());
          }
          else {
-           fInfo.setFileExplanation("SRM-CLIENT: PutDone is called successfully");
+           fInfo.setFileExplanation
+                ("SRM-CLIENT: PutDone is called successfully");
          }
       }
     }
@@ -852,6 +860,7 @@ public void putDone(String siteUrl, String rid, int label) throws Exception {
     TPutRequestFileStatus[] statuses= null;
     TPutRequestFileStatus f_status = null;
     StringBuffer rCode = new StringBuffer();
+
     if(remotePutCase && !noWaitOnRemotePut) {
       URI uuri = new URI(siteUrl);
       Vector siteUrls = new Vector();
@@ -925,7 +934,8 @@ public void putDone(String siteUrl, String rid, int label) throws Exception {
 			logger,silent);
        util.printMessage("\tsurl="+status.getSurl().toString(),pIntf);
        util.printMessage("\tstatus="+temp,pIntf);
-       util.printMessage("\texplanation="+status.getStatus().getExplanation(), pIntf);
+       util.printMessage("\texplanation="+status.getStatus().getExplanation(), 
+                pIntf);
      }
     }
   }catch(Exception e) {
@@ -2471,8 +2481,11 @@ public int doStatus(String uid, Vector fileInfo, String rToken)
    }
 
    if(_debug) {
-     util.printMessage("\nSRM-CLIENT:  ....Input parameters for SrmStatusOfPutRequest temp ...", logger,silent);
-     util.printMessage("\nSRM-CLIENT:  ....Input parameters for SrmStatusOfPutRequest...", pIntf);
+     util.printMessage
+        ("\nSRM-CLIENT:  ....Input parameters for " +
+         "SrmStatusOfPutRequest temp ...", logger,silent);
+     util.printMessage("\nSRM-CLIENT:  ....Input parameters for " +
+                "SrmStatusOfPutRequest...", pIntf);
      util.printMessage("SRM-CLIENT: UID="+uid, logger,silent);
      util.printMessage("SRM-CLIENT: UID="+uid, pIntf);
      util.printMessage("SRM-CLIENT: RequestToken="+rToken, logger,silent);

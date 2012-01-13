@@ -675,7 +675,8 @@ public class TSRMUtil {
 	    return urlInfo;
 	} catch (URI.MalformedURIException e) {
 	    //e.printStackTrace();
-	    TSRMLog.exception(TSRMUtil.class, "failedWithSurl:"+surl, e);
+	    //TSRMLog.exception(TSRMUtil.class, "failedWithSurl:"+surl, e);
+		TSRMLog.debug(TSRMUtil.class, null, "event=notURI", "surl="+surl);
 	    return null;
 	}
     }

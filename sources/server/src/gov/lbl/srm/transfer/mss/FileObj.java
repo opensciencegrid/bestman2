@@ -79,15 +79,20 @@ private String _ftpTransferLog;
 private String tapeId="";
 private String hsiPath=""; //we need this don't remove
 
+// ==>added by Junmin
+private SRM_MSS _parent;
 public void clean() {
 	taskThread = null;
+	_parent.finished(requestToken);
 }
+// <==
 
-public FileObj( SRM_ACCESS_TYPE accessType, 
+public FileObj( SRM_MSS mss, SRM_ACCESS_TYPE accessType, 
                 SRM_ACCESS_INFO accessInfo,
                 mssIntf mssintf, String rid,
 				String type, Object obj) {
 
+			_parent = mss;
             this.accessType = accessType;
             this.accessInfo = accessInfo;
             this.mssintf = mssintf;

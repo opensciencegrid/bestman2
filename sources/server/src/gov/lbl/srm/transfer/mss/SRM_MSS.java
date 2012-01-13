@@ -129,6 +129,9 @@ public class SRM_MSS implements callerIntf {
 
  public File scriptPathDir=null;
 
+protected void finished(String rid) {
+	statusMap.remove(rid);
+}
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 // SRM_MSS
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -1410,16 +1413,16 @@ protected SRM_STATUS mssGetHomeDir(String path,
    Object obj = userInfo.get(accessInfo.getUserId());
    String requestId = generateRequestNumber("gethomedir");
    if(obj == null) {
-     Hashtable requestInfo = new Hashtable();
+     //Hashtable requestInfo = new Hashtable();
      status.setRequestToken(requestId);
-	 requestInfo.put("gethomedir", status);
-     userInfo.put(accessInfo.getUserId(),requestInfo);
+	 //requestInfo.put("gethomedir", status);
+     //userInfo.put(accessInfo.getUserId(),requestInfo);
      statusMap.put(requestId,status);
    }
    else {
-    Hashtable requestInfo = (Hashtable) obj;
+    //Hashtable requestInfo = (Hashtable) obj;
     status.setRequestToken(requestId);
-    requestInfo.put("gethomedir", status);
+   // requestInfo.put("gethomedir", status);
     statusMap.put(requestId,status);
    }
 
@@ -1433,7 +1436,7 @@ protected SRM_STATUS mssGetHomeDir(String path,
      }
    }
     
-   FileObj fObj = new FileObj(accessType, accessInfo,  
+   FileObj fObj = new FileObj(this, accessType, accessInfo,  
 							  mssintf, requestId, "gethomedir", 
 							  status);
 
@@ -1526,16 +1529,16 @@ protected SRM_STATUS mssMakeDirectory
    Object obj = userInfo.get(accessInfo.getUserId());
    String requestId = generateRequestNumber("mkdir");
    if(obj == null) {
-     Hashtable requestInfo = new Hashtable();
+    // Hashtable requestInfo = new Hashtable();
      status.setRequestToken(requestId);
-	 requestInfo.put(source+"-mkdir", status);
-     userInfo.put(accessInfo.getUserId(),requestInfo);
+	 //requestInfo.put(source+"-mkdir", status);
+    // userInfo.put(accessInfo.getUserId(),requestInfo);
      statusMap.put(requestId,status);
    }
    else {
-    Hashtable requestInfo = (Hashtable) obj;
+    //Hashtable requestInfo = (Hashtable) obj;
     status.setRequestToken(requestId);
-    requestInfo.put(source+"-mkdir", status);
+    //requestInfo.put(source+"-mkdir", status);
     statusMap.put(requestId,status);
    }
 
@@ -1549,7 +1552,7 @@ protected SRM_STATUS mssMakeDirectory
      }
    }
     
-   FileObj fObj = new FileObj(accessType, accessInfo,  
+   FileObj fObj = new FileObj(this, accessType, accessInfo,  
 							  mssintf, requestId, "mkdir", 
 							  status);
 
@@ -1674,17 +1677,17 @@ protected SRM_MSSFILE_STATUS mssFilePut
    String requestId = generateRequestNumber("mssput");
 
    if(obj == null) {
-     Hashtable requestInfo = new Hashtable();
+    // Hashtable requestInfo = new Hashtable();
      srmMSSFileStatus.setRequestToken(requestId);
-	 requestInfo.put(source+"-put", srmMSSFileStatus);
-     userInfo.put(accessInfo.getUserId(),requestInfo);
+	 //requestInfo.put(source+"-put", srmMSSFileStatus);
+     //userInfo.put(accessInfo.getUserId(),requestInfo);
      statusMap.put(requestId,srmMSSFileStatus);
    }
    else {
-    Hashtable requestInfo = (Hashtable) obj;
-    Object statusObj = requestInfo.get(source+"-put");
+    //Hashtable requestInfo = (Hashtable) obj;
+    //Object statusObj = requestInfo.get(source+"-put");
     srmMSSFileStatus.setRequestToken(requestId);
-    requestInfo.put(source+"-put", srmMSSFileStatus);
+    //requestInfo.put(source+"-put", srmMSSFileStatus);
     statusMap.put(requestId,srmMSSFileStatus);
    }
 
@@ -1745,7 +1748,7 @@ protected SRM_MSSFILE_STATUS mssFilePut
      }
    }
     
-   FileObj fObj = new FileObj(accessType, accessInfo, 
+   FileObj fObj = new FileObj(this, accessType, accessInfo, 
 									mssintf, requestId, 
 						            "put", srmMSSFileStatus);
    fObj.setSource(source);
@@ -1846,16 +1849,16 @@ protected SRM_MSSFILE_STATUS mssFileGet
    Object obj = userInfo.get(accessInfo.getUserId());
    String requestId = generateRequestNumber("mssget");
    if(obj == null) {
-     Hashtable requestInfo = new Hashtable();
+     //Hashtable requestInfo = new Hashtable();
      srmMSSFileStatus.setRequestToken(requestId);
-	 requestInfo.put(source+"-get", srmMSSFileStatus);
-     userInfo.put(accessInfo.getUserId(),requestInfo);
+	 //requestInfo.put(source+"-get", srmMSSFileStatus);
+     //userInfo.put(accessInfo.getUserId(),requestInfo);
      statusMap.put(requestId,srmMSSFileStatus);
    }
    else {
-    Hashtable requestInfo = (Hashtable) obj;
+    //Hashtable requestInfo = (Hashtable) obj;
     srmMSSFileStatus.setRequestToken(requestId);
-    requestInfo.put(source+"-get", srmMSSFileStatus);
+    //requestInfo.put(source+"-get", srmMSSFileStatus);
 	statusMap.put(requestId,srmMSSFileStatus);
     }
 
@@ -1888,7 +1891,7 @@ protected SRM_MSSFILE_STATUS mssFileGet
    }
 
 
-   FileObj fObj = new FileObj(accessType,accessInfo,
+   FileObj fObj = new FileObj(this, accessType,accessInfo,
 								mssintf,requestId, 
 								"get",srmMSSFileStatus);
    fObj.setSource(target);
@@ -2010,16 +2013,16 @@ protected SRM_STATUS srmCopy (String sourcePath,
    Object obj = userInfo.get(accessInfo.getUserId());
    String requestId = generateRequestNumber("msscopy");
    if(obj == null) {
-     Hashtable requestInfo = new Hashtable();
+    // Hashtable requestInfo = new Hashtable();
      status.setRequestToken(requestId);
-     requestInfo.put(sourcePath+"-copy", status);
-     userInfo.put(accessInfo.getUserId(),requestInfo);
+     //requestInfo.put(sourcePath+"-copy", status);
+     //userInfo.put(accessInfo.getUserId(),requestInfo);
      statusMap.put(requestId, status);
    }
    else {
-    Hashtable requestInfo = (Hashtable) obj;
+    //Hashtable requestInfo = (Hashtable) obj;
     status.setRequestToken(requestId);
-    requestInfo.put(sourcePath+"-copy", status);
+    //requestInfo.put(sourcePath+"-copy", status);
     statusMap.put(requestId, status);
    }
 
@@ -2033,7 +2036,7 @@ protected SRM_STATUS srmCopy (String sourcePath,
      }
    }
 
-   FileObj fObj = new FileObj(accessType,accessInfo,mssintf,
+   FileObj fObj = new FileObj(this, accessType,accessInfo,mssintf,
 			requestId, "copy",status);
 
    fObj.setSource(sourcePath);
@@ -2144,16 +2147,16 @@ protected SRM_STATUS srmDelete
    Object obj = userInfo.get(accessInfo.getUserId());
    String requestId = generateRequestNumber("mssdelete");
    if(obj == null) {
-     Hashtable requestInfo = new Hashtable();
+     //Hashtable requestInfo = new Hashtable();
      status.setRequestToken(requestId);
-     requestInfo.put(dirPath+"-del", status);
-     userInfo.put(accessInfo.getUserId(),requestInfo);
+     //requestInfo.put(dirPath+"-del", status);
+     //userInfo.put(accessInfo.getUserId(),requestInfo);
      statusMap.put(requestId,status);
    }
    else {
-    Hashtable requestInfo = (Hashtable) obj;
+    //Hashtable requestInfo = (Hashtable) obj;
     status.setRequestToken(requestId);
-    requestInfo.put(dirPath+"-del", status);
+    //requestInfo.put(dirPath+"-del", status);
     statusMap.put(requestId,status);
    }
 
@@ -2168,7 +2171,7 @@ protected SRM_STATUS srmDelete
      }
    }
 
-   FileObj fObj = new FileObj(accessType, accessInfo, 
+   FileObj fObj = new FileObj(this, accessType, accessInfo, 
 							   mssintf, requestId, 
 							   "delete", status);
    fObj.setFilePath(dirPath);
@@ -2247,16 +2250,16 @@ protected SRM_FILE srmGetFileSize
    Object obj = userInfo.get(accessInfo.getUserId());
    String requestId = generateRequestNumber("getsize");
    if(obj == null) {
-     Hashtable requestInfo = new Hashtable();
+     //Hashtable requestInfo = new Hashtable();
      srmFile.setRequestToken(requestId);
-     requestInfo.put(path+"-getsize", srmFile);
-     userInfo.put(accessInfo.getUserId(),requestInfo);
+     //requestInfo.put(path+"-getsize", srmFile);
+     //userInfo.put(accessInfo.getUserId(),requestInfo);
      statusMap.put(requestId,srmFile);
    }
    else {
-    Hashtable requestInfo = (Hashtable) obj;
+    //Hashtable requestInfo = (Hashtable) obj;
     srmFile.setRequestToken(requestId);
-    requestInfo.put(path+"-getsize", srmFile);
+    //requestInfo.put(path+"-getsize", srmFile);
     statusMap.put(requestId,srmFile);
    }
 
@@ -2270,7 +2273,7 @@ protected SRM_FILE srmGetFileSize
      }
    }
 
-   FileObj fObj = new FileObj(accessType, accessInfo, 
+   FileObj fObj = new FileObj(this, accessType, accessInfo, 
 			                   mssintf, requestId, 
 						       "getfilesize", srmFile);
    fObj.setFilePath(path);
@@ -2351,16 +2354,16 @@ protected SRM_PATH srmls
    Object obj = userInfo.get(accessInfo.getUserId());
    String requestId = generateRequestNumber("srmls");
    if(obj == null) {
-     Hashtable requestInfo = new Hashtable();
+     //Hashtable requestInfo = new Hashtable();
      srmMSSPath.setRequestToken(requestId);
-     requestInfo.put(path+"-ls", srmMSSPath);
-     userInfo.put(accessInfo.getUserId(),requestInfo);
+     //requestInfo.put(path+"-ls", srmMSSPath);
+     //userInfo.put(accessInfo.getUserId(),requestInfo);
      statusMap.put(requestId,srmMSSPath); 
    }
    else {
-    Hashtable requestInfo = (Hashtable) obj;
+    //Hashtable requestInfo = (Hashtable) obj;
     srmMSSPath.setRequestToken(requestId);
-    requestInfo.put(path+"-ls", srmMSSPath);
+    //requestInfo.put(path+"-ls", srmMSSPath);
     statusMap.put(requestId,srmMSSPath); 
    }
 
@@ -2377,7 +2380,7 @@ protected SRM_PATH srmls
 
    long startMemoryUse = getMemoryUse();
 
-   FileObj fObj = new FileObj(accessType, accessInfo, 
+   FileObj fObj = new FileObj(this, accessType, accessInfo, 
 			                   mssintf, requestId, "ls", 
 							   srmMSSPath);
    long endMemoryUse = getMemoryUse();

@@ -808,7 +808,9 @@ public SRMClientMkdir(String[] args, PrintIntf pIntf) {
       }
 
       serviceUrl = gov.lbl.srm.client.util.Util.getServiceUrl(
-			temp,serviceURL,serviceHandle,servicePortNumber,1, silent,useLog,_theLogger,logger);
+	temp,serviceURL,serviceHandle,
+	servicePortNumber,1, silent,useLog,_theLogger,logger);
+
       if(serviceUrl == null) showUsage(false);
 
       for(int i = 0; i < fileInfo.size(); i++) {
@@ -1063,6 +1065,12 @@ private Vector  validateURL(Request request) {
     FileInfo f = (FileInfo) fInfo.elementAt(i);
     String surl = f.getOrigSURL();
     String turl = f.getOrigTURL();
+    if(surl.startsWith("gsiftp")){
+       doGsiFTPList=true;
+    }
+    if(surl.startsWith("file")){
+       doLocalLsList=true;
+    }
     if(request.getModeType().equalsIgnoreCase("dir")) {
        if(!surl.startsWith("srm://") && !doLocalLsList && !doGsiFTPList) {
           inputVec.clear();

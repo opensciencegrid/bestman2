@@ -3545,7 +3545,7 @@ PARSED: set163_01_32evts_dst.xdf.STAR.DB
                SRM_PATH newPath = new SRM_PATH();
                newPath.setRequestToken(requestToken); 
                FileObj newFObj = new FileObj
-                  (accessType,accessInfo,fObj.getMSSIntf(),requestToken,
+                  (this, accessType,accessInfo,fObj.getMSSIntf(),requestToken,
 					"ls",newPath);
                newFObj.setFilePath(newDir);
                newFObj.setRecursive(recursive);

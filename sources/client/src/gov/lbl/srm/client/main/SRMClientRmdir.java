@@ -1066,6 +1066,12 @@ private Vector  validateURL(Request request) {
     FileInfo f = (FileInfo) fInfo.elementAt(i);
     String surl = f.getOrigSURL();
     String turl = f.getOrigTURL();
+    if(surl.startsWith("file:")) {
+        doLocalLsList = true;
+    }
+    if(surl.startsWith("gsiftp:")) {
+        doGridFTPList = true;
+    }
     if(request.getModeType().equalsIgnoreCase("dir")) {
        if(!surl.startsWith("srm://") && !doLocalLsList && !doGridFTPList) {
           inputVec.clear(); 
