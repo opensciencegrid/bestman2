@@ -6845,9 +6845,9 @@ private void printMetaDataForTextReport(String prefix, TMetaDataPathDetail pDeta
 
   if(pDetail.getOtherPermission() != null) {
    //if(_debug) {
-    util.printMessage("SRM-CLIENT*OTHERPERMISSION=" +
+    util.printMessage("SRM-CLIENT*OTHERPERMISSION.MODE=" +
             pDetail.getOtherPermission().getValue(),logger,silent);
-    util.printMessage("SRM-CLIENT*OTHERPERMISSION=" +
+    util.printMessage("SRM-CLIENT*OTHERPERMISSION.MODE=" +
             pDetail.getOtherPermission().getValue(),pIntf);
     //}
   }
