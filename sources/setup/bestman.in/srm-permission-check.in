@@ -54,7 +54,8 @@ fi
 ############################################################################
 # CLIENT Dependent libs CLASSPATH
 if [ "x$BESTMAN2_CLIENT_LIB" = "x" ] ; then
-    BESTMAN2_CLIENT_LIB=`grep BESTMAN2_CLIENT_LIB $BESTMAN_SYSCONF | tr '=' ' ' | awk '$1 !~ /#/' | awk '{printf $2}'`
+    BESTMAN2_CLIENT_LIB=`source $BESTMAN_SYSCONF && echo $BESTMAN2_CLIENT_LIB`
+    #BESTMAN2_CLIENT_LIB=`grep BESTMAN2_CLIENT_LIB $BESTMAN_SYSCONF | tr '=' ' ' | awk '$1 !~ /#/' | awk '{printf $2}'`
 fi
 ############################################################################
 # internal configuration options
