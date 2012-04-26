@@ -46,7 +46,7 @@
   </target>
 
   <target name="deploy" depends="setenv">
-    <exec dir="." executable="configure">
+    <exec dir="." executable="./configure">
       <arg value="--prefix=${install.root}"/>
     </exec>
   </target>
