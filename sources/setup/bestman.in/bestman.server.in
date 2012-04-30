@@ -170,6 +170,12 @@ Ver_separator() {
 }
 JAVAEXE=$JAVA_HOME/bin/java
 JVR=`$JAVAEXE -version 2>&1`
+RTN=$?
+if [ $RTN -ne 0 ]; then
+    echo "Executing Java version check failed with error:"
+    echo $JVR
+    exit 1
+fi
 JVR=`echo $JVR | sed 's/[^0-9. ]//g'`
 JVR=`echo $JVR | sed 's/\./ /g'`
 Ver_separator $JVR
