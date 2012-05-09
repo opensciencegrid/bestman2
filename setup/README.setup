@@ -61,6 +61,17 @@ XML-security 1.4.5
 Bouncy Castle crypto lib 1.4.6
 
 #####################################################################
+**** To make a setup deployment
+############################################################################
+
+1. Make sure you have the same build.properties from the sources build
+2. "ant" will deploy executable scripts and configuration files to the install.root 
+3. Adjustment to the configuration values can be done by the following two options
+   a) manually editing dist/etc/bestman2
+   b) using the configure options described in the following section.
+   
+
+#####################################################################
 **** To make a custom configuration
 ############################################################################
 

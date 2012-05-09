@@ -91,7 +91,7 @@ All Tier 3 sites and users
     for CMS, Rob Snihur <snihur@fnal.gov>
 
 ############################################################################
-**** Notes on version 2.2.0 
+**** Notes on version 2.2.1 
 ############################################################################
 1. Oracle/SUN Java 1.6.0_27 or later support
    Oracle/SUN Java 1.7.0 support
@@ -105,7 +105,7 @@ All Tier 3 sites and users
    Java CoG JGlobus 2.0 does not support HTTPG
 
 ############################################################################
-**** To make a custom configure after the installation
+#### To make a custom configure after the installation
 ############################################################################
 
 1. Make sure Oracle/SUN or IBM Java 1.6.0_01 or higher version installed
@@ -519,11 +519,16 @@ e.g.  echo $CLASSPATH
 4. Run "ant all"
    It will build all bestman2 libraries, 
       install all bestman2 libraries to the distribution directory, and
-      install all bestman2 executable setup files to the distribution directory.
 
 5. (optional) To run all operations separately,
    Run the following in sequence:
       ant build     # build bestman2 libraries
       ant install   # install bestman2 libraries
-      ant deploy    # deploy setup files including configuration entries
+
+6. (optional) Setup files are installed/deployed separately.
+   In the LBNL setup directory,
+      ant deploy    # deploy setup files including all bestman2 executable 
+                    # setup files and configuration entries to the distribution
+                    # directory.
+
 

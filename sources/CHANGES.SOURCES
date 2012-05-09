@@ -1,6 +1,6 @@
 * Current version
-2.2.2.2.0   Fri Jan 13 08:05:56 PST 2012
-BeStMan and SRM-Clients Copyright(c) 2007-2011,
+2.2.2.2.1   Wed May  9 09:30:39 PDT 2012
+BeStMan and SRM-Clients Copyright(c) 2007-2012,
 Lawrence Berkeley National Laboratory. All rights reserved.
 Support at SRM@LBL.GOV and documents at http://sdm.lbl.gov/bestman
 
@@ -8,6 +8,13 @@ Open Science Grid (OSG) support:  osg-storage@opensciencegrid.org
 All Tier 3 sites and users
     for ATLAS, Doug Benjamin <benjamin@phy.duke.edu>
     for CMS, Rob Snihur <snihur@fnal.gov>
+
+2.2.2.2.1   Wed May  9 09:30:39 PDT 2012
+* setup
+1. setup configurations and scripts are separated from the source release
+2. setup is maintained separately
+3. setup-osg is maintained by OSG team separeately
+
 
 2.2.2.2.0  Fri Jan 13 08:05:56 PST 2012
 * bestman server/client/tester

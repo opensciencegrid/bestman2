@@ -349,7 +349,7 @@ eval "cp -f build.properties ./client"
 eval "cp -f build.properties ./wsdl"
 eval "cp -f build.properties ./server"
 eval "cp -f build.properties ./tester"
-eval "cp -f build.properties ./setup"
+dnl eval "cp -f build.properties ./setup"
 
 echo "Configuration for BeStMan completed."
 echo "Run ant to build and package your build..."

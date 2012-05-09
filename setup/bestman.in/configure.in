@@ -110,11 +110,18 @@ dnl binary directory
 dnl AC_PREFIX_DEFAULT([`echo $INSTALLP`/dist])
 if test "x$prefix" = "xNONE"; then
    if test -f "$BUILDP" ; then
-      AC_MSG_RESULT([build.properties is found for dependent lib paths])
-      ac_default_prefix="$INSTALLP/dist"
+      AC_MSG_RESULT([build.properties is found])
+      INSTALLPATH=`grep install.root $BUILDP | tr '=' ' ' | awk '$1 !~ /#/' | awk '{printf $2}'`
+      if test "X$INSTALLPATH" = "X" ; then
+          ac_default_prefix="$INSTALLP/dist"
+          AC_MSG_WARN([install.root in build.properties is not found. Assume default binary distribution $INSTALLP/dist])
+      else 
+          ac_default_prefix="$INSTALLPATH"
+          AC_MSG_RESULT([install.root=$INSTALLPATH will be used.])
+      fi
    else
-      AC_MSG_WARN([build.properties for setup is not found. Assume binary distribution])
-      ac_default_prefix="$INSTALLP"
+      AC_MSG_WARN([build.properties for setup is not found. Assume default binary distribution $INSTALLP/dist])
+      ac_default_prefix="$INSTALLP/dist"
       BUILDP="NOBUILD"
    fi
    prefix=$ac_default_prefix

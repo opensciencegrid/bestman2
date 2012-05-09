@@ -42,7 +42,6 @@
   <property name="server.dir" value="${bestmansrc.root}/server"/>
   <property name="client.dir" value="${bestmansrc.root}/client"/>
   <property name="tester.dir" value="${bestmansrc.root}/tester"/>
-  <property name="setup.dir" value="${bestmansrc.root}/setup"/>
   <property name="debug" value="yes"/>  
   <tstamp>
       <format property="mybuild.time" pattern="MM/dd/yyyy HH:mm:ss z" unit="hour"/>
@@ -94,7 +93,6 @@
      <ant antfile="${server.dir}/build.xml" target="clean" dir="${server.dir}" />
      <ant antfile="${client.dir}/build.xml" target="clean" dir="${client.dir}" />
      <ant antfile="${tester.dir}/build.xml" target="clean" dir="${tester.dir}" />
-     <ant antfile="${setup.dir}/build.xml" target="clean" dir="${setup.dir}" />
      <delete dir="./autom4te.cache" verbose="false"/>
   </target>
 
@@ -112,14 +110,6 @@
      <ant antfile="${server.dir}/build.xml" target="install" dir="${server.dir}" />
      <ant antfile="${client.dir}/build.xml" target="install" dir="${client.dir}" />
      <ant antfile="${tester.dir}/build.xml" target="install" dir="${tester.dir}" />
-  </target>
-
-  <target name="deploy">
-	 <echo message="DEPLOY setup into ${install.root}"/>
-     <ant antfile="${setup.dir}/build.xml" dir="${setup.dir}" />
-     <copy toDir="${install.root}/properties">
-          <fileset dir="${bestmansrc.root}/properties"/>
-     </copy>
      <copy file="CHANGE" todir="${install.root}"/>
      <copy file="COPYRIGHT" todir="${install.root}"/>
      <copy file="LICENSE" todir="${install.root}"/>
@@ -127,12 +117,11 @@
      <concat destfile="version" append="true">  
 Built on ${myhost.NAME}.${myhost.DOMAIN} ${myhost.ADDR4} at ${mybuild.time}
      </concat>
-
      <copy file="version" todir="${install.root}"/>
   </target>
 
-<target name="all" depends="build, install, deploy">
-    <echo message="Building, installing and deploying ALL" />
+<target name="all" depends="build, install">
+    <echo message="Building and installing ALL" />
     <echo message="On ${myhost.NAME}.${myhost.DOMAIN} ${myhost.ADDR4} at ${mybuild.time}" />
 <!--
     <pathconvert pathsep=":" property="myclasspath" refid="classpath"></pathconvert>

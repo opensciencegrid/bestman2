@@ -38,6 +38,12 @@
 
 <project default="all" basedir=".">
 
+<!--
+ *
+ * build.properties must be copied over from the sources directory
+ * to ensure the same library paths and install.root are used.
+ * 
+-->
   <property file="build.properties"/>
 
   <target name="setenv">
@@ -46,6 +52,9 @@
   </target>
 
   <target name="deploy" depends="setenv">
+     <copy toDir="${install.root}/properties">
+          <fileset dir="./properties"/>
+     </copy>
     <exec dir="." executable="configure">
       <arg value="--prefix=${install.root}"/>
     </exec>
