@@ -1,0 +1,145 @@
+#! /bin/sh
+# 
+# BeStMan and BeStMan Clients Copyright(c) 2007-2011,
+# Lawrence Berkeley National Laboratory. All rights reserved.
+# Support at SRM@LBL.GOV and documents at http://sdm.lbl.gov/bestman
+#
+# BESTMAN_SYSCONF must be defined in the env for site specific env to be effective
+# otherwise, SRM_HOME configuration default will be used
+#        Use BESTMAN_SYSCONF wisely
+#
+# bestman2 configuration definition file
+# BESTMAN2_CONF must be defined in the env 
+#         to the configuration path for internal configuration options
+#
+# Checking BESTMAN_SYSCONF for external environment variables 
+# For different setup than configured, set BESTMAN_SYSCONF
+if [ "x$BESTMAN_SYSCONF" = "x" ] ; then
+   if test ! "$SRM_HOME" ; then
+      SRM_HOME=@SRM_HOME@
+   fi
+   BESTMAN_SYSCONF="$SRM_HOME/etc/bestman2"
+fi
+if [ ! -f "$BESTMAN_SYSCONF" ]; then
+#  e.g. /etc/sysconfig/bestman2
+#  e.g. SRM_HOME/etc/bestman2
+   echo "ERROR: Cannot find the bestman2 configuration file: $BESTMAN_SYSCONF"
+   exit 1;
+fi
+
+############################################################################
+# Collecting external env variables from $BESTMAN_SYSCONF
+if [ "x$SRM_HOME" = "x" ] ; then
+    SRM_HOME=`grep SRM_HOME $BESTMAN_SYSCONF | tr '=' ' ' | awk '$1 !~ /#/' | awk '{printf $2}'`
+fi
+if [ "x$JAVA_HOME" = "x" ] ; then
+    JAVA_HOME=`grep JAVA_HOME $BESTMAN_SYSCONF | tr '=' ' ' | awk '$1 !~ /#/' | awk '{printf $2}'`
+fi
+if [ "x$BESTMAN_LIB" = "x" ] ; then
+    BESTMAN_LIB=`grep BESTMAN_LIB $BESTMAN_SYSCONF | tr '=' ' ' | awk '$1 !~ /#/' | awk '{printf $2}'`
+fi
+if [ "x$X509_CERT_DIR" = "x" ] ; then
+    X509_CERT_DIR=`grep X509_CERT_DIR $BESTMAN_SYSCONF | tr '=' ' ' | awk '$1 !~ /#/' | awk '{printf $2}'`
+    GSI_DAEMON_TRUSTED_CA_DIR=`grep X509_CERT_DIR $BESTMAN_SYSCONF | tr '=' ' ' | awk '$1 !~ /#/' | awk '{printf $2}'`
+fi
+if [ "x$JAVA_CLIENT_MIN_HEAP" = "x" ] ; then
+    JAVA_CLIENT_MIN_HEAP=`grep JAVA_CLIENT_MIN_HEAP $BESTMAN_SYSCONF | tr '=' ' ' | awk '$1 !~ /#/' | awk '{printf $2}'`
+fi
+if [ "x$JAVA_CLIENT_MAX_HEAP" = "x" ] ; then
+    JAVA_CLIENT_MAX_HEAP=`grep JAVA_CLIENT_MAX_HEAP $BESTMAN_SYSCONF | tr '=' ' ' | awk '$1 !~ /#/' | awk '{printf $2}'`
+fi
+if [ "x$JAVA_CLIENT_STACK_SIZE" = "x" ] ; then
+    JAVA_CLIENT_STACK_SIZE=`grep JAVA_CLIENT_STACK_SIZE $BESTMAN_SYSCONF | tr '=' ' ' | awk '$1 !~ /#/' | awk '{printf $2}'`
+fi
+############################################################################
+# CLIENT Dependent libs CLASSPATH
+if [ "x$BESTMAN2_CLIENT_LIB" = "x" ] ; then
+    BESTMAN2_CLIENT_LIB=`grep BESTMAN2_CLIENT_LIB $BESTMAN_SYSCONF | tr '=' ' ' | awk '$1 !~ /#/' | awk '{printf $2}'`
+fi
+############################################################################
+# internal configuration options
+if [ "x$BESTMAN_CLIENT_CONF" = "x" ] ; then
+    BESTMAN_CLIENT_CONF=`grep BESTMAN_CLIENT_CONF $BESTMAN_SYSCONF | tr '=' ' ' | awk '$1 !~ /#/' | awk '{printf $2}'`
+fi
+
+############################################################################
+# Checking BESTMAN_LIB
+if [ "x$BESTMAN_LIB" = "x" ] ; then
+    echo "ERROR: Please define \$BESTMAN_LIB correctly"
+    exit 1;
+else
+    if [ ! -f "$BESTMAN_LIB/bestman2-client.jar" ]; then
+        echo "ERROR: Cannot find the correct $BESTMAN_LIB location,"
+        echo "ERROR: Please define \$BESTMAN_LIB correctly"
+        exit 1;
+    fi
+fi
+# Checking java
+if test ! -f "$JAVA_HOME/bin/java"; then
+  echo "ERROR: Cannot find the java executable in the $JAVA_HOME/bin location,"
+  echo "ERROR: Please define \$JAVA_HOME correctly" 
+  exit 1;
+fi
+###########################################################################
+
+INPUTTOKENS=$*
+DEBUGTOKEN=`echo $INPUTTOKENS| tr ' ' '\n' | egrep "debug"`
+LITETOKEN=`echo $INPUTTOKENS| tr ' ' '\n' | egrep "lite"`
+
+if test "$LITETOKEN" ; then
+    if test "$JAVA_CLIENT_MIN_HEAP" ; then
+        MY_MEM_OPT="-Xms${JAVA_CLIENT_MIN_HEAP}m -Xmx${JAVA_CLIENT_MIN_HEAP}m -client"
+    else
+        MY_MEM_OPT="-client"
+    fi
+else
+    if test "$JAVA_CLIENT_MAX_HEAP" ; then
+        MY_MEM_OPT="-Xmx${JAVA_CLIENT_MAX_HEAP}m -client"
+    else
+        MY_MEM_OPT="-client"
+    fi
+fi
+if test "$JAVA_CLIENT_STACK_SIZE" ; then
+    MY_SMEM_OPT="-Xss${JAVA_CLIENT_STACK_SIZE}k"
+else
+    MY_SMEM_OPT=""
+fi
+
+echo "srm-sp-reserve   `cat $SRM_HOME/version`"
+#echo "SRM-Clients and BeStMan Copyright(c) 2007-2010,"
+#echo "Lawrence Berkeley National Laboratory. All rights reserved."
+#echo "Support at SRM@LBL.GOV and documents at http://sdm.lbl.gov/bestman"
+#echo " "
+###########################################################################
+if test "$DEBUGTOKEN" ; then
+    echo "##############################################################"
+    echo "# SRM_HOME = $SRM_HOME"
+    echo "# BESTMAN_LIB = $BESTMAN_LIB"
+    echo "# JAVA_HOME = $JAVA_HOME"
+    echo "`$JAVA_HOME/bin/java -version`"
+    if [ $BESTMAN_SYSCONF -a -e $BESTMAN_SYSCONF ] ; then
+       echo "# BESTMAN_SYSCONF = $BESTMAN_SYSCONF"
+       echo "##############################################################"
+       echo "`cat $BESTMAN_SYSCONF`"
+    fi
+    if test "$X509_USER_PROXY" ; then
+       echo "##############################################################"
+        echo "# X509_USER_PROXY = $X509_USER_PROXY"
+    fi
+    echo "##############################################################"
+fi
+###########################################################################
+if test "$X509_CERT_DIR" ; then
+    export X509_CERT_DIR
+    export GSI_DAEMON_TRUSTED_CA_DIR
+    MY_CERT_DIR="-DX509_CERT_DIR=$X509_CERT_DIR"
+fi
+if test "$X509_USER_PROXY" ; then
+    MY_USER_PROXY="-DX509_USER_PROXY=$X509_USER_PROXY"
+fi
+###########################################################################
+CLASSPATH=${BESTMAN_LIB}/bestman2-stub.jar:${BESTMAN_LIB}/bestman2-client.jar:${BESTMAN2_CLIENT_LIB}
+export CLASSPATH
+
+exec ${JAVA_HOME}/bin/java ${MY_CERT_DIR} ${MY_USER_PROXY} ${MY_MEM_OPT} ${MY_SMEM_OPT} ${JAVA_SRM_OTHER_OPTS} -DSRM.HOME=${SRM_HOME} -Dlog4j.configuration=${SRM_HOME}/properties/log4j.properties -Djava.security.auth.login.config=${SRM_HOME}/properties/authmod-unix.properties gov.lbl.srm.client.main.SRMClientSpaceReserve $*
+

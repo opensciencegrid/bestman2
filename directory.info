@@ -10,10 +10,12 @@ LICENSEi: License file (BSD with Grant-back provision)
 sources: the backup copy (as of 2/3/2012) of source release 
          of BeStMan2 server and clients, and SRM Tester
          this directory should be preserved as is.
-trunk: release directory of sources
-       for BeStMan2 server and clients, and SRM Tester
+setup: LBNL setup directory for configurations and executable scripts
+setup-osg: OSG setup directory for configurations and executable scripts
 branches/osg: OSG workspace
        https://twiki.grid.iu.edu/bin/view/SoftwareTeam/BestmanDevelopment
+trunk: release directory of sources
+       for BeStMan2 server and clients, and SRM Tester
 
 # Branch/Merging
 http://svnbook.red-bean.com/en/1.7/svn-book.html#svn.branchmerge

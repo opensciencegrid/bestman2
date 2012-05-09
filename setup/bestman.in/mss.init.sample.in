@@ -1,0 +1,28 @@
+hsipath=/software/hsi-3.4.3/hsi
+ldlibpath=/software/globus-4.2.1/lib
+msshost=garchive.nersc.gov
+#mssport=2811
+enablehsi=true
+accesstype=gsi
+enablelogging=true
+enabledetailedlog=true
+logpath=/data/bestman/log/MSS
+#enablerecovery=false
+#recoverypath=
+#enablerecover, recoverypath is not implemented yet.
+setscipath=
+sitespecific2=
+# setscipath and sitespecific2 is not needed for HPSS
+debuglevel=4000
+# default debug level is 10
+## all the following are scheduling related variables and these
+## are the default values used.
+sizeofretrievequeue=10
+sizeofarchivequeue=10
+sizeofothersqueue=10
+passivemsslisting=true
+mssmaximumallowed=5
+mssmaxretrial=3
+msswaittime=120
+keeplogfiles=2
+log4jlocation=/software/bestman/properties/log4j.properties

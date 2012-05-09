@@ -1,0 +1,61 @@
+#################################################################
+# BeStMan and BeStMan Clients Copyright(c) 2007-2011,
+# Lawrence Berkeley National Laboratory. All rights reserved.
+# Support at SRM@LBL.GOV and documents at http://sdm.lbl.gov/bestman
+#################################################################
+# BESTMAN_SYSCONF contains external env settings 
+###########################################################
+# BeStMan Client configuration sample
+# questions to srm@lbl.gov
+###########################################################
+###########################################################
+#
+# service port number and service handle
+# when provided, SRM URL can be shortened.
+# e.g. before srm://hostname:8443/srm/v2/server\?SFN=/mypath/myfile
+#      after  srm://hostname//mypath/myfile
+#
+###########################################################
+#ServicePortNumber=8443
+#ServiceHandle=/srm/v2/server
+###########################################################
+#
+# service url : full SRM service endpoint URL
+#  e.g. srm://hostname:port/srm/managerv2
+#  when defined, the SRM service endpoint will be contacted by default
+#
+###########################################################
+#ServiceURL=srm://hostname:8443/srm/v2/server
+###########################################################
+#
+# Behavior of srm client when file transfer gets failed
+# NumRetry : number of retries of file transfers when failed
+# RetryDelay : number of seconds to sleep after a file transfer
+#             failure before next retrying
+# StatusWaitTime : wait time in seconds between checking status of request
+# StatusMaxTime : maximum time in seconds for checking status before timeout
+# SpaceToken : fixed space token to be used when necessary
+#
+###########################################################
+#NumRetry=3
+#RetryDelay=120
+#StatusWaitTime=30
+#StatusMaxTime=600
+#SpaceToken=USATLAS-USER-2
+###########################################################
+#
+# GridFTP related settings
+#
+###########################################################
+#BufferSize=1048576
+#dcau=true
+#Parallelism=1
+###########################################################
+#
+# User personal GSI related settings
+#
+###########################################################
+#ProxyFile=/tmp/x509up_u1234
+#UserKey=/home/users/.globus/user.key
+#UserCert=/home/users/.globus/user.cert
+###########################################################

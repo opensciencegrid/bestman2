@@ -1,0 +1,337 @@
+#!/bin/sh
+# 
+# BeStMan and BeStMan Clients Copyright(c) 2007-2011,
+# Lawrence Berkeley National Laboratory. All rights reserved.
+# Support at SRM@LBL.GOV and documents at http://sdm.lbl.gov/bestman
+#
+# BESTMAN_SYSCONF must be defined in the env for site specific env to be effective
+# otherwise, SRM_HOME configuration default will be used
+#        Use BESTMAN_SYSCONF wisely
+#
+# bestman2 configuration definition file
+# BESTMAN2_CONF must be defined in the env 
+#         to the configuration path for internal configuration options
+#
+# Checking BESTMAN_SYSCONF for external environment variables ONLY
+# For different setup than configured, set BESTMAN_SYSCONF
+if [ "x$BESTMAN_SYSCONF" = "x" ] ; then
+   if test ! "$SRM_HOME" ; then
+      SRM_HOME=@SRM_HOME@
+   fi
+   BESTMAN_SYSCONF="$SRM_HOME/etc/bestman2"
+fi
+if [ ! -f "$BESTMAN_SYSCONF" ]; then
+#  e.g. /etc/sysconfig/bestman2
+#  e.g. SRM_HOME/etc/bestman2
+   echo "ERROR: Cannot find the bestman2 configuration file: $BESTMAN_SYSCONF"
+   exit 1;
+fi
+
+############################################################################
+# Collecting external env variables from $BESTMAN_SYSCONF
+if [ "x$SRM_HOME" = "x" ] ; then
+    SRM_HOME=`grep SRM_HOME $BESTMAN_SYSCONF | tr '=' ' ' | awk '$1 !~ /#/' | awk '{printf $2}'`
+fi
+if [ "x$JAVA_HOME" = "x" ] ; then
+    JAVA_HOME=`grep JAVA_HOME $BESTMAN_SYSCONF | tr '=' ' ' | awk '$1 !~ /#/' | awk '{printf $2}'`
+fi
+if [ "x$BESTMAN_LIB" = "x" ] ; then
+    BESTMAN_LIB=`grep BESTMAN_LIB $BESTMAN_SYSCONF | tr '=' ' ' | awk '$1 !~ /#/' | awk '{printf $2}'`
+fi
+if [ "x$BESTMAN_GATEWAYMODE_ENABLED" = "x" ] ; then
+    BESTMAN_GATEWAYMODE_ENABLED=`grep BESTMAN_GATEWAYMODE_ENABLED $BESTMAN_SYSCONF | tr '=' ' ' | awk '$1 !~ /#/' | awk '{printf $2}'`
+fi
+if [ "x$BESTMAN_FULLMODE_ENABLED" = "x" ] ; then
+    BESTMAN_FULLMODE_ENABLED=`grep BESTMAN_FULLMODE_ENABLED $BESTMAN_SYSCONF | tr '=' ' ' | awk '$1 !~ /#/' | awk '{printf $2}'`
+fi
+if [ "x$BESTMAN_CONNECTION_ACCEPTORSIZE" = "x" ] ; then
+    BESTMAN_CONNECTION_ACCEPTORSIZE=`grep BESTMAN_CONNECTION_ACCEPTORSIZE $BESTMAN_SYSCONF | tr '=' ' ' | awk '$1 !~ /#/' | awk '{printf $2}'`
+fi
+if [ "x$BESTMAN_CONNECTOR_QUEUESIZE" = "x" ] ; then
+    BESTMAN_CONNECTOR_QUEUESIZE=`grep BESTMAN_CONNECTOR_QUEUESIZE $BESTMAN_SYSCONF | tr '=' ' ' | awk '$1 !~ /#/' | awk '{printf $2}'`
+fi
+if [ "x$BESTMAN_EVENT_LOG_COUNT" = "x" ] ; then
+    BESTMAN_EVENT_LOG_COUNT=`grep BESTMAN_EVENT_LOG_COUNT $BESTMAN_SYSCONF | tr '=' ' ' | awk '$1 !~ /#/' | awk '{printf $2}'`
+fi
+if [ "x$BESTMAN_EVENT_LOG_SIZE" = "x" ] ; then
+    BESTMAN_EVENT_LOG_SIZE=`grep BESTMAN_EVENT_LOG_SIZE $BESTMAN_SYSCONF | tr '=' ' ' | awk '$1 !~ /#/' | awk '{printf $2}'`
+fi
+if [ "x$GLOBUS_HOSTNAME" = "x" ] ; then
+    GLOBUS_HOSTNAME=`grep GLOBUS_HOSTNAME $BESTMAN_SYSCONF | tr '=' ' ' | awk '$1 !~ /#/' | awk '{printf $2}'`
+fi
+if [ "x$GLOBUS_TCP_PORT_RANGE" = "x" ] ; then
+    GLOBUS_TCP_PORT_RANGE=`grep GLOBUS_TCP_PORT_RANGE $BESTMAN_SYSCONF | tr '=' ' ' | awk '$1 !~ /#/' | awk '{printf $2}'`
+fi
+if [ "x$GLOBUS_TCP_SOURCE_RANGE" = "x" ] ; then
+    GLOBUS_TCP_SOURCE_RANGE=`grep GLOBUS_TCP_SOURCE_RANGE $BESTMAN_SYSCONF | tr '=' ' ' | awk '$1 !~ /#/' | awk '{printf $2}'`
+fi
+if [ "x$X509_CERT_DIR" = "x" ] ; then
+    X509_CERT_DIR=`grep X509_CERT_DIR $BESTMAN_SYSCONF | tr '=' ' ' | awk '$1 !~ /#/' | awk '{printf $2}'`
+    GSI_DAEMON_TRUSTED_CA_DIR=`grep X509_CERT_DIR $BESTMAN_SYSCONF | tr '=' ' ' | awk '$1 !~ /#/' | awk '{printf $2}'`
+fi
+if [ "x$VOMSDIR" = "x" ] ; then
+    VOMSDIR=`grep VOMSDIR $BESTMAN_SYSCONF | tr '=' ' ' | awk '$1 !~ /#/' | awk '{printf $2}'`
+fi
+if [ "x$BESTMAN_MAX_JAVA_HEAP" = "x" ] ; then
+    BESTMAN_MAX_JAVA_HEAP=`grep BESTMAN_MAX_JAVA_HEAP $BESTMAN_SYSCONF | tr '=' ' ' | awk '$1 !~ /#/' | awk '{printf $2}'`
+fi
+if [ "x$BESTMAN_JAVA_STACK_SIZE" = "x" ] ; then
+    BESTMAN_JAVA_STACK_SIZE=`grep BESTMAN_JAVA_STACK_SIZE $BESTMAN_SYSCONF | tr '=' ' ' | awk '$1 !~ /#/' | awk '{printf $2}'`
+fi
+if [ "x$BESTMAN_CERTPATH" = "x" ] ; then
+    BESTMAN_CERTPATH=`grep CertFileName $BESTMAN_SYSCONF | tr '=' ' ' | awk '$1 !~ /#/' | awk '{printf $2}'`
+fi
+if [ "x$BESTMAN_KEYPATH" = "x" ] ; then
+    BESTMAN_KEYPATH=`grep KeyFileName $BESTMAN_SYSCONF | tr '=' ' ' | awk '$1 !~ /#/' | awk '{printf $2}'`
+fi
+if [ "x$BESTMAN_GUMSCERTPATH" = "x" ] ; then
+    BESTMAN_GUMSCERTPATH=`grep BESTMAN_GUMSCERTPATH $BESTMAN_SYSCONF | tr '=' ' ' | awk '$1 !~ /#/' | awk '{printf $2}'`
+fi
+if [ "x$BESTMAN_GUMSKEYPATH" = "x" ] ; then
+    BESTMAN_GUMSKEYPATH=`grep BESTMAN_GUMSKEYPATH $BESTMAN_SYSCONF | tr '=' ' ' | awk '$1 !~ /#/' | awk '{printf $2}'`
+fi
+if [ "x$JETTY_DEBUG_ENABLED" = "x" ] ; then
+    JETTY_DEBUG_ENABLED=`grep JETTY_DEBUG_ENABLED $BESTMAN_SYSCONF | tr '=' ' ' | awk '$1 !~ /#/' | awk '{printf $2}'`
+fi
+if [ "x$BESTMAN_GUMS_ENABLED" = "x" ] ; then
+    BESTMAN_GUMS_ENABLED=`grep BESTMAN_GUMS_ENABLED $BESTMAN_SYSCONF | tr '=' ' ' | awk '$1 !~ /#/' | awk '{printf $2}'`
+fi
+if [ "x$BESTMAN_GUMSPROXYPATH" = "x" ] ; then
+    BESTMAN_GUMSPROXYPATH=`grep BESTMAN_GUMSPROXYPATH $BESTMAN_SYSCONF | tr '=' ' ' | awk '$1 !~ /#/' | awk '{printf $2}'`
+fi
+
+############################################################################
+# SERVER Dependent libs CLASSPATH
+if [ "x$BESTMAN2_SERVER_LIB" = "x" ] ; then
+    BESTMAN2_SERVER_LIB=`grep BESTMAN2_SERVER_LIB $BESTMAN_SYSCONF | tr '=' ' ' | awk '$1 !~ /#/' | awk '{printf $2}'`
+fi
+############################################################################
+# internal configuration options
+if [ "x$BESTMAN2_CONF" = "x" ] ; then
+    BESTMAN2_CONF=`grep BESTMAN2_CONF $BESTMAN_SYSCONF | tr '=' ' ' | awk '$1 !~ /#/' | awk '{printf $2}'`
+fi
+############################################################################
+# Checking BESTMAN_LIB
+if [ "x$BESTMAN_LIB" = "x" ] ; then
+    echo "ERROR: Please define \$BESTMAN_LIB correctly"
+    exit 1;
+else
+    if [ ! -f "$BESTMAN_LIB/bestman2.jar" ]; then
+        echo "ERROR: Cannot find the correct $BESTMAN_LIB location,"
+        echo "ERROR: Please define \$BESTMAN_LIB correctly"
+        exit 1;
+    fi
+fi
+# Checking java
+if test ! -f "$JAVA_HOME/bin/java"; then
+  echo "ERROR: Cannot find the java executable in the $JAVA_HOME/bin location,"
+  echo "ERROR: Please define \$JAVA_HOME correctly" 
+  exit 1;
+fi
+# To enforce "log4j.category.COM.claymoresystems.ptls.SSLDebug=OFF"
+# if removed or false, all those hex output will be displayed
+if [ "x$LOG4JDEF" = "x" ] ; then
+    LOG4JDEF="-Dorg.eclipse.jetty.util.log.IGNORE=true"
+fi
+###########################################################################
+
+INPUTTOKENS=$*
+HELPTOKEN=`echo $INPUTTOKENS| tr ' ' '\n' | egrep "help|version"`
+
+#echo "BeStMan  `cat $SRM_HOME/version`"
+#echo "BeStMan and SRM-Clients Copyright(c) 2007-2011,"
+#echo "Lawrence Berkeley National Laboratory. All rights reserved." 
+#echo "Support at SRM@LBL.GOV and documents at http://sdm.lbl.gov/bestman"
+#echo " "
+if test "$BESTMAN_GATEWAYMODE_ENABLED" = "yes" -a "$BESTMAN_FULLMODE_ENABLED" = "no" ; then
+    echo "BeStMan (Gateway mode)   `cat $SRM_HOME/version`"
+else
+    if test "$BESTMAN_GATEWAYMODE_ENABLED" = "no" -a "$BESTMAN_FULLMODE_ENABLED" = "yes" ; then
+        echo "BeStMan (Full mode)   `cat $SRM_HOME/version`"
+	else 
+  	    echo "BeStMan UNKNOWN mode - check the env settings or options"
+		exit 1;
+	fi
+fi 
+
+Ver_separator() {
+  var1=$1
+  var2=$2
+  var3=$3
+  if test ! "$var1"; then
+   var1=0
+  fi
+  if test ! "$var2" ; then
+        var2=0
+  fi
+  if test ! "$var3" ; then
+       var3=0
+  fi
+}
+JAVAEXE=$JAVA_HOME/bin/java
+JVR=`$JAVAEXE -version 2>&1`
+RTN=$?
+if [ $RTN -ne 0 ]; then
+    echo "Executing Java version check failed with error:"
+    echo $JVR
+    exit 1
+fi
+JVR=`echo $JVR | sed 's/[^0-9. ]//g'`
+JVR=`echo $JVR | sed 's/\./ /g'`
+Ver_separator $JVR
+if [ 1 -eq $var1 -a 6 -le $var2 -a 000 -le $var3 ]; then
+    jver=yes
+else
+    echo "ERROR: Please use SUN/Oracle Java version $var1 $var2 $var3 >= 1.6.0_01 for \$JAVA_HOME"
+    exit 1;
+fi
+
+#######################################################################
+if test "$HELPTOKEN" ; then
+    echo "##############################################################"
+    echo "# SRM_HOME = $SRM_HOME"
+    echo "# BESTMAN_LIB = $BESTMAN_LIB"
+    echo "# BESTMAN_SYSCONF = $BESTMAN_SYSCONF"
+    echo "# JAVA_HOME = $JAVA_HOME"
+    echo "`$JAVA_HOME/bin/java -version`"
+    if [ $BESTMAN_SYSCONF -a -e $BESTMAN_SYSCONF ] ; then
+       echo "# BESTMAN_SYSCONF = $BESTMAN_SYSCONF"
+       echo "##############################################################"
+       echo "`cat $BESTMAN_SYSCONF`"
+    fi
+    echo "##############################################################"
+    if test "$X509_USER_PROXY" ; then
+        echo "# X509_USER_PROXY = $X509_USER_PROXY"
+    fi
+    if test "$GLOBUS_HOSTNAME" ; then
+        echo "GLOBUS_HOSTNAME = $GLOBUS_HOSTNAME"
+    fi
+    echo "##############################################################"
+fi
+#######################################################################
+if test "$BESTMAN_CONNECTION_ACCEPTORSIZE" ; then
+    CONNECTIONACCEPTORSIZE="-DAcceptorSize=${BESTMAN_CONNECTION_ACCEPTORSIZE}"
+fi
+if test "$BESTMAN_CONNECTOR_QUEUESIZE" ; then
+    CONNECTORQUEUESIZE="-DConnectorAcceptQueueSize=${BESTMAN_CONNECTOR_QUEUESIZE}"
+fi
+if test "$BESTMAN_EVENT_LOG_COUNT" ; then
+    EVENTLOGCOUNT="-DSRMMaxNumEventLog=${BESTMAN_EVENT_LOG_COUNT}"
+fi
+if test "$BESTMAN_EVENT_LOG_SIZE" ; then
+    EVENTLOGSIZE="-DSRMEventLogByteMax=${BESTMAN_EVENT_LOG_SIZE}"
+fi
+if test "$GLOBUS_HOSTNAME" ; then
+    export GLOBUS_HOSTNAME
+    MY_GLOBUSHOSTNAME="-DGLOBUS_HOSTNAME=$GLOBUS_HOSTNAME"
+fi
+if test "$GLOBUS_TCP_PORT_RANGE" ; then
+    export GLOBUS_TCP_PORT_RANGE
+	MY_TCP_PORTR="-Dorg.globus.tcp.port.range=$GLOBUS_TCP_PORT_RANGE"
+fi
+if test "$GLOBUS_TCP_SOURCE_RANGE" ; then
+    export GLOBUS_TCP_SOURCE_RANGE
+fi
+if test "$X509_CERT_DIR" ; then
+    if test -d "$X509_CERT_DIR" ; then
+        export X509_CERT_DIR
+        export GSI_DAEMON_TRUSTED_CA_DIR
+        CADIR=$X509_CERT_DIR
+        export CADIR
+    	MY_CERT_DIR="-DX509_CERT_DIR=$X509_CERT_DIR -DCADIR=$X509_CERT_DIR"
+    else
+        echo "Cannot find $X509_CERT_DIR"
+        echo "Please check proper certificate directory" 
+        exit 1;
+    fi
+fi
+if test "$VOMSDIR" ; then
+    if test -d "$VOMSDIR" ; then
+        export VOMSDIR
+    	MY_VOMS_DIR="-DVOMSDIR=$VOMSDIR"
+    else
+        echo "Cannot find $VOMSDIR"
+        echo "Please check proper voms directory" 
+        exit 1;
+    fi
+fi
+if test "$BESTMAN_MAX_JAVA_HEAP" ; then
+    MAXHEAP="-Xmx${BESTMAN_MAX_JAVA_HEAP}m -XX:MaxDirectMemorySize=${BESTMAN_MAX_JAVA_HEAP}m"
+fi
+
+if test "$BESTMAN_JAVA_STACK_SIZE" ; then
+    STACKSIZE="-Xss${BESTMAN_JAVA_STACK_SIZE}k" 
+fi
+
+if test "$BESTMAN_CERTPATH" ; then
+    if test ! -r "$BESTMAN_CERTPATH" ; then
+        echo "Cannot find $BESTMAN_CERTPATH"
+        echo "Please check proper service certificate path" 
+        exit 1;
+    fi
+fi
+if test "$BESTMAN_KEYPATH" ; then
+    if test ! -r "$BESTMAN_KEYPATH" ; then
+        echo "Cannot find $BESTMAN_KEYPATH"
+        echo "Please check proper service certificate key path"
+        exit 1;
+    fi
+fi
+if test "$BESTMAN_GUMSCERTPATH" ; then
+    if test ! -r "$BESTMAN_GUMSCERTPATH" ; then
+        echo "Cannot find $BESTMAN_GUMSCERTPATH"
+        echo "Please check proper service certificate path to connect GUMS"
+        exit 1;
+    fi
+fi
+if test "$BESTMAN_GUMSKEYPATH" ; then
+    if test ! -r "$BESTMAN_GUMSKEYPATH" ; then
+        echo "Cannot find $BESTMAN_GUMSKEYPATH"
+        echo "Please check proper service certificate key path to connect GUMS"
+        exit 1;
+    fi
+fi
+#######################################################################
+if test "$JETTY_DEBUG_ENABLED" = "yes" ; then
+    JETTYDEBUGDEF="-Dorg.eclipse.jetty.util.log.stderr.DEBUG=true"
+fi
+
+JETTYDEF="-DJettyConfiguration=${SRM_HOME}/conf/WEB-INF/jetty.xml -DJettyDescriptor=${SRM_HOME}/conf/WEB-INF/web.xml -DJettyResource=${SRM_HOME}/conf/"
+
+PLUGINLIBS="."
+if test "$BESTMAN_GUMS_ENABLED" = "yes" ; then
+    MY_GUMS_OPT1="-Daxis.socketSecureFactory=org.glite.security.trustmanager.axis.AXISSocketFactory"
+    MY_GUMS_OPT2="-DsslCAFiles=$X509_CERT_DIR/*.0"
+    if test "$BESTMAN_GUMSCERTPATH" -a "$BESTMAN_GUMSKEYPATH" ; then
+        MY_GUMS_OPT3="-DsslCertfile=$BESTMAN_GUMSCERTPATH -DsslKey=$BESTMAN_GUMSKEYPATH"
+	fi 
+    if test "$BESTMAN_GUMSPROXYPATH" ; then
+         MY_GUMS_OPT4="-DgridProxyFile=$BESTMAN_GUMSPROXYPATH"
+    fi
+fi
+if test "$BESTMAN_PLUGIN" ; then
+     TMPPLUGINPATH=${BESTMAN_PLUGIN}/*.jar
+     for j in ${TMPPLUGINPATH}
+     do
+           PLUGINLIBS="$PLUGINLIBS:$j"
+     done
+else
+     TMPPLUGINPATH=${BESTMAN_LIB}/plugin/*.jar
+     for j in ${TMPPLUGINPATH}
+     do
+           PLUGINLIBS="$PLUGINLIBS:$j"
+     done
+fi
+
+CLASSPATH=${SRM_HOME}/properties:${BESTMAN_LIB}/bestman2-stub.jar:${BESTMAN_LIB}/bestman2.jar:${BESTMAN_LIB}/bestman2-aux.jar:${BESTMAN2_SERVER_LIB}:${PLUGINLIBS}
+export CLASSPATH
+#echo $CLASSPATH
+# cd $SRM_HOME
+
+if test "$HELPTOKEN" ; then
+exec $JAVA_HOME/bin/java -server -Xmx256m ${LOG4JDEF} ${JETTYDEF} ${JETTYDEBUGDEF} gov.lbl.srm.server.Server ${BESTMAN_SYSCONF} $*
+else
+exec $JAVA_HOME/bin/java -server ${MAXPOOLSIZE} ${MAXHEAP} ${STACKSIZE} ${CONNECTORQUEUESIZE} ${CONNECTIONACCEPTORSIZE} ${EVENTLOGCOUNT} ${EVENTLOGSIZE} ${BESTMAN_EXTRALIB} ${MY_GLOBUSHOSTNAME} ${MY_TCP_PORTR} ${MY_CERT_DIR} ${MY_VOMS_DIR} ${MY_GUMS_OPT1} ${MY_GUMS_OPT2} ${MY_GUMS_OPT3} ${MY_GUMS_OPT4} ${JETTYDEF} ${JETTYDEBUGDEF} ${LOG4JDEF} ${BESTMAN_JAVA_SRM_OTHER_OPTS} gov.lbl.srm.server.Server ${BESTMAN2_CONF} $*
+
+fi
+

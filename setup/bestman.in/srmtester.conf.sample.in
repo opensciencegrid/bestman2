@@ -1,0 +1,17 @@
+testsites=MYSITE
+localtargetdir=/tmp
+localsource=/tmp/test.data
+gucscriptpath=/sandbox/bestman/bin/g-urlcopy.sh
+useguc=true
+proxyfile=/sandbox/srmtester/.globus/x509up_u1234
+op=ping,put,ls,get,bringonline,push,pull,gsiftp,mv,srmrm,mkdir,rmdir,reserve,getspacemeta,getspacetokens,release,gettransferprotocols
+retrytimeallowed=10
+gsiftpcopysource=gsiftp://datagrid.lbl.gov//testdata/T/test.data
+pullcopysrm=MYSITE@srm://hostname.domain.edu:10443/srm/v2/server?SFN=/srmcache/srmtester/srmtester2.MYSITE.data,UNL@srm://srm.unl.edu:8443/srm/managerv2?SFN=/pnfs/unl.edu/data4/test/srmtester2.data/srmtester2.unl.data
+pushcopysource=MYSITE@disable=false,UNL@disable=false
+pullcopysource=MYSITE@disable=false,UNL@disable=false
+browseafterput=true
+advisorydelete=false
+putoverwrite=MYSITE@true,UNL@true
+copyoverwrite=MYSITE@true,UNL@true
+output=/tmp/log

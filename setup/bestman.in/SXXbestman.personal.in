@@ -1,0 +1,201 @@
+#!/bin/sh
+
+# either BESTMAN_SYSCONF or BESTMAN_ENV_PATH must be defined in the env
+# otherwise, SRM_HOME configuration default will be used
+
+# SRM_HOME=/data/bestman/current
+
+# BESTMAN_SYSCONF must be defined in the env for site specific env to be effective
+# otherwise, SRM_HOME configuration default will be used
+#        Use BESTMAN_SYSCONF wisely
+#
+# bestman2 configuration definition file
+# BESTMAN2_CONF must be defined in the env 
+#         to the configuration path for internal configuration options
+#
+# Checking BESTMAN_SYSCONF for external environment variables 
+# For different setup than configured, set BESTMAN_SYSCONF
+if [ "x$BESTMAN_SYSCONF" = "x" ] ; then
+   if test ! "$SRM_HOME" ; then
+      SRM_HOME=@SRM_HOME@
+   fi
+   BESTMAN_SYSCONF="$SRM_HOME/etc/bestman2"
+fi
+if [ ! -f "$BESTMAN_SYSCONF" ]; then
+#  e.g. /etc/sysconfig/bestman2
+#  e.g. SRM_HOME/etc/bestman2
+   echo "ERROR: Cannot find the bestman2 configuration file: $BESTMAN_SYSCONF"
+   exit 1;
+fi
+
+############################################################################
+# Collecting external env variables from $BESTMAN_SYSCONF
+if [ "x$SRM_HOME" = "x" ] ; then
+    SRM_HOME=`grep SRM_HOME $BESTMAN_SYSCONF | tr '=' ' ' | awk '$1 !~ /#/' | awk '{printf $2}'`
+fi
+if [ "x$JAVA_HOME" = "x" ] ; then
+    JAVA_HOME=`grep JAVA_HOME $BESTMAN_SYSCONF | tr '=' ' ' | awk '$1 !~ /#/' | awk '{printf $2}'`
+fi
+if [ "x$BESTMAN_LIB" = "x" ] ; then
+    BESTMAN_LIB=`grep BESTMAN_LIB $BESTMAN_SYSCONF | tr '=' ' ' | awk '$1 !~ /#/' | awk '{printf $2}'`
+fi
+if [ "x$GLOBUS_TCP_PORT_RANGE" = "x" ] ; then
+    GLOBUS_TCP_PORT_RANGE=`grep GLOBUS_TCP_PORT_RANGE $BESTMAN_SYSCONF | tr '=' ' ' | awk '$1 !~ /#/' | awk '{printf $2}'`
+fi
+if [ "x$GLOBUS_TCP_SOURCE_RANGE" = "x" ] ; then
+    GLOBUS_TCP_SOURCE_RANGE=`grep GLOBUS_TCP_SOURCE_RANGE $BESTMAN_SYSCONF | tr '=' ' ' | awk '$1 !~ /#/' | awk '{printf $2}'`
+fi
+if [ "x$X509_CERT_DIR" = "x" ] ; then
+    X509_CERT_DIR=`grep X509_CERT_DIR $BESTMAN_SYSCONF | tr '=' ' ' | awk '$1 !~ /#/' | awk '{printf $2}'`
+    GSI_DAEMON_TRUSTED_CA_DIR=`grep X509_CERT_DIR $BESTMAN_SYSCONF | tr '=' ' ' | awk '$1 !~ /#/' | awk '{printf $2}'`
+fi
+if [ "x$BESTMAN_LOG" = "x" ] ; then
+    BESTMAN_LOG=`grep BESTMAN_LOG $BESTMAN_SYSCONF | tr '=' ' ' | awk '$1 !~ /#/' | awk '{printf $2}'`
+fi
+
+
+#############################################
+if [ "x$BESTMAN_LOG" = "x" ]; then
+    # default to /var/log/bestman2.log
+    BESTMAN_LOG=/var/log/bestman2-.log
+fi
+# Checking BESTMAN_LIB
+if [ "x$BESTMAN_LIB" = "x" ] ; then
+    echo "ERROR: Please define \$BESTMAN_LIB correctly"
+    exit 1;
+else
+    if [ ! -f "$BESTMAN_LIB/bestman2.jar" ]; then
+        echo "ERROR: Cannot find the correct $BESTMAN_LIB location,"
+        echo "ERROR: Please define \$BESTMAN_LIB correctly"
+        exit 1;
+    fi
+fi
+# Checking bestman2 configuration definition file
+if [ "x$BESTMAN_SYSCONF" = "x" ] ; then
+   BESTMAN_SYSCONF="$SRM_HOME/etc/bestman2"
+fi
+if [ ! -f "$BESTMAN_SYSCONF" ]; then
+   echo "ERROR: Cannot find the bestman2 configuration file: $BESTMAN_SYSCONF"
+   exit 1;
+fi
+# Checking java
+if test ! -f "$JAVA_HOME/bin/java"; then
+  echo "ERROR: Cannot find the java executable in the $JAVA_HOME/bin location,"
+  echo "ERROR: Please define \$JAVA_HOME correctly" 
+  exit 1;
+fi
+################# DO NOT MODIFY BELOW THIS LINE #######################
+# unless you know what you are doing
+
+if [ ! -f "$SRM_HOME/sbin/bestman.server" ]; then
+  echo "Cannot find the $SRM_HOME location,"
+  echo "Please define \$SRM_HOME correctly"
+  exit 1;
+fi
+
+export SRM_HOME
+dname=gov.lbl.srm.server.Server
+
+ARGV="$@"
+for ARG in $@
+do
+case $ARG in
+start)
+    echo "START"
+    plist=`ps -afe | awk "/$dname/ && ! /awk/ {print \\$2}"`
+    if test "$plist" ; then
+    echo "there are other bestman processes running already"
+    for p in $plist ; do
+    echo -n $p ' ... '
+    done
+    echo " "
+    echo "if this is intentional, please use start2"
+    else
+    nohup $SRM_HOME/sbin/bestman.server >& $BESTMAN_LOG  2>&1 &
+    sleep 10
+    fi
+    ;;
+start2)
+    echo "START 2"
+#    "$SRM_HOME/sbin/bestman.server |& tee /tmp/bestman-.log"
+    nohup $SRM_HOME/sbin/bestman.server >& $BESTMAN_LOG 2>&1 &
+#    $SRM_HOME/sbin/bestman.server &
+    sleep 10
+    ;;
+stop)
+    echo Attempt to terminate process running bestman
+    nlist=`ps -afe | awk "/$dname/ && ! /awk/ {print \\$2}"`
+    for p in $nlist ; do
+    echo -n $p ' ... '
+    kill -9 $p
+    done
+    echo " "
+    ;;
+check)
+    echo Checking process running bestman
+    dlist=`ps -afe | awk "/$dname/ && ! /awk/ {print \\$2}"`
+    for p in $dlist ; do
+    echo -n $p ' ... '
+    done
+    echo " "
+
+    ;;
+checkjava)
+
+if test ! -f "$JAVA_HOME/bin/java"; then
+  echo "Cannot find the java executable in the $JAVA_HOME/bin location,"
+  echo "Please define \$JAVA_HOME correctly" 1>&2
+  exit 1;
+fi
+
+Ver_separator() {
+  var1=$1
+  var2=$2
+  var3=$3
+
+  if test ! "$var1"; then
+      var1=0
+  fi
+
+  if test ! "$var2" ; then
+      var2=0
+  fi
+
+  if test ! "$var3" ; then
+      var3=0
+  fi
+}
+
+if test ! -f "$JAVA_HOME/bin/java"; then
+  echo "Error: Cannot find the java executable in the $JAVA_HOME/bin location,"
+  echo "Please define JAVA_HOME" 1>&2
+  exit 0;
+fi
+
+JAVAEXE=$JAVA_HOME/bin/java
+JV=`$JAVAEXE -version 2>&1`
+JV=`echo $JV | sed 's/[^0-9. ]//g'`
+JV=`echo $JV | sed 's/\./ /g'`
+
+Ver_separator $JV
+
+set ok = `echo $version | awk '{print index($0, "1.6.")}'`
+if [ 1 -eq $var1 -a 6 -eq $var2 -a 001 -le $var3 ]; then
+    ver=yes
+else
+   echo "Error: Please use java version $var1 $var2 $var3 >= 1.6.0_01 in \$JAVA_HOME" 1>&2
+   exit 132;
+fi
+
+echo "current java version is $var1.$var2.$var3 ";
+
+    ;;
+*)
+    echo "WRONG option"
+    exit 131
+    ;;
+esac
+
+done
+
+
