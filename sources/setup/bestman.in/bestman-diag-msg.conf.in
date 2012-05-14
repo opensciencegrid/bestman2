@@ -1,4 +1,0 @@
-connection refused=Target server may be down or have a firewall issue
-user credential expired, please renew your credentials=Renew your proxy
-connection timed out=Server may be down or have a firewall issue, and connection got timed out
-Exception The AXIS engine could not find a target service to invoke=check the service handle
