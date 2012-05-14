@@ -52,6 +52,9 @@
   </target>
 
   <target name="deploy" depends="setenv">
+     <copy toDir="${install.root}/properties">
+          <fileset dir="./properties"/>
+     </copy>
     <exec dir="." executable="./configure">
       <arg value="--prefix=${install.root}"/>
     </exec>
