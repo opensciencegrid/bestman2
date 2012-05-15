@@ -18,7 +18,7 @@ if [ "x$BESTMAN_SYSCONF" = "x" ] ; then
    if test ! "$SRM_HOME" ; then
       SRM_HOME=@SRM_HOME@
    fi
-   BESTMAN_SYSCONF="$SRM_HOME/etc/bestman2"
+   BESTMAN_SYSCONF="/etc/sysconfig/bestman2"
 fi
 if [ ! -f "$BESTMAN_SYSCONF" ]; then
 #  e.g. /etc/sysconfig/bestman2

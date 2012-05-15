@@ -2101,6 +2101,7 @@ $SRM_HOME/bin/srm-ls:./bestman.in/srm-ls.in \
 $SRM_HOME/bin/srm-ls-status:./bestman.in/srm-ls-status.in \
 $SRM_HOME/bin/srm-mkdir:./bestman.in/srm-mkdir.in \
 $SRM_HOME/bin/srm-mv:./bestman.in/srm-mv.in \
+$SRM_HOME/bin/srm-common.sh:./bestman.in/srm-common.sh.in \
 $SRM_HOME/bin/srm-permission-check:./bestman.in/srm-permission-check.in \
 $SRM_HOME/bin/srm-permission-get:./bestman.in/srm-permission-get.in \
 $SRM_HOME/bin/srm-permission-set:./bestman.in/srm-permission-set.in \
@@ -2157,6 +2158,7 @@ $SRM_HOME/bin/srm-ls:./bestman.in/srm-ls.in \
 $SRM_HOME/bin/srm-ls-status:./bestman.in/srm-ls-status.in \
 $SRM_HOME/bin/srm-mkdir:./bestman.in/srm-mkdir.in \
 $SRM_HOME/bin/srm-mv:./bestman.in/srm-mv.in \
+$SRM_HOME/bin/srm-common.sh:./bestman.in/srm-common.sh.in \
 $SRM_HOME/bin/srm-permission-check:./bestman.in/srm-permission-check.in \
 $SRM_HOME/bin/srm-permission-get:./bestman.in/srm-permission-get.in \
 $SRM_HOME/bin/srm-permission-set:./bestman.in/srm-permission-set.in \

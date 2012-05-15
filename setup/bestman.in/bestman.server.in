@@ -15,10 +15,7 @@
 # Checking BESTMAN_SYSCONF for external environment variables ONLY
 # For different setup than configured, set BESTMAN_SYSCONF
 if [ "x$BESTMAN_SYSCONF" = "x" ] ; then
-   if test ! "$SRM_HOME" ; then
-      SRM_HOME=@SRM_HOME@
-   fi
-   BESTMAN_SYSCONF="$SRM_HOME/etc/bestman2"
+   BESTMAN_SYSCONF="/etc/sysconfig/bestman2"
 fi
 if [ ! -f "$BESTMAN_SYSCONF" ]; then
 #  e.g. /etc/sysconfig/bestman2
@@ -26,6 +23,11 @@ if [ ! -f "$BESTMAN_SYSCONF" ]; then
    echo "ERROR: Cannot find the bestman2 configuration file: $BESTMAN_SYSCONF"
    exit 1;
 fi
+if [ "x$BESTMAN_PID" = "x" ] ; then
+   BESTMAN_PID=/var/run/bestman2.pid
+fi
+echo $$ > $BESTMAN_PID
+
 
 ############################################################################
 # Collecting external env variables from $BESTMAN_SYSCONF

@@ -16,8 +16,8 @@
 #      after  srm://hostname//mypath/myfile
 #
 ###########################################################
-#ServicePortNumber=8443
-#ServiceHandle=/srm/v2/server
+ServicePortNumber=8443
+ServiceHandle=/srm/v2/server
 ###########################################################
 #
 # service url : full SRM service endpoint URL
