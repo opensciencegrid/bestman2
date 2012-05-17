@@ -1,6 +1,11 @@
 # SRM-Tester configuration template Wed Oct 22 10:27:15 PDT 2008
 # questions srm@lbl.gov
 #
+#UNCOMMENT or put -serviceurl in the in the command line
+#serviceurl=srm://[YOUR-SE-HOSTNAME]:[PORT]/srm/v2/server
+#UNCOMMENT or put -serviceurl in the in the command line
+#Must be a valid location writable on your SE
+#remotesfn=/tmp/testdir
 # User proxy file path
 proxyfile=/tmp/x509up_u1234
 # Existing GSIFTP server and existing file path that BeStMan can test with
@@ -15,22 +20,36 @@ pullcopysrm=MYSITE@srm://hostname.domain.edu:10443/srm/v2/server?SFN=/srmcache/~
 op=ping,put,ls,get,bringonline,push,pull,gsiftp,mv,srmrm,mkdir,rmdir,reserve,getspacemeta,getspacetokens,release,gettransferprotocols
 #
 # Un-comment Below op for BeStMan gateway mode
-#op=ping,put,ls,get,mv,srmrm,mkdir,rmdir,getspacetokens,release,gettransferprotocols
+#op=ping,put,ls,get,srmrm,mkdir,rmdir,getspacetokens,release,gettransferprotocols
 #
 ##################################################################
 # Do not modify below without knowledge
+##################################################################
+#Defines test site name.  (comma seperated for multiple sites)
 testsites=MYSITE
+#Defines local target directory for GET operation
 localtargetdir=/tmp
+#Defines local source file for PUT operation
 localsource=@SRM_HOME@/version
+#Defines an external globus-url-copy path
 gucscriptpath=@GUC_GLOBUS_PATH@
+#Defines the use of an external globus-url-copy
 useguc=false
+#Defines the number of times of file transfer try in case of failure
 retrytimeallowed=10
+#Defines the push mode in COPY operation (comma seperated for multiple)
 pushcopysource=MYSITE@disable=false
+#Defines the pull mode in COPY operation (comma seperated for multiple)
 pullcopysource=MYSITE@disable=false
+#Defines if LS operation is done after PUT operation
 browseafterput=true
+#
 advisorydelete=false
+#Enables overwrite mode in PUT operation
 putoverwrite=MYSITE@true
+#Enables overwrite mode in COPY operation
 copyoverwrite=MYSITE@true
+#Local output of logs and results
 output=/tmp
 # More advanced operations below
 #gsiftpcopysource=gsiftp://datagrid.lbl.gov//testdata/T/test.data
