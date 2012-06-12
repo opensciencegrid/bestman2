@@ -26,8 +26,6 @@ fi
 if [ "x$BESTMAN_PID" = "x" ] ; then
    BESTMAN_PID=/var/run/bestman2.pid
 fi
-echo $$ > $BESTMAN_PID
-
 
 ############################################################################
 # Collecting external env variables from $BESTMAN_SYSCONF
@@ -336,9 +334,9 @@ export CLASSPATH
 # cd $SRM_HOME
 
 if test "$HELPTOKEN" ; then
-exec $JAVA_HOME/bin/java -server -Xmx256m ${LOG4JDEF} ${JETTYDEF} ${JETTYDEBUGDEF} gov.lbl.srm.server.Server ${BESTMAN_SYSCONF} $*
+exec $JAVA_HOME/bin/java -server -Xmx256m ${LOG4JDEF} ${JETTYDEF} ${JETTYDEBUGDEF} gov.lbl.srm.server.Server ${BESTMAN_SYSCONF} $* &
 else
-exec $JAVA_HOME/bin/java -server ${MAXPOOLSIZE} ${MAXHEAP} ${STACKSIZE} ${CONNECTORQUEUESIZE} ${CONNECTIONACCEPTORSIZE} ${EVENTLOGCOUNT} ${EVENTLOGSIZE} ${BESTMAN_EXTRALIB} ${MY_GLOBUSHOSTNAME} ${MY_TCP_PORTR} ${MY_CERT_DIR} ${MY_VOMS_DIR} ${MY_GUMS_OPT1} ${MY_GUMS_OPT2} ${MY_GUMS_OPT3} ${MY_GUMS_OPT4} ${JETTYDEF} ${JETTYDEBUGDEF} ${LOG4JDEF} ${BESTMAN_JAVA_SRM_OTHER_OPTS} gov.lbl.srm.server.Server ${BESTMAN2_CONF} $*
-
+exec $JAVA_HOME/bin/java -server ${MAXPOOLSIZE} ${MAXHEAP} ${STACKSIZE} ${CONNECTORQUEUESIZE} ${CONNECTIONACCEPTORSIZE} ${EVENTLOGCOUNT} ${EVENTLOGSIZE} ${BESTMAN_EXTRALIB} ${MY_GLOBUSHOSTNAME} ${MY_TCP_PORTR} ${MY_CERT_DIR} ${MY_VOMS_DIR} ${MY_GUMS_OPT1} ${MY_GUMS_OPT2} ${MY_GUMS_OPT3} ${MY_GUMS_OPT4} ${JETTYDEF} ${JETTYDEBUGDEF} ${LOG4JDEF} ${BESTMAN_JAVA_SRM_OTHER_OPTS} gov.lbl.srm.server.Server ${BESTMAN2_CONF} $* &
 fi
 
+echo $! > $BESTMAN_PID
