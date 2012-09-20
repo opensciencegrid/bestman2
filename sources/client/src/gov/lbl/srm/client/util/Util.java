@@ -52,11 +52,15 @@ import org.gridforum.jgss.ExtendedGSSCredential;
 
 import org.globus.util.ConfigUtil;
 import org.globus.gsi.GlobusCredential;
+import org.globus.gsi.X509Credential;
 import org.globus.gsi.CertUtil;
 import org.globus.gsi.GSIConstants;
 import org.globus.gsi.OpenSSLKey;
 import org.globus.gsi.gssapi.*;
 import org.globus.gsi.bc.*;
+
+import org.globus.gsi.gssapi.GlobusGSSCredentialImpl;
+
 import java.security.interfaces.*;
 import java.security.PrivateKey;
 
@@ -176,16 +180,15 @@ public static GSSCredential getCredential(String proxyPath, String userKey,
    GSSCredential mycred = null;
    try {
      if(!useProxy) {
-       GlobusCredential gCreds = null;
+       X509Credential gCreds = null;
        String userCert = proxyPath;
        X509Certificate[] certs = Util.loadCerts(userCert);
        OpenSSLKey k = new BouncyCastleOpenSSLKey(userKey);
        if(k.isEncrypted()) {
           k.decrypt(password);
           PrivateKey key = k.getPrivateKey();
-          gCreds = new GlobusCredential(key, certs);
-          mycred = new GlobusGSSCredentialImpl
-               (gCreds, GSSCredential.INITIATE_AND_ACCEPT);
+          gCreds = new X509Credential(key, certs);
+          mycred = new GlobusGSSCredentialImpl(gCreds, GSSCredential.INITIATE_AND_ACCEPT);
         }
      }
      else {
