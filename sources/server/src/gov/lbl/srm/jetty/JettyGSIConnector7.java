@@ -55,10 +55,10 @@ import org.ietf.jgss.GSSContext;
 import org.gridforum.jgss.ExtendedGSSManager;
 import org.gridforum.jgss.ExtendedGSSContext;
 
-import org.globus.gsi.GlobusCredential;
+import org.globus.gsi.X509Credential;
 import org.globus.gsi.TrustedCertificates;
 import org.globus.gsi.GSIConstants;
-import org.globus.gsi.GlobusCredentialException;
+import org.globus.gsi.CredentialException;
 import org.globus.gsi.gssapi.GlobusGSSCredentialImpl;
 import org.globus.gsi.gssapi.GSSConstants;
 import org.globus.gsi.gssapi.net.GssInputStream;
@@ -330,25 +330,25 @@ public class JettyGSIConnector7
         try {
             _log.info("Loading credentials");
 
-            GlobusCredential cred;
+            X509Credential cred;
             if (_serverProxy != null && !_serverProxy.equals("")) {
                 if (_log.isInfoEnabled()) {
                     _log.info("Server Proxy: " + _serverProxy);
                 }
-                cred = new GlobusCredential(_serverProxy);
+                cred = new X509Credential(_serverProxy);
             } else if (_serverCert != null && _serverKey != null) {
                 if (_log.isInfoEnabled()) {
                     _log.info("Server Certificate: " + _serverCert);
                     _log.info("Server Key: " + _serverKey);
                 }
-                cred = new GlobusCredential(_serverCert, _serverKey);
+                cred = new X509Credential(_serverCert, _serverKey);
             } else {
                 throw new IllegalStateException("Server credentials have not been configured");
             }
 
             _credentials =
                 new GlobusGSSCredentialImpl(cred, GSSCredential.ACCEPT_ONLY);
-        } catch (GlobusCredentialException e) {
+        } catch (CredentialException e) {
             throw new IOException("Failed to load credentials", e);
         } catch (GSSException e) {
             throw new IOException("Failed to load credentials", e);
