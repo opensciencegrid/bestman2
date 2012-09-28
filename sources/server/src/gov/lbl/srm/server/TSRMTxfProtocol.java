@@ -438,12 +438,12 @@ public final class TSRMTxfProtocol {
 	    return TSRMTxfProtocol.FILE;
 	}
 	if (_gUserDefinedProtocols != null) {
-		for (int i=0; i<_gUserDefinedProtocols.length; i++) {
-			TSRMTxfProtocol p = _gUserDefinedProtocols[i];
-			if (name.equalsIgnoreCase(p.toString())) {
-				return p;
-			}
+	    for (int i=0; i<_gUserDefinedProtocols.length; i++) {
+		TSRMTxfProtocol p = _gUserDefinedProtocols[i];
+		if (name.equalsIgnoreCase(p.toString())) {
+		    return p;
 		}
+	    }
 	}
 	return null;
     }
