@@ -92,6 +92,34 @@ public class SRMGateway extends TSRMServerIdle {
 	return result;
     }
 	    
+    public TSRMTxfProtocol  getUserPreferredTransferProtocol(TTransferParameters tp) {	 
+	if (tp == null) {
+	    return null;
+	}
+
+	ArrayOfString protocolArray = tp.getArrayOfTransferProtocols();
+	if (protocolArray== null) {
+	    // return TSRMTxfProtocol.getDefaultTransferProtocol();
+	    return null;
+	}
+	
+	String[] protocols = protocolArray.getStringArray();
+
+	for (int i=0; i<protocols.length; i++) {
+	    String curr = protocols[i];
+
+	    TSRMTxfProtocol p = TSRMTxfProtocol.getProtocol(curr);
+
+	    if (p != null) {
+		if (p.isEnabled()) {
+		    return p;
+		}
+	    }
+	}
+	
+	return null;    
+    }
+
 
     public SrmGetTransferProtocolsResponse srmGetTransferProtocols(SrmGetTransferProtocolsRequest req)  
     {   
@@ -145,6 +173,8 @@ public class SRMGateway extends TSRMServerIdle {
 	    return result;
     	}
 
+	TSRMTxfProtocol clientProtocol = getUserPreferredTransferProtocol(req.getTransferParameters());
+
 	TGetRequestFileStatus[] fileStatusList = new TGetRequestFileStatus[listOfFileReqs.length];
     		
 	for (int i=0; i<listOfFileReqs.length; i++) {	    
@@ -154,7 +184,7 @@ public class SRMGateway extends TSRMServerIdle {
 	    URI src = curr.getSourceSURL();
 	    s.setSourceSURL(src);
 	    try {
-		URI txfURL = getXrootdPath(src);	    
+		URI txfURL = getXrootdPath(src, clientProtocol);	    
 	
 		if (txfURL == null) {
 		    s.setStatus(TSRMUtil.createReturnStatus(TStatusCode.SRM_FAILURE, src+" is not a supported url."));
@@ -341,6 +371,7 @@ public class SRMGateway extends TSRMServerIdle {
 	    creds = TSRMService.gGetCredential("srmPut");
 	}
 	    
+	TSRMTxfProtocol clientProtocol = getUserPreferredTransferProtocol(req.getTransferParameters());
 	TSRMLog.debug(SRMGateway.class, null, "authid="+req.getAuthorizationID(), "fasttrack="+fastTrack);
 
 	for (int i=0; i<listOfFileReqs.length; i++) {	    
@@ -351,7 +382,7 @@ public class SRMGateway extends TSRMServerIdle {
 	    s.setSURL(src);
 
 	    try {
-		URI txfURL = getXrootdPath(src, spaceToken);
+		URI txfURL = getXrootdPath(src, spaceToken, clientProtocol);
 		if (txfURL != null) {
 		    if (fastTrack) {
 			s.setTransferURL(txfURL);		
@@ -858,6 +889,67 @@ public class SRMGateway extends TSRMServerIdle {
 	
     }
 
+
+    private URI getXrootdPath(URI input, String token, TSRMTxfProtocol p) {
+	if (token == null) {
+	    return getXrootdPath(input, p);
+	}
+
+	String path = findFilePath(input);
+	if (path == null) {
+	    return null;
+	}      	
+
+	try {
+	    //URI result = new URI(TSRMTxfProtocol.GSIFTP.generateURI(path+"?"+ConfigXrootd._xrootdTokenCompName+"="+token));
+	    if (p == null) {
+		URI result = new URI(TSRMTxfProtocol.getDefaultTransferProtocol().generateURI(path+"?"+ConfigGateway._xrootdTokenCompName+"="+token));
+		return result;
+	    } else {
+		URI result = new URI(p.generateURI(path+"?"+ConfigGateway._xrootdTokenCompName+"="+token));
+		return result;
+	    }
+	} catch (Exception e) {
+	    e.printStackTrace();
+	    return null;
+	}
+    }
+
+    private URI getXrootdPath(URI input) {
+	return getXrootdPath(input, TSRMTxfProtocol.getDefaultTransferProtocol());
+    }
+
+    private URI getXrootdPath(URI input, TSRMTxfProtocol p) {
+	String path = findFilePath(input);
+	if (path == null) {
+	    return null;
+	}
+
+	// validation	
+	////TSupportedURLWithFILE f = new TSupportedURLWithFILE(TSRMUtil.createTSURLInfo(input), path);
+	try {
+	    //URI result = new URI(TSRMTxfProtocol.getDefaultTransferProtocol().generateURI(path));
+	    if (p != null) {
+		URI result = new URI(p.generateURI(path));
+		return result;
+	    } else {
+		URI result = new URI(TSRMTxfProtocol.getDefaultTransferProtocol().generateURI(path));
+		return result;
+	    }
+	} catch (Exception e) {
+	    e.printStackTrace();
+	    return null;
+	}
+    }
+
+
+
+
+
+
+
+    /*
+
     private URI getXrootdPath(URI input, String token) {
 	if (token == null) {
 	    return getXrootdPath(input);
@@ -896,7 +988,7 @@ public class SRMGateway extends TSRMServerIdle {
 	    return null;
 	}
     }
-
+    */
 
     private static String getHostPort(URI info) {
 	int port = info.getPort();
