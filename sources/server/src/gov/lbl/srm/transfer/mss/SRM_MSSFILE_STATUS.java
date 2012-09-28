@@ -58,8 +58,10 @@ private long startTimeStamp = System.currentTimeMillis();
 
 public void clean() {
 	currentProcess = null;
-	fileObj.clean();
-	fileObj = null;
+	if (fileObj != null) {
+	    fileObj.clean();
+	    fileObj = null;
+	}
 }
 
 public SRM_MSSFILE_STATUS () { 
