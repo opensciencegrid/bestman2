@@ -1,5 +1,5 @@
 * Current version
-2.2.2.2.1   Wed May  9 09:30:39 PDT 2012
+2.2.2.2.2   Sat Sep 29 16:22:20 PDT 2012
 BeStMan and SRM-Clients Copyright(c) 2007-2012,
 Lawrence Berkeley National Laboratory. All rights reserved.
 Support at SRM@LBL.GOV and documents at http://sdm.lbl.gov/bestman
@@ -8,6 +8,11 @@ Open Science Grid (OSG) support:  osg-storage@opensciencegrid.org
 All Tier 3 sites and users
     for ATLAS, Doug Benjamin <benjamin@phy.duke.edu>
     for CMS, Rob Snihur <snihur@fnal.gov>
+
+2.2.2.2.2   Sat Sep 29 16:22:20 PDT 2012
+* server
+1. BeStMan Gateway now supports Transfer Protocol selection (requested by EOS)
+2. bug fix in the MSS plugin interface for srmLs
 
 2.2.2.2.1   Wed May  9 09:30:39 PDT 2012
 * setup
