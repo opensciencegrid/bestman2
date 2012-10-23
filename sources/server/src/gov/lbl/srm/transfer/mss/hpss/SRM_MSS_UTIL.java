@@ -36,7 +36,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import org.globus.util.ConfigUtil;
-import org.globus.gsi.GlobusCredential;
+import org.globus.gsi.X509Credential;
 import org.globus.gsi.gssapi.GlobusGSSCredentialImpl;
 import org.ietf.jgss.GSSCredential;
 import org.gridforum.jgss.ExtendedGSSCredential;
@@ -1649,7 +1649,7 @@ private static void checkProxyIsValid(String proxyFile,  boolean showOutput)
   throws SRM_MSS_Exception {
 
    try {
-    GlobusCredential gCreds = new GlobusCredential(proxyFile);
+    X509Credential gCreds = new X509Credential(proxyFile);
     if(showOutput) {
        util.printMessage("\nSubject " + gCreds.getSubject(), logger);
        util.printMessage("timeleft " + gCreds.getTimeLeft(), logger);

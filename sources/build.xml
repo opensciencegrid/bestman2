@@ -46,7 +46,7 @@
   <tstamp>
       <format property="mybuild.time" pattern="MM/dd/yyyy HH:mm:ss z" unit="hour"/>
   </tstamp>
-  <hostinfo prefix="myhost"/>
+  <!--<hostinfo prefix="myhost"/>-->
 
   <target name="setenv">
 	<echo message="pkg=${package}"/>
@@ -110,7 +110,7 @@
      <ant antfile="${server.dir}/build.xml" target="install" dir="${server.dir}" />
      <ant antfile="${client.dir}/build.xml" target="install" dir="${client.dir}" />
      <ant antfile="${tester.dir}/build.xml" target="install" dir="${tester.dir}" />
-     <copy file="CHANGES.SOURCES" todir="${install.root}"/>
+     <!--<copy file="CHANGES.SOURCES" todir="${install.root}"/>-->
      <copy file="COPYRIGHT" todir="${install.root}"/>
      <copy file="LICENSE" todir="${install.root}"/>
      <copy file="README" todir="${install.root}"/>

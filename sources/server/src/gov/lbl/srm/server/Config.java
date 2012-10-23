@@ -50,7 +50,7 @@ import java.util.*;
 
 import javax.xml.rpc.Stub;
 import org.apache.axis.types.URI;
-import org.globus.security.gridmap.GridMap;
+import org.globus.gsi.gridmap.GridMap;
 
 //import EDU.oswego.cs.dl.util.concurrent.Mutex;
 

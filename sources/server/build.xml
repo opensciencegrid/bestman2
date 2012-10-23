@@ -82,13 +82,11 @@
     <fileset file="${jetty-webapp.path}"/>
     <fileset file="${jetty-xml.path}"/>
     <fileset file="${cog-axis.path}"/>
-    <fileset file="${cog-jglobus.path}"/>
-    <fileset file="${cog-url.path}"/>
-    <fileset file="${cryptix-asn1.path}"/>
-    <fileset file="${cryptix.path}"/>
-    <fileset file="${jce-jdk.path}"/>
+    <fileset file="${jglobus-io.path}"/>
+    <fileset file="${jglobus-gridftp.path}"/>
+    <fileset file="${jglobus-gss.path}"/>
+    <fileset file="${jglobus-ssl-proxies.path}"/>
     <fileset file="${log4j.path}"/>
-    <fileset file="${puretls.path}"/>
     <fileset file="${bcprov-jdk15.path}"/>
     <fileset file="${vomsjapi.path}"/>
     <fileset file="${jcl-over-slf4j.path}"/>
@@ -98,14 +96,6 @@
     <fileset file="${slf4j-log4j.path}"/>
     <fileset file="${slf4j-simple.path}"/>
     <fileset file="${which4j.path}"/>
-<!--
-    <fileset file="/software/bestman2-1.4/lib/gums/glite-security-trustmanager-2.5.5.jar"/>
-    <fileset file="/software/bestman2-1.4/lib/gums/glite-security-util-java.jar"/>
-    <fileset file="/software/bestman2-1.4/lib/gums/opensaml-1.1.jar"/>
-    <fileset file="/software/bestman2-1.4/lib/gums/privilege-1.0.1.5.jar"/>
-    <fileset file="/software/bestman2-1.4/lib/gums/vomsjapi-2.0.6.jar"/>
-    <fileset file="/software/bestman2-1.4/lib/others/concurrent.jar"/>
--->
     <pathelement path="${java.class.path}"/>
   </path>
 

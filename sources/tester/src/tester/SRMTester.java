@@ -54,7 +54,7 @@ import org.globus.axis.gsi.GSIConstants;
 import org.globus.util.ConfigUtil;
 //import org.globus.ogsa.utils.GetOpts;
 //import org.globus.ogsa.gui.ServiceContext;
-import org.globus.gsi.GlobusCredential;
+import org.globus.gsi.X509Credential;
 import org.globus.gsi.gssapi.GlobusGSSCredentialImpl;
 import org.globus.gsi.gssapi.auth.*;
 
@@ -7728,12 +7728,12 @@ private ISRM getRemoteWSDLObject(String servicePath,
        throw new Exception ("SRM-TESTER: Could not connect to wsdlHandle " +
           "httpg://"+host.trim()+":"+port+pathName.trim());
      }
-     GlobusCredential gCreds = null;
+     X509Credential gCreds = null;
      if(!defaultProxy) {
-       gCreds = new GlobusCredential(proxyFile);
+       gCreds = new X509Credential(proxyFile);
      }
      else {
-       gCreds = new GlobusCredential("/tmp/x509up_u"+MyConfigUtil.getUID2());
+       gCreds = new X509Credential("/tmp/x509up_u"+MyConfigUtil.getUID2());
      }
   
      util.printMessage("\nSRM-TESTER: Issues=" +
