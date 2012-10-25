@@ -49,7 +49,8 @@ import java.util.*;
 
 import javax.xml.rpc.Stub;
 import org.apache.axis.types.URI;
-import org.globus.security.gridmap.GridMap;
+//import org.globus.security.gridmap.GridMap;
+import org.globus.gsi.gridmap.GridMap;
 
 public class ConfigGateway extends Config{
     public static final String _DefConfigCheckXrootdFS = "checkSizeWithFS";

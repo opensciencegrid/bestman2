@@ -52,7 +52,8 @@ import javax.xml.rpc.Stub;
 
 import org.globus.gsi.GlobusCredential;
 import org.globus.gsi.gssapi.GlobusGSSCredentialImpl;
-import org.globus.security.gridmap.GridMap;
+//import org.globus.security.gridmap.GridMap;
+import org.globus.gsi.gridmap.GridMap;
 import org.ietf.jgss.GSSCredential;
 
 import org.apache.axis.types.URI;

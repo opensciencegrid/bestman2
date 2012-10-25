@@ -52,6 +52,7 @@ import org.apache.axis.MessageContext;
 import org.apache.axis.Constants;
 import org.globus.axis.transport.GSIHTTPTransport;
 import org.globus.axis.util.Util;
+//import org.globus.util.Util;
 import org.ietf.jgss.GSSCredential;
 import org.globus.gsi.gssapi.GlobusGSSCredentialImpl;
 import java.security.cert.X509Certificate;
@@ -263,7 +264,7 @@ public class TSRMService implements ISRM {
       //return null;
       //return gGetCertChainTomcatSSL(currMethodName, true);
     }
-    public static X509Certificate[] gGetCertChainGlobusContainer(String currMethodName) {
+    /*public static X509Certificate[] gGetCertChainGlobusContainer(String currMethodName) {
       GSSCredential cred = gGetCredentialGlobusContainer(currMethodName,true);
 	if (cred == null) {	    
 	    X509Certificate[] result = gGetChainFromPatchedGlobus(currMethodName);
@@ -279,10 +280,10 @@ public class TSRMService implements ISRM {
 	
 	TSRMLog.warning(TSRMService.class, currMethodName, "Not globus credential", "no x509 cert chain obtained");
 	return null;
-    }
+    }*/
 
     
-    public static X509Certificate[] gGetChainFromPatchedGlobus(String currMethodName) {
+    /*public static X509Certificate[] gGetChainFromPatchedGlobus(String currMethodName) {
 	if (!TSRMUtil.acquireSync(_commonMutex)) {
 	    return null;
 	}
@@ -303,7 +304,29 @@ public class TSRMService implements ISRM {
 	    TSRMUtil.releaseSync(_commonMutex);	   
 	}
 	return null;
-    }
+    }*/
+    /*public static X509Certificate[] gGetChainFromPatchedGlobus(String currMethodName) {
+        if (!TSRMUtil.acquireSync(_commonMutex)) {
+            return null;
+        }
+        try {
+            TSRMUtil.startUpInfo("### gGetChainPatched ["+currMethodName+"] tid ="+Thread.currentThread().getName());
+            MessageContext ctx = MessageContext.getCurrentContext();
+
+            //System.out.println(".....................[end]................."+ctx.getProperty("org.globus.gssapi.authorize.certChain"));
+           TSRMUtil.getCompiledDate(org.globus.gsi.gssapi.GlobusGSSContextImpl.class);
+              java.util.Vector v = (java.util.Vector)ctx.getProperty("org.globus.gsi.gssapi.authorize.certChain");
+              if (v != null && v.size() > 0) {
+                  return org.globus.gsi.ptls.PureTLSUtil.certificateChainToArray(v);
+              }
+        } catch (Exception e) {
+            e.printStackTrace();
+            TSRMLog.exception(TSRMService.class, "gGetCertChainFromPatchedGlobus", e);
+        } finally {
+            TSRMUtil.releaseSync(_commonMutex);
+        }
+        return null;
+    }*/ 
   
     public static GSSCredential gGetCredentialGlobusContainer(String currMethodName, boolean silent) {
     	if (TSRMUtil.acquireSync(_commonMutex)) {	  
