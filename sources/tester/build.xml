@@ -61,13 +61,11 @@
     <fileset file="${xercesImpl.path}"/>
     <fileset file="${xml-apis.path}"/>
     <fileset file="${cog-axis.path}"/>
-    <fileset file="${cog-jglobus.path}"/>
-    <fileset file="${cog-url.path}"/>
-    <fileset file="${cryptix-asn1.path}"/>
-    <fileset file="${cryptix.path}"/>
-    <fileset file="${jce-jdk.path}"/>
+    <fileset file="${jglobus-io.path}"/>
+    <fileset file="${jglobus-gridftp.path}"/>
+    <fileset file="${jglobus-gss.path}"/>
+    <fileset file="${jglobus-ssl-proxies.path}"/>
     <fileset file="${log4j.path}"/>
-    <fileset file="${puretls.path}"/>
     <pathelement path="${java.class.path}"/>
   </path>
 

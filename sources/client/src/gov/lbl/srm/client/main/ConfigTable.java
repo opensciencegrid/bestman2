@@ -66,7 +66,6 @@ import org.apache.xml.serialize.*;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import org.globus.util.Base64;
 
 public class ConfigTable extends JFrame implements actionIntf, colorIntf,
 	itemIntf, threadIntf {

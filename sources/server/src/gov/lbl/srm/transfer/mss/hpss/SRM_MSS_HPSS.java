@@ -35,7 +35,7 @@ import java.net.*;
 
 import org.globus.util.ConfigUtil;
 import org.globus.util.GlobusURL;
-import org.globus.gsi.GlobusCredential;
+import org.globus.gsi.X509Credential;
 import org.globus.gsi.gssapi.GlobusGSSCredentialImpl;
 import org.ietf.jgss.GSSCredential;
 import org.gridforum.jgss.ExtendedGSSCredential;
@@ -209,7 +209,7 @@ private synchronized void checkProxyIsValid
 		throws SRM_MSS_Exception,Exception { 
 
   try {
-   GlobusCredential gCreds  = new GlobusCredential(proxyFile);
+   X509Credential gCreds  = new X509Credential(proxyFile);
    if(showOutput) {
      util.printMessage("\nSubject " + gCreds.getSubject(),logger,debugLevel);
      util.printMessage("timeleft " + gCreds.getTimeLeft(),logger,debugLevel);

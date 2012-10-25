@@ -46,7 +46,7 @@ import org.apache.commons.logging.LogFactory;
 
 import org.globus.io.urlcopy.UrlCopy;
 import org.globus.util.GlobusURL;
-import org.globus.gsi.GlobusCredential;
+import org.globus.gsi.X509Credential;
 import org.globus.gsi.gssapi.GlobusGSSCredentialImpl;
 import org.gridforum.jgss.ExtendedGSSManager;
 import org.ietf.jgss.GSSCredential;
@@ -863,13 +863,13 @@ public static StringBuffer doOnlyGsiFTP(String ss, String tt,
   StringBuffer gsiFTPETimeStamp = new StringBuffer();
 
   try {
-    GlobusCredential gCreds = null;
+    X509Credential gCreds = null;
 
     if(!defaultProxy) {
-       gCreds = new GlobusCredential(proxyFile);
+       gCreds = new X509Credential(proxyFile);
     }
     else {
-      gCreds = new GlobusCredential("/tmp/x509up_u"+MyConfigUtil.getUID());
+      gCreds = new X509Credential("/tmp/x509up_u"+MyConfigUtil.getUID());
     }
 
     credential = new GlobusGSSCredentialImpl
@@ -1412,13 +1412,13 @@ private static ISRM getRemoteWSDLObject(String servicePath,
        throw new Exception ("Could not connect to wsdlHandle " +
           "httpg://"+host.trim()+":"+port+"/"+pathName.trim());
      }
-     GlobusCredential gCreds = null;
+     X509Credential gCreds = null;
  
      if(!defaultProxy) {
-       gCreds = new GlobusCredential(proxyFile);
+       gCreds = new X509Credential(proxyFile);
      }
      else {
-       gCreds = new GlobusCredential("/tmp/x509up_u"+MyConfigUtil.getUID());
+       gCreds = new X509Credential("/tmp/x509up_u"+MyConfigUtil.getUID());
      }
  
      util.printMessage("\nIssues=" + gCreds.getIssuer(), logger,pIntf);
