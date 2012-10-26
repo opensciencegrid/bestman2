@@ -91,6 +91,19 @@ All Tier 3 sites and users
     for CMS, Rob Snihur <snihur@fnal.gov>
 
 ############################################################################
+**** Notes on version 2.3.0
+############################################################################
+1. Oracle/SUN Java 1.6.0_27 or later support
+   Oracle/SUN Java 1.7.0 support
+   OpenJDK 1.7.0 support
+
+2. Supports both SHA-1 and SHA-2 based GSI
+   Java CoG JGlobus 1.8 is no longer used
+   Java JGlobus 2.0 is used instead. It does suppot HTTPG
+
+3. GUMS XACML is supported. GUMS SAML is not supported
+
+############################################################################
 **** Notes on version 2.2.1 
 ############################################################################
 1. Oracle/SUN Java 1.6.0_27 or later support
