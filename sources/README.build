@@ -21,15 +21,55 @@ he Software to reproduce, prepare derivative works, distribute copies to the pub
 lic, perform publicly and display publicly, and to permit others to do so.
 
 #################################################
+Berkeley Storage Manager (BeStMan) 
+vBeStMan LICENSE: https://sdm.lbl.gov/wiki/Software/BeStMan/License
+BeStMan COPYRIGHT: https://sdm.lbl.gov/wiki/Software/BeStMan/Copyrigh
 
-Berkeley Storage Manager (BeStMan) v2.2.2.x (a.k.a. BeStMan2 v2.2.x)
 http://sdm.lbl.gov/bestman
 Questions: srm@lbl.gov
 
-BeStMan LICENSE: https://sdm.lbl.gov/wiki/Software/BeStMan/License
-BeStMan COPYRIGHT: https://sdm.lbl.gov/wiki/Software/BeStMan/Copyright
-
 Note: Support is not available for the sources.
+
+### Berkeley Storage Manager (BeStMan) v2.3.0.x (a.k.a. BeStMan2 v2.3.x)
+
+Dependency requirements are below, and
+each software package follows its own license and copyright:
+- java-1.6.0-sun-compat
+- ant
+- axis
+- wget
+- autoconf
+- jakarta-commons-logging
+- jakarta-commons-discovery
+- wsdl4j
+- jakarta-commons-collections
+- jakarta-commons-lang
+- joda-time
+- velocity
+- xalan-j2
+- xml-security
+- bouncycastle
+- vomsjapi 
+- slf4j 1.5
+- log4j 1.2.13
+- cog-jglobus-axis 1.2-1
+- jglobus 2.0.4
+- jetty-client 8.1.4.v20120524
+- jetty-continuation 8.1.4.v20120524
+- jetty-deploy 8.1.4.v20120524
+- jetty-http 8.1.4.v20120524
+- jetty-io 8.1.4.v20120524
+- jetty-security 8.1.4.v20120524
+- jetty-server 8.1.4.v20120524
+- jetty-servlet 8.1.4.v20120524
+- jetty-util 8.1.4.v20120524
+- jetty-webapp 8.1.4.v20120524
+- jetty-xml 8.1.4.v20120524
+- emi-trustmanager
+- emi-trustmanager-axis
+- gums
+
+### Berkeley Storage Manager (BeStMan) v2.2.2.x (a.k.a. BeStMan2 v2.2.x)
 
 Dependency requirements are below, and 
 each software package follows its own license and copyright:
