@@ -4,7 +4,7 @@
  *
  * *** Copyright Notice ***
  *
- * BeStMan Copyright (c) 2010-2011, The Regents of the University of California, 
+ * BeStMan Copyright (c) 2010, The Regents of the University of California, 
  * through Lawrence Berkeley National Laboratory (subject to receipt of any 
  * required approvals from the U.S. Dept. of Energy).  This software was 
  * developed under funding from the U.S. Department of Energy and is 
@@ -27,51 +27,115 @@
  * the public, perform publicly and display publicly, and to permit others to
  * do so.
  *
- *
  * Email questions to SRM@LBL.GOV
  * Scientific Data Management Research Group
  * Lawrence Berkeley National Laboratory
  * http://sdm.lbl.gov/bestman
  *
- * bestman2 setup build.xml
+ * bestman2 source release build.xml
 -->
 
 <project default="all" basedir=".">
 
-<!--
- *
- * build.properties must be copied over from the sources directory
- * to ensure the same library paths and install.root are used.
- * 
--->
   <property file="build.properties"/>
+  <property name="wsdl.dir" value="${bestmansrc.root}/wsdl"/>
+  <property name="server.dir" value="${bestmansrc.root}/server"/>
+  <property name="client.dir" value="${bestmansrc.root}/client"/>
+  <property name="tester.dir" value="${bestmansrc.root}/tester"/>
+  <property name="setup.dir" value="${bestmansrc.root}/setup"/>
+  <property name="debug" value="yes"/>  
+  <tstamp>
+      <format property="mybuild.time" pattern="MM/dd/yyyy HH:mm:ss z" unit="hour"/>
+  </tstamp>
 
   <target name="setenv">
-    <echo message="deployment root=${install.root}"/>
-    <mkdir dir="${install.root}"/>
+	<echo message="pkg=${package}"/>
+	<echo message="install path=${install.root}"/>
+	<echo message="interface=${interface.name}"/>
+	<echo message="using javac from ${javac.path}"/>
   </target>
 
-  <target name="deploy" depends="setenv">
-     <copy toDir="${install.root}/properties">
-          <fileset dir="./properties"/>
-     </copy>
-    <exec dir="." executable="./configure">
-      <arg value="--prefix=${install.root}"/>
-    </exec>
+  <target name="wsdl">
+	<echo message="building server..."/>
+     <ant antfile="${wsdl.dir}/build.xml" dir="${wsdl.dir}" />
+  </target>
+  <target name="client" depends="setenv,wsdl">
+	<echo message="building client..."/>
+     <ant antfile="${client.dir}/build.xml" dir="${client.dir}" />
+  </target>
+  <target name="clientinstall">
+	<echo message="installing client..."/>
+     <ant antfile="${client.dir}/build.xml" target="install" dir="${client.dir}" />
+  </target>
+  <target name="tester" depends="setenv,wsdl">
+	<echo message="building tester..."/>
+     <ant antfile="${tester.dir}/build.xml" dir="${tester.dir}" />
+  </target>
+  <target name="testerinstall">
+	<echo message="installing tester..."/>
+     <ant antfile="${tester.dir}/build.xml" target="install" dir="${tester.dir}" />
+  </target>
+  <target name="server" depends="wsdl, client, tester">
+	<echo message="building server..."/>
+     <ant antfile="${server.dir}/build.xml" dir="${server.dir}" />
+  </target>
+  <target name="serverinstall">
+	<echo message="installing server..."/>
+     <ant antfile="${server.dir}/build.xml" target="install" dir="${server.dir}" />
+  </target>
+  <target name="build" depends="wsdl, client, tester, server">
+	<echo message="building bestman2..."/>
+  </target>
+
+  <target name="removeall">
+	<echo message="REMOVE ALL builds"/>
+     <ant antfile="${wsdl.dir}/build.xml" target="clean" dir="${wsdl.dir}" />
+     <ant antfile="${server.dir}/build.xml" target="clean" dir="${server.dir}" />
+     <ant antfile="${client.dir}/build.xml" target="clean" dir="${client.dir}" />
+     <ant antfile="${tester.dir}/build.xml" target="clean" dir="${tester.dir}" />
+     <ant antfile="${setup.dir}/build.xml" target="clean" dir="${setup.dir}" />
+     <delete dir="./autom4te.cache" verbose="false"/>
   </target>
 
   <target name="clean">
-    <delete verbose="false">
-      <fileset dir="." includes="bestman.*.log"/>
-    </delete>
-    <delete dir="./old.*" verbose="false"/>
-    <delete dir="./bestman.in/autom4te.cache" verbose="false"/>
+	<echo message="CLEAN ALL builds"/>
+     <ant antfile="${wsdl.dir}/build.xml" target="clean" dir="${wsdl.dir}" />
+     <ant antfile="${server.dir}/build.xml" target="clean" dir="${server.dir}" />
+     <ant antfile="${client.dir}/build.xml" target="clean" dir="${client.dir}" />
+     <ant antfile="${tester.dir}/build.xml" target="clean" dir="${tester.dir}" />
   </target>
 
-<target name="all" depends="deploy">
-	<echo message="DEPLOY ALL setup into ${install.root}"/>
+  <target name="install">
+	<echo message="INSTALL ALL lib builds into ${install.root}"/>
+     <ant antfile="${wsdl.dir}/build.xml" target="install" dir="${wsdl.dir}" />
+     <ant antfile="${server.dir}/build.xml" target="install" dir="${server.dir}" />
+     <ant antfile="${client.dir}/build.xml" target="install" dir="${client.dir}" />
+     <ant antfile="${tester.dir}/build.xml" target="install" dir="${tester.dir}" />
+  </target>
+
+  <target name="deploy">
+	 <echo message="DEPLOY setup into ${install.root}"/>
+     <ant antfile="${setup.dir}/build.xml" dir="${setup.dir}" />
+     <copy toDir="${install.root}/properties">
+          <fileset dir="${bestmansrc.root}/properties"/>
+     </copy>
+     <copy file="CHANGE" todir="${install.root}"/>
+     <copy file="COPYRIGHT" todir="${install.root}"/>
+     <copy file="LICENSE" todir="${install.root}"/>
+     <copy file="README" todir="${install.root}"/>
+     <concat destfile="version" append="true">  
+Built on ${myhost.NAME}.${myhost.DOMAIN} ${myhost.ADDR4} at ${mybuild.time}
+     </concat>
+
+     <copy file="version" todir="${install.root}"/>
+  </target>
+
+<target name="all" depends="build, install, deploy">
+    <echo message="Building, installing and deploying ALL" />
+<!--
+    <pathconvert pathsep=":" property="myclasspath" refid="classpath"></pathconvert>
+    <echo message="CLASSPATH ${myclasspath}" />
+-->
 </target>
 
-
 </project>
-
