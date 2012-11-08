@@ -114,9 +114,9 @@
      <copy file="COPYRIGHT" todir="${install.root}"/>
      <copy file="LICENSE" todir="${install.root}"/>
      <copy file="README" todir="${install.root}"/>
-     <concat destfile="version" append="true">  
+     <!--concat destfile="version" append="true">  
 Built on ${myhost.NAME}.${myhost.DOMAIN} ${myhost.ADDR4} at ${mybuild.time}
-     </concat>
+     </concat-->
      <copy file="version" todir="${install.root}"/>
   </target>
 
