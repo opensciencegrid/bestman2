@@ -70,7 +70,7 @@ public class SRMGateway extends TSRMServerIdle {
 	}
 
 	SrmPingResponse result = new SrmPingResponse();
-	result.setVersionInfo("v2.2");
+	result.setVersionInfo("v2.3.0");
 
 	java.util.Vector storageReport = new java.util.Vector();
 

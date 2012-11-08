@@ -95,7 +95,7 @@ public class TSRMServerIdle extends TSRMServer {
 	//checkUserValidity(null, "srmPing");
 
 	SrmPingResponse result = new SrmPingResponse();
-	result.setVersionInfo("v2.2");
+	result.setVersionInfo("v2.3.0");
 
 	return result;
     }

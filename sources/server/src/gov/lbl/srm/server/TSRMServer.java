@@ -157,7 +157,7 @@ public class TSRMServer /*extends GridServiceImpl implements ISRMPortType*/{
 	}
 
 	SrmPingResponse result = new SrmPingResponse();
-	result.setVersionInfo("v2.2");
+	result.setVersionInfo("v2.3.0");
 
 	Vector storageReport = new Vector();
 	TSRMUtil.addVersionInfo(storageReport, _compileDate);	
