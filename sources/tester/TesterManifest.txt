@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Main-Class: tester.SRMTester
 Specification-Title: SRM Tester Classes
-Specification-Version: 2.3.0
+Specification-Version: 2.2.2.3.0
 Specification-Vendor: LBNL
-Implementation-Version: 2.3.0
+Implementation-Version: 2.2.2.3.0
 Implementation-Vendor: LBNL SRM team <srm@lbl.gov>
