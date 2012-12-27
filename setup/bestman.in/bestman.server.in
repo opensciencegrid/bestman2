@@ -14,6 +14,8 @@
 #
 # Checking BESTMAN_SYSCONF for external environment variables ONLY
 # For different setup than configured, set BESTMAN_SYSCONF
+BESTMAN_SYSCONF_MODE="SERVER"
+
 if [ "x$BESTMAN_SYSCONF" = "x" ] ; then
    BESTMAN_SYSCONF="/etc/sysconfig/bestman2"
 fi
