@@ -97,9 +97,10 @@ start() {
         ulimit -n 65536
         echo -n "Starting bestman2: "
         touch $BESTMAN_PID
-        chown $SRM_OWNER: $BESTMAN_PID
+#        chown $SRM_OWNER: $BESTMAN_PID
         daemon --user $SRM_OWNER --pidfile $BESTMAN_PID $SRM_HOME/sbin/bestman.server $BESTMAN_OPTIONS 
         RETVAL=$?
+		pgrep -n -f "java .*gov.lbl.srm.server.Server"  >  $BESTMAN_PID
         chown root: $BESTMAN_PID
         echo
         [ $RETVAL -eq 0 ] && touch $BESTMAN_LOCK
@@ -109,7 +110,8 @@ start() {
 # A function to stop a program.
 stop() {
         echo -n "Shutting down bestman2: "
-        killproc bestman.server
+#        killproc bestman.server
+        killproc -p $BESTMAN_PID bestman.server
         RETVAL=$?
         echo
   	    rm -f $BESTMAN_LOCK
@@ -131,7 +133,7 @@ case $1 in
     stop
     ;;
 'status')
-    status bestman.server
+    status -p $BESTMAN_PID bestman.server
     ;;
 'reload' | 'restart')
     restart
