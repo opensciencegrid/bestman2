@@ -989,13 +989,13 @@ if test "X$1" = "XNOBUILD"; then
    mJARPATH=
 else
    mJARNAME=`grep $3 $1 | tr '=' '\n' | sed -e 's/^.*\///'  | grep "^$3.*.jar"`
-   mJARPATH=`grep $mJARNAME $1 | tr '=' '\n' | grep $mJARNAME`
+   mJARPATH=`grep $mJARNAME $1 | tr '=' '\n' | grep "/$mJARNAME"`
 fi
 if test "X$mJARPATH" = "X" ; then
    mJARNAME=`echo $2 | tr ':' '\n' | sed -e 's/^.*\///'  | grep "^$3.*.jar"`
    $5=$mJARNAME
    if test "$mJARNAME" ; then
-      mJARPATH=`echo $2 | tr ':' '\n' | grep $mJARNAME`
+      mJARPATH=`echo $2 | tr ':' '\n' | grep "/$mJARNAME"`
       $6=$mJARPATH
       if test -f "$mJARPATH" ; then
          AC_MSG_RESULT([VALIDATED: $3 $mJARNAME for version $4 is found in $mJARPATH.]) 

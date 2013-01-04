@@ -65,6 +65,9 @@ fi
 if [ "x$BESTMAN_EVENT_LOG_SIZE" = "x" ] ; then
     BESTMAN_EVENT_LOG_SIZE=`grep BESTMAN_EVENT_LOG_SIZE $BESTMAN_SYSCONF | tr '=' ' ' | awk '$1 !~ /#/' | awk '{printf $2}'`
 fi
+if [ "x$BESTMAN_LOG" = "x" ] ; then
+    BESTMAN_LOG=`grep BESTMAN_LOG $BESTMAN_SYSCONF | tr '=' ' ' | awk '$1 !~ /#/' | awk '{printf $2}'`
+fi
 if [ "x$GLOBUS_HOSTNAME" = "x" ] ; then
     GLOBUS_HOSTNAME=`grep GLOBUS_HOSTNAME $BESTMAN_SYSCONF | tr '=' ' ' | awk '$1 !~ /#/' | awk '{printf $2}'`
 fi
