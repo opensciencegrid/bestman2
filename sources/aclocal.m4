@@ -112,8 +112,9 @@ AC_DEFUN(my_JAR_VALIDATOR, [
 mJARNAME=`echo $1 | tr ':' '\n' | sed -e 's/^.*\///'  | grep "^$2.*.jar"`
 $4=$mJARNAME
 if test "$mJARNAME" ; then
-   mJARPATH=`echo $1 | tr ':' '\n' | grep $mJARNAME`
+   mJARPATH=`echo $1 | tr ':' '\n' | grep "/$mJARNAME"`
    $5=$mJARPATH
+dnl    AC_MSG_WARN([VALIDATED: $2 $mJARNAME for version $3 in $mJARPATH.]) 
    if test -f "$mJARPATH" ; then
       mJARDIR=`echo $mJARPATH | sed -e 's/\/'"$mJARNAME"'//'`
       $6=$mJARDIR

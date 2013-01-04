@@ -83,6 +83,7 @@
     <fileset file="${jetty-xml.path}"/>
     <fileset file="${cog-axis.path}"/>
     <fileset file="${jglobus-io.path}"/>
+    <fileset file="${jglobus-jsse.path}"/>
     <fileset file="${jglobus-gridftp.path}"/>
     <fileset file="${jglobus-gss.path}"/>
     <fileset file="${jglobus-ssl-proxies.path}"/>
