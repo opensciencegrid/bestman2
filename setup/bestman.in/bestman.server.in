@@ -14,8 +14,7 @@
 #
 # Checking BESTMAN_SYSCONF for external environment variables ONLY
 # For different setup than configured, set BESTMAN_SYSCONF
-BESTMAN_SYSCONF_MODE="SERVER"
-
+BESTMAN_SYSCONF_MODE="server"
 if [ "x$BESTMAN_SYSCONF" = "x" ] ; then
    BESTMAN_SYSCONF="/etc/sysconfig/bestman2"
 fi
@@ -25,10 +24,18 @@ if [ ! -f "$BESTMAN_SYSCONF" ]; then
    echo "ERROR: Cannot find the bestman2 configuration file: $BESTMAN_SYSCONF"
    exit 1;
 fi
+if [ "x$BESTMAN_SYSCONF_LIB" = "x" ] ; then
+   BESTMAN_SYSCONF_LIB="/etc/sysconfig/bestman2lib"
+fi
+if [ ! -f "$BESTMAN_SYSCONF_LIB" ]; then
+#  e.g. /etc/sysconfig/bestman2
+#  e.g. SRM_HOME/etc/bestman2
+   echo "ERROR: Cannot find the bestman2 configuration file: $BESTMAN_SYSCONF_LIB"
+   exit 1;
+fi
 if [ "x$BESTMAN_PID" = "x" ] ; then
    BESTMAN_PID=/var/run/bestman2.pid
 fi
-
 ############################################################################
 # Collecting external env variables from $BESTMAN_SYSCONF
 if [ "x$SRM_HOME" = "x" ] ; then
@@ -109,9 +116,10 @@ fi
 ############################################################################
 # SERVER Dependent libs CLASSPATH
 if [ "x$BESTMAN2_SERVER_LIB" = "x" ] ; then
-    #BESTMAN2_SERVER_LIB=`grep BESTMAN2_SERVER_LIB $BESTMAN_SYSCONF | tr '=' ' ' | awk '$1 !~ /#/' | awk '{printf $2}'`
-     BESTMAN2_SERVER_LIB=`source $BESTMAN_SYSCONF && echo $BESTMAN2_SERVER_LIB`
+    #BESTMAN2_SERVER_LIB=`grep BESTMAN2_SERVER_LIB $BESTMAN_SYSCONF_LIB | tr '=' ' ' | awk '$1 !~ /#/' | awk '{printf $2}'`
+     BESTMAN2_SERVER_LIB=`source $BESTMAN_SYSCONF_LIB && echo $BESTMAN2_SERVER_LIB`
 fi
+
 ############################################################################
 # internal configuration options
 if [ "x$BESTMAN2_CONF" = "x" ] ; then
@@ -332,7 +340,7 @@ fi
 
 CLASSPATH=${SRM_HOME}/properties:${BESTMAN_LIB}/bestman2-stub.jar:${BESTMAN_LIB}/bestman2.jar:${BESTMAN_LIB}/bestman2-aux.jar:${BESTMAN2_SERVER_LIB}:${PLUGINLIBS}
 export CLASSPATH
-#echo $CLASSPATH
+# echo $CLASSPATH
 # cd $SRM_HOME
 
 if test "$HELPTOKEN" ; then

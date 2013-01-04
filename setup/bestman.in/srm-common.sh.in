@@ -10,11 +10,19 @@
 if [ "x$BESTMAN_SYSCONF" = "x" ] ; then
    BESTMAN_SYSCONF="/etc/sysconfig/bestman2"
 fi
+if [ "x$BESTMAN_SYSCONF_LIB" = "x" ] ; then
+   BESTMAN_SYSCONF_LIB="/etc/sysconfig/bestman2lib"
+fi
 
 if [ ! -f "$BESTMAN_SYSCONF" ]; then
 #  e.g. /etc/sysconfig/bestman2
 #  e.g. SRM_HOME/etc/bestman2
    echo "ERROR: Cannot find the bestman2 configuration file: $BESTMAN_SYSCONF"
+   exit 1;
+fi
+if [ ! -f "$BESTMAN_SYSCONF_LIB" ]; then
+#  e.g. /etc/sysconfig/bestman2lib
+   echo "ERROR: Cannot find the bestman2 configuration file: $BESTMAN_SYSCONF_LIB"
    exit 1;
 fi
 
@@ -51,8 +59,8 @@ fi
 ############################################################################
 # CLIENT Dependent libs CLASSPATH
 if [ "x$BESTMAN2_CLIENT_LIB" = "x" ] ; then
-    BESTMAN2_CLIENT_LIB=`source $BESTMAN_SYSCONF && echo $BESTMAN2_CLIENT_LIB`
-    #BESTMAN2_CLIENT_LIB=`grep BESTMAN2_CLIENT_LIB $BESTMAN_SYSCONF | tr '=' ' ' | awk '$1 !~ /#/' | awk '{printf $2}'`
+    BESTMAN2_CLIENT_LIB=`source $BESTMAN_SYSCONF_LIB && echo $BESTMAN2_CLIENT_LIB`
+    #BESTMAN2_CLIENT_LIB=`grep BESTMAN2_CLIENT_LIB $BESTMAN_SYSCONF_LIB | tr '=' ' ' | awk '$1 !~ /#/' | awk '{printf $2}'`
 fi
 ############################################################################
 # internal configuration options
@@ -127,6 +135,11 @@ if test "$DEBUGTOKEN" ; then
        echo "# BESTMAN_SYSCONF = $BESTMAN_SYSCONF"
        echo "##############################################################"
        echo "`cat $BESTMAN_SYSCONF`"
+    fi
+    if [ $BESTMAN_SYSCONF_LIB -a -e $BESTMAN_SYSCONF_LIB ] ; then
+       echo "# BESTMAN_SYSCONF_LIB = $BESTMAN_SYSCONF_LIB"
+       echo "##############################################################"
+       echo "`cat $BESTMAN_SYSCONF_LIB`"
     fi
     if test "$X509_USER_PROXY" ; then
         echo "##############################################################"
