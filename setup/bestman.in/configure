@@ -9269,7 +9269,6 @@ BPVERSION="1.4.6"
 VOMSJAPI="vomsjapi"
 VJVERSION="2.0.6"
 
-if test "$CLIENTONLY" = "no" -a "$TESTERONLY" = "no"; then
 
 if test "X$BUILDP" = "XNOBUILD"; then
    mJARNAME=
@@ -9330,7 +9329,6 @@ else
 $as_echo "VALIDATED: $VOMSJAPI $mJARNAME for version $VJVERSION is found in $mJARPATH." >&6; }
 fi
 
-fi
 
 JCLOSLF4J="jcl-over-slf4j"
 JSVERSION="146"
