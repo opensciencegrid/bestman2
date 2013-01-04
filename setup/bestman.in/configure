@@ -7972,8 +7972,8 @@ if test "X$MYCLASSPATH" = "X" ; then
    if test -d "$SRM_HOME/lib/jetty"; then
       TMPJETTYPATH="$SRM_HOME/lib/jetty/*.jar"
    fi
-   if test -d "$SRM_HOME/lib/jglobus"; then
-      TMPJGLOBUSPATH="$SRM_HOME/lib/jglobus/*.jar"
+   if test -d "$SRM_HOME/lib/jglobus2"; then
+      TMPJGLOBUSPATH="$SRM_HOME/lib/jglobus2/*.jar"
    fi
    if test -d "$SRM_HOME/lib/others"; then
       TMPOTHERSPATH="$SRM_HOME/lib/others/*.jar"
