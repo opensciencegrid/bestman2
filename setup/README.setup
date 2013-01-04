@@ -22,7 +22,7 @@ lic, perform publicly and display publicly, and to permit others to do so.
 
 #################################################
 
-Berkeley Storage Manager (BeStMan) v2.2.2.x (a.k.a. BeStMan2 v2.2.x)
+Berkeley Storage Manager (BeStMan) v2.2.2.3.x (a.k.a. BeStMan2 v2.3.x)
 BeStMan SRM Clients
 SRM-Tester
 http://sdm.lbl.gov/bestman
@@ -42,7 +42,7 @@ Axis 1.4
 WSDL4j-1.6.2
 Xerces-2.11.0
 Jetty 8.0.1.v20110908
-Java CoG JGlobus 1.8.0
+Java CoG JGlobus 2.0.4 customized by OSG
 Java Servlet API 3.0
 Slf4j-1.6.2
 Berkeley DB 4.1.10
@@ -353,5 +353,32 @@ For now you can just sudo and modify the current shell
 $ sudo bash
 # ulimit -n 999999
 # erl
+
+#######################################################################
+# SHA-2 support
+# SHA-1 and SHA-2 inter-operability
+###########################################################################
+
+For cases of clients and servers,
+(C1) sha2-client (new client) using sha2-proxy
+(C2) sha2-client (new client) using sha1-proxy
+(C3) sha1-client (old client) using sha1-proxy
+(S1) sha2-server (new server) using sha2-cert
+(S2) sha2-server (new server) using sha1-cert
+(S3) sha1-server (old server) using sha1-cert
+
+Cross communication cases:
+(C1) & (S1) : successful
+(C1) & (S2) : successful
+(C1) & (S3) : failed
+(C2) & (S1) : successful
+(C2) & (S2) : successful
+(C2) & (S3) : successful
+(C3) & (S1) : failed
+(C3) & (S2) : successful
+(C3) & (S3) : successful
+
+OSG testing page:
+https://www.opensciencegrid.org/bin/view/SoftwareTeam/Sha2Support
 
 ###################################################################
