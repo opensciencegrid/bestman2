@@ -151,29 +151,23 @@ my_JAR_VALIDATOR($MYCLASSPATH, $JETTYWEBAPP, $JETTYVERSION, JWNAME, JWPATH, JWDI
 my_JAR_VALIDATOR($MYCLASSPATH, $JETTYXML, $JETTYVERSION, JXNAME, JXPATH, JXDIR)
 
 dnl jetty related libs
-COGAXIS="cog-axis"
-COGJGLOBUS="cog-jglobus"
-COGURL="cog-url"
-JGVERSION="1.8.0"
-CRYPTIXASN1="cryptix-asn1"
-CXAVERSION="0.1.11"
-CRYPTIX32="cryptix32"
-CX32VERSION="3.2.0"
-JCEJDK13="jce-jdk13"
-JCEVERSION="131"
+JGLOBUSAXIS="cog-jglobus-axis"
+JGLOBUSGRIDFTP="gridftp"
+JGLOBUSGSS="gss"
+JGLOBUSIO="io"
+JGLOBUSJSSE="jsse"
+JGLOBUSSSLPROXIES="ssl-proxies"
+JGVERSION="2.0.4"
 LOG4J="log4j"
 LOG4JVERSION="1.2.15"
-PURETLS="puretls"
-PTVERSION="0.9"
 
-my_JAR_VALIDATOR($MYCLASSPATH, $COGAXIS, $JGVERSION, CANAME, CAPATH, CADIR)
-my_JAR_VALIDATOR($MYCLASSPATH, $COGJGLOBUS, $JGVERSION, CJNAME, CJPATH, CJDIR)
-my_JAR_VALIDATOR($MYCLASSPATH, $COGURL, $JGVERSION, CUNAME, CUPATH, CUDIR)
-my_JAR_VALIDATOR($MYCLASSPATH, $CRYPTIXASN1, $CXAVERSION, CXANAME, CXAPATH, CXADIR)
-my_JAR_VALIDATOR($MYCLASSPATH, $CRYPTIX32, $CX32VERSION, CX32NAME, CX32PATH, CX32DIR)
-my_JAR_VALIDATOR($MYCLASSPATH, $JCEJDK13, $JCEVERSION, JCENAME, JCEPATH, JCEDIR)
+my_JAR_VALIDATOR($MYCLASSPATH, $JGLOBUSAXIS, $JGVERSION, JGANAME, JGAPATH, JGADIR)
+my_JAR_VALIDATOR($MYCLASSPATH, $JGLOBUSGRIDFTP, $JGVERSION, JGGNAME, JGGPATH, JGGDIR)
+my_JAR_VALIDATOR($MYCLASSPATH, $JGLOBUSGSS, $JGVERSION, JGSNAME, JGSPATH, JGSDIR)
+my_JAR_VALIDATOR($MYCLASSPATH, $JGLOBUSIO, $JGVERSION, JGINAME, JGIPATH, JGIDIR)
+my_JAR_VALIDATOR($MYCLASSPATH, $JGLOBUSJSSE, $JGVERSION, JGJNAME, JGJPATH, JGJDIR)
+my_JAR_VALIDATOR($MYCLASSPATH, $JGLOBUSSSLPROXIES, $JGVERSION, JGPNAME, JGPPATH, JGPDIR)
 my_JAR_VALIDATOR($MYCLASSPATH, $LOG4J, $LOG4JVERSION, LOG4JNAME, LOG4JPATH, LOG4JDIR)
-my_JAR_VALIDATOR($MYCLASSPATH, $PURETLS, $PTVERSION, PTNAME, PTPATH, PTDIR)
 
 dnl voms related libs
 BCPROV="bcprov-jdk15"
@@ -237,14 +231,13 @@ AC_MSG_RESULT([PASSED: JETTY-SERVLET for version $JETTYVERSION is found in $JSLP
 AC_MSG_RESULT([PASSED: JETTY-UTIL for version $JETTYVERSION is found in $JUPATH.])
 AC_MSG_RESULT([PASSED: JETTY-WEBAPP for version $JETTYVERSION is found in $JWPATH.])
 AC_MSG_RESULT([PASSED: JETTY-XML for version $JETTYVERSION is found in $JXPATH.])
-AC_MSG_RESULT([PASSED: COG-AXIS for version $JGVERSION is found in $CAPATH.])
-AC_MSG_RESULT([PASSED: COG-JGLOBUS for version $JGVERSION is found in $CJPATH.])
-AC_MSG_RESULT([PASSED: COG-URL for version $JGVERSION is found in $CUPATH.])
-AC_MSG_RESULT([PASSED: CRYPTIX-ASN1 for version $CXAVERSION is found in $CXAPATH.])
-AC_MSG_RESULT([PASSED: CRYPTIX32 for version $CX32VERSION is found in $CX32PATH.])
-AC_MSG_RESULT([PASSED: JCE-JDK13 for version $JCEVERSION is found in $JCEPATH.])
+AC_MSG_RESULT([PASSED: COG-JGLOBUS-AXIS for version $JGVERSION is found in $JGAPATH.])
+AC_MSG_RESULT([PASSED: GRIDFTP for version $JGVERSION is found in $JGGPATH.])
+AC_MSG_RESULT([PASSED: GSS for version $JGVERSION is found in $JGSPATH.])
+AC_MSG_RESULT([PASSED: IO for version $JGVERSION is found in $JGIPATH.])
+AC_MSG_RESULT([PASSED: JSSE for version $JGVERSION is found in $JGJPATH.])
+AC_MSG_RESULT([PASSED: SSL-PROXIES for version $JGVERSION is found in $JGPPATH.])
 AC_MSG_RESULT([PASSED: LOG4J for version $LOG4JVERSION is found in $LOG4JPATH.])
-AC_MSG_RESULT([PASSED: PURETLS for version $PTVERSION is found in $PTPATH.])
 AC_MSG_RESULT([PASSED: BOUNCY-CASTLE-CRYPTO-JDK15 for version $BPVERSION is found in $BPPATH.])
 AC_MSG_RESULT([PASSED: VOMSJAPI for version $VJVERSION is found in $VJPATH.])
 AC_MSG_RESULT([PASSED: JCL-OVER-SLF4J for version $JSVERSION is found in $JSPATH.])
@@ -322,14 +315,13 @@ echo "jetty-util.path=$JUPATH" >> build.properties
 echo "jetty-webapp.path=$JWPATH" >> build.properties
 echo "jetty-xml.path=$JXPATH" >> build.properties
 echo "#####################################################" >> build.properties
-echo "cog-axis.path=$CAPATH" >> build.properties
-echo "cog-jglobus.path=$CJPATH" >> build.properties
-echo "cog-url.path=$CUPATH" >> build.properties
-echo "cryptix-asn1.path=$CXAPATH" >> build.properties
-echo "cryptix32.path=$CX32PATH" >> build.properties
-echo "jce-jdk13.path=$JCEPATH" >> build.properties
+echo "cog-axis.path=$JGAPATH" >> build.properties
+echo "jglobus-gridftp.path=$JGGPATH" >> build.properties
+echo "jglobus-gss.path=$JGSPATH" >> build.properties
+echo "jglobus-io.path=$JGIPATH" >> build.properties
+echo "jglobus-jsse.path=$JGJPATH" >> build.properties
 echo "log4j.path=$LOG4JPATH" >> build.properties
-echo "puretls.path=$PTPATH" >> build.properties
+echo "jglobus-ssl-proxies.path=$JGPPATH" >> build.properties
 echo "#####################################################" >> build.properties
 echo "bcprov-jdk15.path=$BPPATH" >> build.properties
 echo "vomsjapi.path=$VJPATH" >> build.properties

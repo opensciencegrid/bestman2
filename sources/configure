@@ -1832,7 +1832,7 @@ XAVERSION="2.11.0"
 mJARNAME=`echo $MYCLASSPATH | tr ':' '\n' | sed -e 's/^.*\///'  | grep "^$AXIS.*.jar"`
 AXISNAME=$mJARNAME
 if test "$mJARNAME" ; then
-   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep $mJARNAME`
+   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep "/$mJARNAME"`
    AXISPATH=$mJARPATH
    if test -f "$mJARPATH" ; then
       mJARDIR=`echo $mJARPATH | sed -e 's/\/'"$mJARNAME"'//'`
@@ -1851,7 +1851,7 @@ fi
 mJARNAME=`echo $MYCLASSPATH | tr ':' '\n' | sed -e 's/^.*\///'  | grep "^$COMMONSDISCOVERY.*.jar"`
 CDNAME=$mJARNAME
 if test "$mJARNAME" ; then
-   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep $mJARNAME`
+   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep "/$mJARNAME"`
    CDPATH=$mJARPATH
    if test -f "$mJARPATH" ; then
       mJARDIR=`echo $mJARPATH | sed -e 's/\/'"$mJARNAME"'//'`
@@ -1870,7 +1870,7 @@ fi
 mJARNAME=`echo $MYCLASSPATH | tr ':' '\n' | sed -e 's/^.*\///'  | grep "^$COMMONSLOGGING.*.jar"`
 CLNAME=$mJARNAME
 if test "$mJARNAME" ; then
-   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep $mJARNAME`
+   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep "/$mJARNAME"`
    CLPATH=$mJARPATH
    if test -f "$mJARPATH" ; then
       mJARDIR=`echo $mJARPATH | sed -e 's/\/'"$mJARNAME"'//'`
@@ -1889,7 +1889,7 @@ fi
 mJARNAME=`echo $MYCLASSPATH | tr ':' '\n' | sed -e 's/^.*\///'  | grep "^$JAXRPC.*.jar"`
 JRNAME=$mJARNAME
 if test "$mJARNAME" ; then
-   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep $mJARNAME`
+   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep "/$mJARNAME"`
    JRPATH=$mJARPATH
    if test -f "$mJARPATH" ; then
       mJARDIR=`echo $mJARPATH | sed -e 's/\/'"$mJARNAME"'//'`
@@ -1908,7 +1908,7 @@ fi
 mJARNAME=`echo $MYCLASSPATH | tr ':' '\n' | sed -e 's/^.*\///'  | grep "^$WSDL4J.*.jar"`
 WJNAME=$mJARNAME
 if test "$mJARNAME" ; then
-   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep $mJARNAME`
+   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep "/$mJARNAME"`
    WJPATH=$mJARPATH
    if test -f "$mJARPATH" ; then
       mJARDIR=`echo $mJARPATH | sed -e 's/\/'"$mJARNAME"'//'`
@@ -1927,7 +1927,7 @@ fi
 mJARNAME=`echo $MYCLASSPATH | tr ':' '\n' | sed -e 's/^.*\///'  | grep "^$XERCES.*.jar"`
 XCNAME=$mJARNAME
 if test "$mJARNAME" ; then
-   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep $mJARNAME`
+   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep "/$mJARNAME"`
    XCPATH=$mJARPATH
    if test -f "$mJARPATH" ; then
       mJARDIR=`echo $mJARPATH | sed -e 's/\/'"$mJARNAME"'//'`
@@ -1946,7 +1946,7 @@ fi
 mJARNAME=`echo $MYCLASSPATH | tr ':' '\n' | sed -e 's/^.*\///'  | grep "^$XMLAPIS.*.jar"`
 XANAME=$mJARNAME
 if test "$mJARNAME" ; then
-   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep $mJARNAME`
+   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep "/$mJARNAME"`
    XAPATH=$mJARPATH
    if test -f "$mJARPATH" ; then
       mJARDIR=`echo $mJARPATH | sed -e 's/\/'"$mJARNAME"'//'`
@@ -1993,7 +1993,7 @@ XTVERSION="1.3.3"
 mJARNAME=`echo $MYCLASSPATH | tr ':' '\n' | sed -e 's/^.*\///'  | grep "^$COMMONSCOLLECTIONS.*.jar"`
 COMMCNAME=$mJARNAME
 if test "$mJARNAME" ; then
-   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep $mJARNAME`
+   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep "/$mJARNAME"`
    COMMCPATH=$mJARPATH
    if test -f "$mJARPATH" ; then
       mJARDIR=`echo $mJARPATH | sed -e 's/\/'"$mJARNAME"'//'`
@@ -2012,7 +2012,7 @@ fi
 mJARNAME=`echo $MYCLASSPATH | tr ':' '\n' | sed -e 's/^.*\///'  | grep "^$COMMONSLANG.*.jar"`
 COMMLNAME=$mJARNAME
 if test "$mJARNAME" ; then
-   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep $mJARNAME`
+   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep "/$mJARNAME"`
    COMMLPATH=$mJARPATH
    if test -f "$mJARPATH" ; then
       mJARDIR=`echo $mJARPATH | sed -e 's/\/'"$mJARNAME"'//'`
@@ -2031,7 +2031,7 @@ fi
 mJARNAME=`echo $MYCLASSPATH | tr ':' '\n' | sed -e 's/^.*\///'  | grep "^$ESAPI.*.jar"`
 ESAPINAME=$mJARNAME
 if test "$mJARNAME" ; then
-   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep $mJARNAME`
+   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep "/$mJARNAME"`
    ESAPIPATH=$mJARPATH
    if test -f "$mJARPATH" ; then
       mJARDIR=`echo $mJARPATH | sed -e 's/\/'"$mJARNAME"'//'`
@@ -2050,7 +2050,7 @@ fi
 mJARNAME=`echo $MYCLASSPATH | tr ':' '\n' | sed -e 's/^.*\///'  | grep "^$JODATIME.*.jar"`
 JTNAME=$mJARNAME
 if test "$mJARNAME" ; then
-   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep $mJARNAME`
+   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep "/$mJARNAME"`
    JTPATH=$mJARPATH
    if test -f "$mJARPATH" ; then
       mJARDIR=`echo $mJARPATH | sed -e 's/\/'"$mJARNAME"'//'`
@@ -2069,7 +2069,7 @@ fi
 mJARNAME=`echo $MYCLASSPATH | tr ':' '\n' | sed -e 's/^.*\///'  | grep "^$OPENSAML.*.jar"`
 OPENSNAME=$mJARNAME
 if test "$mJARNAME" ; then
-   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep $mJARNAME`
+   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep "/$mJARNAME"`
    OPENSPATH=$mJARPATH
    if test -f "$mJARPATH" ; then
       mJARDIR=`echo $mJARPATH | sed -e 's/\/'"$mJARNAME"'//'`
@@ -2088,7 +2088,7 @@ fi
 mJARNAME=`echo $MYCLASSPATH | tr ':' '\n' | sed -e 's/^.*\///'  | grep "^$OPENWS.*.jar"`
 OPENWNAME=$mJARNAME
 if test "$mJARNAME" ; then
-   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep $mJARNAME`
+   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep "/$mJARNAME"`
    OPENWPATH=$mJARPATH
    if test -f "$mJARPATH" ; then
       mJARDIR=`echo $mJARPATH | sed -e 's/\/'"$mJARNAME"'//'`
@@ -2107,7 +2107,7 @@ fi
 mJARNAME=`echo $MYCLASSPATH | tr ':' '\n' | sed -e 's/^.*\///'  | grep "^$PRIVILEGE.*.jar"`
 PRNAME=$mJARNAME
 if test "$mJARNAME" ; then
-   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep $mJARNAME`
+   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep "/$mJARNAME"`
    PRPATH=$mJARPATH
    if test -f "$mJARPATH" ; then
       mJARDIR=`echo $mJARPATH | sed -e 's/\/'"$mJARNAME"'//'`
@@ -2126,7 +2126,7 @@ fi
 mJARNAME=`echo $MYCLASSPATH | tr ':' '\n' | sed -e 's/^.*\///'  | grep "^$GLITET.*.jar"`
 GLITETNAME=$mJARNAME
 if test "$mJARNAME" ; then
-   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep $mJARNAME`
+   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep "/$mJARNAME"`
    GLITETPATH=$mJARPATH
    if test -f "$mJARPATH" ; then
       mJARDIR=`echo $mJARPATH | sed -e 's/\/'"$mJARNAME"'//'`
@@ -2145,7 +2145,7 @@ fi
 mJARNAME=`echo $MYCLASSPATH | tr ':' '\n' | sed -e 's/^.*\///'  | grep "^$GLITEU.*.jar"`
 GLITEUNAME=$mJARNAME
 if test "$mJARNAME" ; then
-   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep $mJARNAME`
+   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep "/$mJARNAME"`
    GLITEUPATH=$mJARPATH
    if test -f "$mJARPATH" ; then
       mJARDIR=`echo $mJARPATH | sed -e 's/\/'"$mJARNAME"'//'`
@@ -2164,7 +2164,7 @@ fi
 mJARNAME=`echo $MYCLASSPATH | tr ':' '\n' | sed -e 's/^.*\///'  | grep "^$VELOCITY.*.jar"`
 VLNAME=$mJARNAME
 if test "$mJARNAME" ; then
-   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep $mJARNAME`
+   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep "/$mJARNAME"`
    VLPATH=$mJARPATH
    if test -f "$mJARPATH" ; then
       mJARDIR=`echo $mJARPATH | sed -e 's/\/'"$mJARNAME"'//'`
@@ -2183,7 +2183,7 @@ fi
 mJARNAME=`echo $MYCLASSPATH | tr ':' '\n' | sed -e 's/^.*\///'  | grep "^$XALAN.*.jar"`
 XLNAME=$mJARNAME
 if test "$mJARNAME" ; then
-   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep $mJARNAME`
+   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep "/$mJARNAME"`
    XLPATH=$mJARPATH
    if test -f "$mJARPATH" ; then
       mJARDIR=`echo $mJARPATH | sed -e 's/\/'"$mJARNAME"'//'`
@@ -2202,7 +2202,7 @@ fi
 mJARNAME=`echo $MYCLASSPATH | tr ':' '\n' | sed -e 's/^.*\///'  | grep "^$XMLSEC.*.jar"`
 XSNAME=$mJARNAME
 if test "$mJARNAME" ; then
-   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep $mJARNAME`
+   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep "/$mJARNAME"`
    XSPATH=$mJARPATH
    if test -f "$mJARPATH" ; then
       mJARDIR=`echo $mJARPATH | sed -e 's/\/'"$mJARNAME"'//'`
@@ -2221,7 +2221,7 @@ fi
 mJARNAME=`echo $MYCLASSPATH | tr ':' '\n' | sed -e 's/^.*\///'  | grep "^$XMLTOOLING.*.jar"`
 XTNAME=$mJARNAME
 if test "$mJARNAME" ; then
-   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep $mJARNAME`
+   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep "/$mJARNAME"`
    XTPATH=$mJARPATH
    if test -f "$mJARPATH" ; then
       mJARDIR=`echo $mJARPATH | sed -e 's/\/'"$mJARNAME"'//'`
@@ -2254,7 +2254,7 @@ JETTYVERSION="8.0.1.v20110908"
 mJARNAME=`echo $MYCLASSPATH | tr ':' '\n' | sed -e 's/^.*\///'  | grep "^$JETTYCLIENT.*.jar"`
 JCNAME=$mJARNAME
 if test "$mJARNAME" ; then
-   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep $mJARNAME`
+   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep "/$mJARNAME"`
    JCPATH=$mJARPATH
    if test -f "$mJARPATH" ; then
       mJARDIR=`echo $mJARPATH | sed -e 's/\/'"$mJARNAME"'//'`
@@ -2273,7 +2273,7 @@ fi
 mJARNAME=`echo $MYCLASSPATH | tr ':' '\n' | sed -e 's/^.*\///'  | grep "^$JETTYCONTINUATION.*.jar"`
 JNNAME=$mJARNAME
 if test "$mJARNAME" ; then
-   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep $mJARNAME`
+   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep "/$mJARNAME"`
    JNPATH=$mJARPATH
    if test -f "$mJARPATH" ; then
       mJARDIR=`echo $mJARPATH | sed -e 's/\/'"$mJARNAME"'//'`
@@ -2292,7 +2292,7 @@ fi
 mJARNAME=`echo $MYCLASSPATH | tr ':' '\n' | sed -e 's/^.*\///'  | grep "^$JETTYDEPLOY.*.jar"`
 JDNAME=$mJARNAME
 if test "$mJARNAME" ; then
-   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep $mJARNAME`
+   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep "/$mJARNAME"`
    JDPATH=$mJARPATH
    if test -f "$mJARPATH" ; then
       mJARDIR=`echo $mJARPATH | sed -e 's/\/'"$mJARNAME"'//'`
@@ -2311,7 +2311,7 @@ fi
 mJARNAME=`echo $MYCLASSPATH | tr ':' '\n' | sed -e 's/^.*\///'  | grep "^$JETTYHTTP.*.jar"`
 JHNAME=$mJARNAME
 if test "$mJARNAME" ; then
-   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep $mJARNAME`
+   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep "/$mJARNAME"`
    JHPATH=$mJARPATH
    if test -f "$mJARPATH" ; then
       mJARDIR=`echo $mJARPATH | sed -e 's/\/'"$mJARNAME"'//'`
@@ -2330,7 +2330,7 @@ fi
 mJARNAME=`echo $MYCLASSPATH | tr ':' '\n' | sed -e 's/^.*\///'  | grep "^$JETTYIO.*.jar"`
 JINAME=$mJARNAME
 if test "$mJARNAME" ; then
-   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep $mJARNAME`
+   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep "/$mJARNAME"`
    JIPATH=$mJARPATH
    if test -f "$mJARPATH" ; then
       mJARDIR=`echo $mJARPATH | sed -e 's/\/'"$mJARNAME"'//'`
@@ -2349,7 +2349,7 @@ fi
 mJARNAME=`echo $MYCLASSPATH | tr ':' '\n' | sed -e 's/^.*\///'  | grep "^$JETTYSECURITY.*.jar"`
 JSCNAME=$mJARNAME
 if test "$mJARNAME" ; then
-   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep $mJARNAME`
+   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep "/$mJARNAME"`
    JSCPATH=$mJARPATH
    if test -f "$mJARPATH" ; then
       mJARDIR=`echo $mJARPATH | sed -e 's/\/'"$mJARNAME"'//'`
@@ -2368,7 +2368,7 @@ fi
 mJARNAME=`echo $MYCLASSPATH | tr ':' '\n' | sed -e 's/^.*\///'  | grep "^$JETTYSERVER.*.jar"`
 JSVNAME=$mJARNAME
 if test "$mJARNAME" ; then
-   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep $mJARNAME`
+   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep "/$mJARNAME"`
    JSVPATH=$mJARPATH
    if test -f "$mJARPATH" ; then
       mJARDIR=`echo $mJARPATH | sed -e 's/\/'"$mJARNAME"'//'`
@@ -2387,7 +2387,7 @@ fi
 mJARNAME=`echo $MYCLASSPATH | tr ':' '\n' | sed -e 's/^.*\///'  | grep "^$JETTYSERVLET.*.jar"`
 JSLNAME=$mJARNAME
 if test "$mJARNAME" ; then
-   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep $mJARNAME`
+   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep "/$mJARNAME"`
    JSLPATH=$mJARPATH
    if test -f "$mJARPATH" ; then
       mJARDIR=`echo $mJARPATH | sed -e 's/\/'"$mJARNAME"'//'`
@@ -2406,7 +2406,7 @@ fi
 mJARNAME=`echo $MYCLASSPATH | tr ':' '\n' | sed -e 's/^.*\///'  | grep "^$JETTYUTIL.*.jar"`
 JUNAME=$mJARNAME
 if test "$mJARNAME" ; then
-   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep $mJARNAME`
+   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep "/$mJARNAME"`
    JUPATH=$mJARPATH
    if test -f "$mJARPATH" ; then
       mJARDIR=`echo $mJARPATH | sed -e 's/\/'"$mJARNAME"'//'`
@@ -2425,7 +2425,7 @@ fi
 mJARNAME=`echo $MYCLASSPATH | tr ':' '\n' | sed -e 's/^.*\///'  | grep "^$JETTYWEBAPP.*.jar"`
 JWNAME=$mJARNAME
 if test "$mJARNAME" ; then
-   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep $mJARNAME`
+   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep "/$mJARNAME"`
    JWPATH=$mJARPATH
    if test -f "$mJARPATH" ; then
       mJARDIR=`echo $mJARPATH | sed -e 's/\/'"$mJARNAME"'//'`
@@ -2444,7 +2444,7 @@ fi
 mJARNAME=`echo $MYCLASSPATH | tr ':' '\n' | sed -e 's/^.*\///'  | grep "^$JETTYXML.*.jar"`
 JXNAME=$mJARNAME
 if test "$mJARNAME" ; then
-   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep $mJARNAME`
+   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep "/$mJARNAME"`
    JXPATH=$mJARPATH
    if test -f "$mJARPATH" ; then
       mJARDIR=`echo $mJARPATH | sed -e 's/\/'"$mJARNAME"'//'`
@@ -2460,132 +2460,127 @@ fi
 
 
 
-COGAXIS="cog-axis"
-COGJGLOBUS="cog-jglobus"
-COGURL="cog-url"
-JGVERSION="1.8.0"
-CRYPTIXASN1="cryptix-asn1"
-CXAVERSION="0.1.11"
-CRYPTIX32="cryptix32"
-CX32VERSION="3.2.0"
-JCEJDK13="jce-jdk13"
-JCEVERSION="131"
+JGLOBUSAXIS="cog-jglobus-axis"
+JGLOBUSGRIDFTP="gridftp"
+JGLOBUSGSS="gss"
+JGLOBUSIO="io"
+JGLOBUSJSSE="jsse"
+JGLOBUSSSLPROXIES="ssl-proxies"
+JGVERSION="2.0.4"
 LOG4J="log4j"
 LOG4JVERSION="1.2.15"
-PURETLS="puretls"
-PTVERSION="0.9"
 
 
-mJARNAME=`echo $MYCLASSPATH | tr ':' '\n' | sed -e 's/^.*\///'  | grep "^$COGAXIS.*.jar"`
-CANAME=$mJARNAME
+mJARNAME=`echo $MYCLASSPATH | tr ':' '\n' | sed -e 's/^.*\///'  | grep "^$JGLOBUSAXIS.*.jar"`
+JGANAME=$mJARNAME
 if test "$mJARNAME" ; then
-   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep $mJARNAME`
-   CAPATH=$mJARPATH
+   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep "/$mJARNAME"`
+   JGAPATH=$mJARPATH
    if test -f "$mJARPATH" ; then
       mJARDIR=`echo $mJARPATH | sed -e 's/\/'"$mJARNAME"'//'`
-      CADIR=$mJARDIR
-      { $as_echo "$as_me:${as_lineno-$LINENO}: result: VALIDATED: $COGAXIS $mJARNAME for version $JGVERSION is found in $mJARDIR." >&5
-$as_echo "VALIDATED: $COGAXIS $mJARNAME for version $JGVERSION is found in $mJARDIR." >&6; }
+      JGADIR=$mJARDIR
+      { $as_echo "$as_me:${as_lineno-$LINENO}: result: VALIDATED: $JGLOBUSAXIS $mJARNAME for version $JGVERSION is found in $mJARDIR." >&5
+$as_echo "VALIDATED: $JGLOBUSAXIS $mJARNAME for version $JGVERSION is found in $mJARDIR." >&6; }
    else
-      as_fn_error "FAILED: $COGAXIS $mJARNAME for version $JGVERSION is not found in $mJARPATH." "$LINENO" 5
+      as_fn_error "FAILED: $JGLOBUSAXIS $mJARNAME for version $JGVERSION is not found in $mJARPATH." "$LINENO" 5
    fi
 else
-   as_fn_error "FAILED: $COGAXIS $JGVERSION is not found in CLASSPATH." "$LINENO" 5
+   as_fn_error "FAILED: $JGLOBUSAXIS $JGVERSION is not found in CLASSPATH." "$LINENO" 5
 fi
 
 
 
-mJARNAME=`echo $MYCLASSPATH | tr ':' '\n' | sed -e 's/^.*\///'  | grep "^$COGJGLOBUS.*.jar"`
-CJNAME=$mJARNAME
+mJARNAME=`echo $MYCLASSPATH | tr ':' '\n' | sed -e 's/^.*\///'  | grep "^$JGLOBUSGRIDFTP.*.jar"`
+JGGNAME=$mJARNAME
 if test "$mJARNAME" ; then
-   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep $mJARNAME`
-   CJPATH=$mJARPATH
+   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep "/$mJARNAME"`
+   JGGPATH=$mJARPATH
    if test -f "$mJARPATH" ; then
       mJARDIR=`echo $mJARPATH | sed -e 's/\/'"$mJARNAME"'//'`
-      CJDIR=$mJARDIR
-      { $as_echo "$as_me:${as_lineno-$LINENO}: result: VALIDATED: $COGJGLOBUS $mJARNAME for version $JGVERSION is found in $mJARDIR." >&5
-$as_echo "VALIDATED: $COGJGLOBUS $mJARNAME for version $JGVERSION is found in $mJARDIR." >&6; }
+      JGGDIR=$mJARDIR
+      { $as_echo "$as_me:${as_lineno-$LINENO}: result: VALIDATED: $JGLOBUSGRIDFTP $mJARNAME for version $JGVERSION is found in $mJARDIR." >&5
+$as_echo "VALIDATED: $JGLOBUSGRIDFTP $mJARNAME for version $JGVERSION is found in $mJARDIR." >&6; }
    else
-      as_fn_error "FAILED: $COGJGLOBUS $mJARNAME for version $JGVERSION is not found in $mJARPATH." "$LINENO" 5
+      as_fn_error "FAILED: $JGLOBUSGRIDFTP $mJARNAME for version $JGVERSION is not found in $mJARPATH." "$LINENO" 5
    fi
 else
-   as_fn_error "FAILED: $COGJGLOBUS $JGVERSION is not found in CLASSPATH." "$LINENO" 5
+   as_fn_error "FAILED: $JGLOBUSGRIDFTP $JGVERSION is not found in CLASSPATH." "$LINENO" 5
 fi
 
 
 
-mJARNAME=`echo $MYCLASSPATH | tr ':' '\n' | sed -e 's/^.*\///'  | grep "^$COGURL.*.jar"`
-CUNAME=$mJARNAME
+mJARNAME=`echo $MYCLASSPATH | tr ':' '\n' | sed -e 's/^.*\///'  | grep "^$JGLOBUSGSS.*.jar"`
+JGSNAME=$mJARNAME
 if test "$mJARNAME" ; then
-   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep $mJARNAME`
-   CUPATH=$mJARPATH
+   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep "/$mJARNAME"`
+   JGSPATH=$mJARPATH
    if test -f "$mJARPATH" ; then
       mJARDIR=`echo $mJARPATH | sed -e 's/\/'"$mJARNAME"'//'`
-      CUDIR=$mJARDIR
-      { $as_echo "$as_me:${as_lineno-$LINENO}: result: VALIDATED: $COGURL $mJARNAME for version $JGVERSION is found in $mJARDIR." >&5
-$as_echo "VALIDATED: $COGURL $mJARNAME for version $JGVERSION is found in $mJARDIR." >&6; }
+      JGSDIR=$mJARDIR
+      { $as_echo "$as_me:${as_lineno-$LINENO}: result: VALIDATED: $JGLOBUSGSS $mJARNAME for version $JGVERSION is found in $mJARDIR." >&5
+$as_echo "VALIDATED: $JGLOBUSGSS $mJARNAME for version $JGVERSION is found in $mJARDIR." >&6; }
    else
-      as_fn_error "FAILED: $COGURL $mJARNAME for version $JGVERSION is not found in $mJARPATH." "$LINENO" 5
+      as_fn_error "FAILED: $JGLOBUSGSS $mJARNAME for version $JGVERSION is not found in $mJARPATH." "$LINENO" 5
    fi
 else
-   as_fn_error "FAILED: $COGURL $JGVERSION is not found in CLASSPATH." "$LINENO" 5
+   as_fn_error "FAILED: $JGLOBUSGSS $JGVERSION is not found in CLASSPATH." "$LINENO" 5
 fi
 
 
 
-mJARNAME=`echo $MYCLASSPATH | tr ':' '\n' | sed -e 's/^.*\///'  | grep "^$CRYPTIXASN1.*.jar"`
-CXANAME=$mJARNAME
+mJARNAME=`echo $MYCLASSPATH | tr ':' '\n' | sed -e 's/^.*\///'  | grep "^$JGLOBUSIO.*.jar"`
+JGINAME=$mJARNAME
 if test "$mJARNAME" ; then
-   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep $mJARNAME`
-   CXAPATH=$mJARPATH
+   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep "/$mJARNAME"`
+   JGIPATH=$mJARPATH
    if test -f "$mJARPATH" ; then
       mJARDIR=`echo $mJARPATH | sed -e 's/\/'"$mJARNAME"'//'`
-      CXADIR=$mJARDIR
-      { $as_echo "$as_me:${as_lineno-$LINENO}: result: VALIDATED: $CRYPTIXASN1 $mJARNAME for version $CXAVERSION is found in $mJARDIR." >&5
-$as_echo "VALIDATED: $CRYPTIXASN1 $mJARNAME for version $CXAVERSION is found in $mJARDIR." >&6; }
+      JGIDIR=$mJARDIR
+      { $as_echo "$as_me:${as_lineno-$LINENO}: result: VALIDATED: $JGLOBUSIO $mJARNAME for version $JGVERSION is found in $mJARDIR." >&5
+$as_echo "VALIDATED: $JGLOBUSIO $mJARNAME for version $JGVERSION is found in $mJARDIR." >&6; }
    else
-      as_fn_error "FAILED: $CRYPTIXASN1 $mJARNAME for version $CXAVERSION is not found in $mJARPATH." "$LINENO" 5
+      as_fn_error "FAILED: $JGLOBUSIO $mJARNAME for version $JGVERSION is not found in $mJARPATH." "$LINENO" 5
    fi
 else
-   as_fn_error "FAILED: $CRYPTIXASN1 $CXAVERSION is not found in CLASSPATH." "$LINENO" 5
+   as_fn_error "FAILED: $JGLOBUSIO $JGVERSION is not found in CLASSPATH." "$LINENO" 5
 fi
 
 
 
-mJARNAME=`echo $MYCLASSPATH | tr ':' '\n' | sed -e 's/^.*\///'  | grep "^$CRYPTIX32.*.jar"`
-CX32NAME=$mJARNAME
+mJARNAME=`echo $MYCLASSPATH | tr ':' '\n' | sed -e 's/^.*\///'  | grep "^$JGLOBUSJSSE.*.jar"`
+JGJNAME=$mJARNAME
 if test "$mJARNAME" ; then
-   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep $mJARNAME`
-   CX32PATH=$mJARPATH
+   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep "/$mJARNAME"`
+   JGJPATH=$mJARPATH
    if test -f "$mJARPATH" ; then
       mJARDIR=`echo $mJARPATH | sed -e 's/\/'"$mJARNAME"'//'`
-      CX32DIR=$mJARDIR
-      { $as_echo "$as_me:${as_lineno-$LINENO}: result: VALIDATED: $CRYPTIX32 $mJARNAME for version $CX32VERSION is found in $mJARDIR." >&5
-$as_echo "VALIDATED: $CRYPTIX32 $mJARNAME for version $CX32VERSION is found in $mJARDIR." >&6; }
+      JGJDIR=$mJARDIR
+      { $as_echo "$as_me:${as_lineno-$LINENO}: result: VALIDATED: $JGLOBUSJSSE $mJARNAME for version $JGVERSION is found in $mJARDIR." >&5
+$as_echo "VALIDATED: $JGLOBUSJSSE $mJARNAME for version $JGVERSION is found in $mJARDIR." >&6; }
    else
-      as_fn_error "FAILED: $CRYPTIX32 $mJARNAME for version $CX32VERSION is not found in $mJARPATH." "$LINENO" 5
+      as_fn_error "FAILED: $JGLOBUSJSSE $mJARNAME for version $JGVERSION is not found in $mJARPATH." "$LINENO" 5
    fi
 else
-   as_fn_error "FAILED: $CRYPTIX32 $CX32VERSION is not found in CLASSPATH." "$LINENO" 5
+   as_fn_error "FAILED: $JGLOBUSJSSE $JGVERSION is not found in CLASSPATH." "$LINENO" 5
 fi
 
 
 
-mJARNAME=`echo $MYCLASSPATH | tr ':' '\n' | sed -e 's/^.*\///'  | grep "^$JCEJDK13.*.jar"`
-JCENAME=$mJARNAME
+mJARNAME=`echo $MYCLASSPATH | tr ':' '\n' | sed -e 's/^.*\///'  | grep "^$JGLOBUSSSLPROXIES.*.jar"`
+JGPNAME=$mJARNAME
 if test "$mJARNAME" ; then
-   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep $mJARNAME`
-   JCEPATH=$mJARPATH
+   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep "/$mJARNAME"`
+   JGPPATH=$mJARPATH
    if test -f "$mJARPATH" ; then
       mJARDIR=`echo $mJARPATH | sed -e 's/\/'"$mJARNAME"'//'`
-      JCEDIR=$mJARDIR
-      { $as_echo "$as_me:${as_lineno-$LINENO}: result: VALIDATED: $JCEJDK13 $mJARNAME for version $JCEVERSION is found in $mJARDIR." >&5
-$as_echo "VALIDATED: $JCEJDK13 $mJARNAME for version $JCEVERSION is found in $mJARDIR." >&6; }
+      JGPDIR=$mJARDIR
+      { $as_echo "$as_me:${as_lineno-$LINENO}: result: VALIDATED: $JGLOBUSSSLPROXIES $mJARNAME for version $JGVERSION is found in $mJARDIR." >&5
+$as_echo "VALIDATED: $JGLOBUSSSLPROXIES $mJARNAME for version $JGVERSION is found in $mJARDIR." >&6; }
    else
-      as_fn_error "FAILED: $JCEJDK13 $mJARNAME for version $JCEVERSION is not found in $mJARPATH." "$LINENO" 5
+      as_fn_error "FAILED: $JGLOBUSSSLPROXIES $mJARNAME for version $JGVERSION is not found in $mJARPATH." "$LINENO" 5
    fi
 else
-   as_fn_error "FAILED: $JCEJDK13 $JCEVERSION is not found in CLASSPATH." "$LINENO" 5
+   as_fn_error "FAILED: $JGLOBUSSSLPROXIES $JGVERSION is not found in CLASSPATH." "$LINENO" 5
 fi
 
 
@@ -2593,7 +2588,7 @@ fi
 mJARNAME=`echo $MYCLASSPATH | tr ':' '\n' | sed -e 's/^.*\///'  | grep "^$LOG4J.*.jar"`
 LOG4JNAME=$mJARNAME
 if test "$mJARNAME" ; then
-   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep $mJARNAME`
+   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep "/$mJARNAME"`
    LOG4JPATH=$mJARPATH
    if test -f "$mJARPATH" ; then
       mJARDIR=`echo $mJARPATH | sed -e 's/\/'"$mJARNAME"'//'`
@@ -2609,25 +2604,6 @@ fi
 
 
 
-mJARNAME=`echo $MYCLASSPATH | tr ':' '\n' | sed -e 's/^.*\///'  | grep "^$PURETLS.*.jar"`
-PTNAME=$mJARNAME
-if test "$mJARNAME" ; then
-   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep $mJARNAME`
-   PTPATH=$mJARPATH
-   if test -f "$mJARPATH" ; then
-      mJARDIR=`echo $mJARPATH | sed -e 's/\/'"$mJARNAME"'//'`
-      PTDIR=$mJARDIR
-      { $as_echo "$as_me:${as_lineno-$LINENO}: result: VALIDATED: $PURETLS $mJARNAME for version $PTVERSION is found in $mJARDIR." >&5
-$as_echo "VALIDATED: $PURETLS $mJARNAME for version $PTVERSION is found in $mJARDIR." >&6; }
-   else
-      as_fn_error "FAILED: $PURETLS $mJARNAME for version $PTVERSION is not found in $mJARPATH." "$LINENO" 5
-   fi
-else
-   as_fn_error "FAILED: $PURETLS $PTVERSION is not found in CLASSPATH." "$LINENO" 5
-fi
-
-
-
 BCPROV="bcprov-jdk15"
 BPVERSION="1.4.6"
 VOMSJAPI="vomsjapi"
@@ -2637,7 +2613,7 @@ VJVERSION="2.0.6"
 mJARNAME=`echo $MYCLASSPATH | tr ':' '\n' | sed -e 's/^.*\///'  | grep "^$BCPROV.*.jar"`
 BPNAME=$mJARNAME
 if test "$mJARNAME" ; then
-   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep $mJARNAME`
+   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep "/$mJARNAME"`
    BPPATH=$mJARPATH
    if test -f "$mJARPATH" ; then
       mJARDIR=`echo $mJARPATH | sed -e 's/\/'"$mJARNAME"'//'`
@@ -2656,7 +2632,7 @@ fi
 mJARNAME=`echo $MYCLASSPATH | tr ':' '\n' | sed -e 's/^.*\///'  | grep "^$VOMSJAPI.*.jar"`
 VJNAME=$mJARNAME
 if test "$mJARNAME" ; then
-   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep $mJARNAME`
+   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep "/$mJARNAME"`
    VJPATH=$mJARPATH
    if test -f "$mJARPATH" ; then
       mJARDIR=`echo $mJARPATH | sed -e 's/\/'"$mJARNAME"'//'`
@@ -2689,7 +2665,7 @@ W4VERSION="0.21"
 mJARNAME=`echo $MYCLASSPATH | tr ':' '\n' | sed -e 's/^.*\///'  | grep "^$JCLOSLF4J.*.jar"`
 JSNAME=$mJARNAME
 if test "$mJARNAME" ; then
-   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep $mJARNAME`
+   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep "/$mJARNAME"`
    JSPATH=$mJARPATH
    if test -f "$mJARPATH" ; then
       mJARDIR=`echo $mJARPATH | sed -e 's/\/'"$mJARNAME"'//'`
@@ -2708,7 +2684,7 @@ fi
 mJARNAME=`echo $MYCLASSPATH | tr ':' '\n' | sed -e 's/^.*\///'  | grep "^$BERKELEYDB.*.jar"`
 BDBNAME=$mJARNAME
 if test "$mJARNAME" ; then
-   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep $mJARNAME`
+   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep "/$mJARNAME"`
    BDBPATH=$mJARPATH
    if test -f "$mJARPATH" ; then
       mJARDIR=`echo $mJARPATH | sed -e 's/\/'"$mJARNAME"'//'`
@@ -2727,7 +2703,7 @@ fi
 mJARNAME=`echo $MYCLASSPATH | tr ':' '\n' | sed -e 's/^.*\///'  | grep "^$SERVLETAPI.*.jar"`
 SANAME=$mJARNAME
 if test "$mJARNAME" ; then
-   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep $mJARNAME`
+   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep "/$mJARNAME"`
    SAPATH=$mJARPATH
    if test -f "$mJARPATH" ; then
       mJARDIR=`echo $mJARPATH | sed -e 's/\/'"$mJARNAME"'//'`
@@ -2746,7 +2722,7 @@ fi
 mJARNAME=`echo $MYCLASSPATH | tr ':' '\n' | sed -e 's/^.*\///'  | grep "^$SLF4JAPI.*.jar"`
 S4ANAME=$mJARNAME
 if test "$mJARNAME" ; then
-   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep $mJARNAME`
+   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep "/$mJARNAME"`
    S4APATH=$mJARPATH
    if test -f "$mJARPATH" ; then
       mJARDIR=`echo $mJARPATH | sed -e 's/\/'"$mJARNAME"'//'`
@@ -2765,7 +2741,7 @@ fi
 mJARNAME=`echo $MYCLASSPATH | tr ':' '\n' | sed -e 's/^.*\///'  | grep "^$SLF4JLOG4J12.*.jar"`
 S4LNAME=$mJARNAME
 if test "$mJARNAME" ; then
-   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep $mJARNAME`
+   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep "/$mJARNAME"`
    S4LPATH=$mJARPATH
    if test -f "$mJARPATH" ; then
       mJARDIR=`echo $mJARPATH | sed -e 's/\/'"$mJARNAME"'//'`
@@ -2784,7 +2760,7 @@ fi
 mJARNAME=`echo $MYCLASSPATH | tr ':' '\n' | sed -e 's/^.*\///'  | grep "^$SLF4JSIMPLE.*.jar"`
 S4SNAME=$mJARNAME
 if test "$mJARNAME" ; then
-   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep $mJARNAME`
+   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep "/$mJARNAME"`
    S4SPATH=$mJARPATH
    if test -f "$mJARPATH" ; then
       mJARDIR=`echo $mJARPATH | sed -e 's/\/'"$mJARNAME"'//'`
@@ -2803,7 +2779,7 @@ fi
 mJARNAME=`echo $MYCLASSPATH | tr ':' '\n' | sed -e 's/^.*\///'  | grep "^$WHICH4J.*.jar"`
 W4NAME=$mJARNAME
 if test "$mJARNAME" ; then
-   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep $mJARNAME`
+   mJARPATH=`echo $MYCLASSPATH | tr ':' '\n' | grep "/$mJARNAME"`
    W4PATH=$mJARPATH
    if test -f "$mJARPATH" ; then
       mJARDIR=`echo $mJARPATH | sed -e 's/\/'"$mJARNAME"'//'`
@@ -2881,22 +2857,20 @@ $as_echo "PASSED: JETTY-UTIL for version $JETTYVERSION is found in $JUPATH." >&6
 $as_echo "PASSED: JETTY-WEBAPP for version $JETTYVERSION is found in $JWPATH." >&6; }
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: PASSED: JETTY-XML for version $JETTYVERSION is found in $JXPATH." >&5
 $as_echo "PASSED: JETTY-XML for version $JETTYVERSION is found in $JXPATH." >&6; }
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: PASSED: COG-AXIS for version $JGVERSION is found in $CAPATH." >&5
-$as_echo "PASSED: COG-AXIS for version $JGVERSION is found in $CAPATH." >&6; }
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: PASSED: COG-JGLOBUS for version $JGVERSION is found in $CJPATH." >&5
-$as_echo "PASSED: COG-JGLOBUS for version $JGVERSION is found in $CJPATH." >&6; }
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: PASSED: COG-URL for version $JGVERSION is found in $CUPATH." >&5
-$as_echo "PASSED: COG-URL for version $JGVERSION is found in $CUPATH." >&6; }
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: PASSED: CRYPTIX-ASN1 for version $CXAVERSION is found in $CXAPATH." >&5
-$as_echo "PASSED: CRYPTIX-ASN1 for version $CXAVERSION is found in $CXAPATH." >&6; }
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: PASSED: CRYPTIX32 for version $CX32VERSION is found in $CX32PATH." >&5
-$as_echo "PASSED: CRYPTIX32 for version $CX32VERSION is found in $CX32PATH." >&6; }
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: PASSED: JCE-JDK13 for version $JCEVERSION is found in $JCEPATH." >&5
-$as_echo "PASSED: JCE-JDK13 for version $JCEVERSION is found in $JCEPATH." >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: PASSED: COG-JGLOBUS-AXIS for version $JGVERSION is found in $JGAPATH." >&5
+$as_echo "PASSED: COG-JGLOBUS-AXIS for version $JGVERSION is found in $JGAPATH." >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: PASSED: GRIDFTP for version $JGVERSION is found in $JGGPATH." >&5
+$as_echo "PASSED: GRIDFTP for version $JGVERSION is found in $JGGPATH." >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: PASSED: GSS for version $JGVERSION is found in $JGSPATH." >&5
+$as_echo "PASSED: GSS for version $JGVERSION is found in $JGSPATH." >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: PASSED: IO for version $JGVERSION is found in $JGIPATH." >&5
+$as_echo "PASSED: IO for version $JGVERSION is found in $JGIPATH." >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: PASSED: JSSE for version $JGVERSION is found in $JGJPATH." >&5
+$as_echo "PASSED: JSSE for version $JGVERSION is found in $JGJPATH." >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: PASSED: SSL-PROXIES for version $JGVERSION is found in $JGPPATH." >&5
+$as_echo "PASSED: SSL-PROXIES for version $JGVERSION is found in $JGPPATH." >&6; }
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: PASSED: LOG4J for version $LOG4JVERSION is found in $LOG4JPATH." >&5
 $as_echo "PASSED: LOG4J for version $LOG4JVERSION is found in $LOG4JPATH." >&6; }
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: PASSED: PURETLS for version $PTVERSION is found in $PTPATH." >&5
-$as_echo "PASSED: PURETLS for version $PTVERSION is found in $PTPATH." >&6; }
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: PASSED: BOUNCY-CASTLE-CRYPTO-JDK15 for version $BPVERSION is found in $BPPATH." >&5
 $as_echo "PASSED: BOUNCY-CASTLE-CRYPTO-JDK15 for version $BPVERSION is found in $BPPATH." >&6; }
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: PASSED: VOMSJAPI for version $VJVERSION is found in $VJPATH." >&5
@@ -2983,14 +2957,13 @@ echo "jetty-util.path=$JUPATH" >> build.properties
 echo "jetty-webapp.path=$JWPATH" >> build.properties
 echo "jetty-xml.path=$JXPATH" >> build.properties
 echo "#####################################################" >> build.properties
-echo "cog-axis.path=$CAPATH" >> build.properties
-echo "cog-jglobus.path=$CJPATH" >> build.properties
-echo "cog-url.path=$CUPATH" >> build.properties
-echo "cryptix-asn1.path=$CXAPATH" >> build.properties
-echo "cryptix32.path=$CX32PATH" >> build.properties
-echo "jce-jdk13.path=$JCEPATH" >> build.properties
+echo "cog-axis.path=$JGAPATH" >> build.properties
+echo "jglobus-gridftp.path=$JGGPATH" >> build.properties
+echo "jglobus-gss.path=$JGSPATH" >> build.properties
+echo "jglobus-io.path=$JGIPATH" >> build.properties
+echo "jglobus-jsse.path=$JGJPATH" >> build.properties
 echo "log4j.path=$LOG4JPATH" >> build.properties
-echo "puretls.path=$PTPATH" >> build.properties
+echo "jglobus-ssl-proxies.path=$JGPPATH" >> build.properties
 echo "#####################################################" >> build.properties
 echo "bcprov-jdk15.path=$BPPATH" >> build.properties
 echo "vomsjapi.path=$VJPATH" >> build.properties

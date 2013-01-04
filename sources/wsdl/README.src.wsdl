@@ -22,7 +22,7 @@ lic, perform publicly and display publicly, and to permit others to do so.
 
 #################################################
 
-Berkeley Storage Manager (BeStMan) v2.2.2.x (a.k.a. BeStMan2 v2.2.x)
+Berkeley Storage Manager (BeStMan) v2.2.2.3.x (a.k.a. BeStMan2 v2.3.x)
 BeStMan SRM Clients
 SRM-Tester
 http://sdm.lbl.gov/bestman
@@ -42,7 +42,7 @@ Axis 1.4
 WSDL4j-1.6.2
 Xerces-2.11.0
 Jetty 8.0.1.v20110908
-Java CoG JGlobus 1.8.0
+Java CoG JGlobus 2.0.4 customized by OSG
 Java Servlet API 3.0
 Slf4j-1.6.2
 Berkeley DB 4.1.10

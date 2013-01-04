@@ -8,7 +8,7 @@ NOTICE.  This software was developed under funding from the U.S. Department of E
 
 #################################################
 
-Berkeley Storage Manager (BeStMan) v2.2.2.x (a.k.a. BeStMan2 v2.2.x)
+Berkeley Storage Manager (BeStMan) v2.2.2.3.x (a.k.a. BeStMan2 v2.3.x)
 BeStMan SRM Clients
 SRM-Tester
 http://sdm.lbl.gov/bestman
@@ -27,4 +27,4 @@ Apache ant 1.8.2
 Axis 1.4
 WSDL4j-1.6.2
 Xerces-2.11.0
-Java CoG JGlobus 1.8.0
+Java CoG JGlobus 2.0.4 customized by OSG
