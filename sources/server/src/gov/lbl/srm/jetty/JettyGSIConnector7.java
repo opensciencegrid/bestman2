@@ -531,7 +531,7 @@ public class JettyGSIConnector7
                 }
                 super.run();
             } catch (IOException e) {
-                _log.warn(e.toString());
+                _log.error("Failed to accept the GSI socket", e);
                 try {
                     close();
                 } catch (IOException e2) {
