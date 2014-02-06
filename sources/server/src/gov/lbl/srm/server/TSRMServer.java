@@ -55,7 +55,7 @@ import org.apache.axis.types.*;
 public class TSRMServer /*extends GridServiceImpl implements ISRMPortType*/{
     //private static TSRMLog _log = new TSRMLog();
 
-    public TSRMLsManager _lsManager = new TSRMLsManager();
+    public static TSRMLsManager _lsManager = new TSRMLsManager();
 	
     //public static final TProcessingUnit _gProcessingUnit = new TProcessingUnitPDSF();
     public static TProcessingUnit _gProcessingUnit = null;

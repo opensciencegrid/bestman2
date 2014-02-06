@@ -57,8 +57,10 @@ public class SRM_FILE {
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 public void clean() {
-	fileObj.clean();
-	fileObj = null;
+	if (fileObj != null) {
+	    fileObj.clean();
+	    fileObj = null;
+	}
 	currentProcess = null;
 }
 

@@ -1309,11 +1309,14 @@ class  TSRMFileAccessSudo extends ISRMFileAccess {
 
     public boolean exists(File f) {	
 	//return f.exists();
-        if ((_uid==null)&&(f.exists())) {
-            TSRMLog.warning(this.getClass(), null, "event=sudoNoUidSpecified", "No uid for sudo, using current user");
+	/*if (f.exists()) {
 	    return true;
 	}
-	
+	*/
+	if ((_uid == null) && (f.exists())) {
+	    TSRMLog.warning(this.getClass(), null, "event=sudoNoUidSpecified", "No uid for sudo, using current user");
+	    return true;
+	}
 	TSRMLog.debug(this.getClass(), null, "event=checkExistsSudoStarts", null);
 	String path  = f.getPath();
 

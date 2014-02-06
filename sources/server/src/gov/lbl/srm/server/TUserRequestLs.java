@@ -40,7 +40,7 @@ package gov.lbl.srm.server;
 import java.util.*;
 //import srm.common.StorageResourceManager.*;
 import gov.lbl.srm.StorageResourceManager.*;
-//import EDU.oswego.cs.dl.util.concurrent.Mutex;
+
 import gov.lbl.srm.util.*;
 import org.apache.axis.types.*;
 
@@ -51,7 +51,9 @@ public class TUserRequestLs extends TUserRequest {
 
     TSRMRequestLs _lsReq = null;
     SrmLsResponse _result = null;
-    
+    long _timeResultIsSet = 0;
+    static long _gLifeTimeMillisOfFinishedLsReq = 5400000; // 90 minutes
+
     public TUserRequestLs(TAccount owner, URI[] input, TSRMFileListingOption op, 
 			  TFileStorageType ftype, ArrayOfTExtraInfo ssinfo) 
     {
@@ -133,6 +135,7 @@ public class TUserRequestLs extends TUserRequest {
 	_result.setReturnStatus(TSRMUtil.createReturnStatus(reqSummary.getStatusCode(), "Ref:"+getID()));	   
 	//_result.setReturnStatus(TSRMUtil.createReturnStatus(TStatusCode.SRM_SUCCESS, null));
 	TSRMLog.debug(this.getClass(), null, "rid="+getID()+" resultSize="+pathList.size(), "statusCode="+_result.getReturnStatus().getStatusCode());
+	recordTime();
     }
 
     public void setFailed(String errMsg) {
@@ -141,12 +144,34 @@ public class TUserRequestLs extends TUserRequest {
 	}
 	_result = new SrmLsResponse();
 	_result.setReturnStatus(TSRMUtil.createReturnStatus(TStatusCode.SRM_FAILURE, errMsg));
+	recordTime();
     }
 
+    public void recordTime() {
+	_timeResultIsSet = System.currentTimeMillis();
+    }
+	
     public void cleanMe() {
 	getOwner().removeRequest(this);
 	_lsReq.cleanMe();
 	_lsReq = null;
+    }
+
+    public void cleanUp() { // called periodically to clean up reqs that was never gotten a chance to deliver results
+	if (!isDone()) {
+	    return;
+	}
+
+	if (_lsReq == null) {
+	    return; // already cleaned
+	}
+	
+	long curr = System.currentTimeMillis();
+	
+	if (curr - _timeResultIsSet > _gLifeTimeMillisOfFinishedLsReq) {
+	    TSRMLog.info(this.getClass(), null, "event=exceededLsLifetimeForStatusCall", "lifetimeValue="+_gLifeTimeMillisOfFinishedLsReq+" rid="+getID());
+	    TSRMServer._lsManager.removeWhenFinished(this);
+	}
     }
 }
 
