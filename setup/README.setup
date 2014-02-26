@@ -1,6 +1,6 @@
 *** Copyright Notice ***
  
-BeStMan Copyright (c) 2010-2012, The Regents of the University of California, th
+BeStMan Copyright (c) 2010-2014, The Regents of the University of California, th
 rough Lawrence Berkeley National Laboratory (subject to receipt of any required 
 approvals from the U.S. Dept. of Energy).  This software was developed under fun
 ding from the U.S. Department of Energy and is associated with the Berkeley Lab 
@@ -26,7 +26,7 @@ Berkeley Storage Manager (BeStMan) v2.2.2.3.x (a.k.a. BeStMan2 v2.3.x)
 BeStMan SRM Clients
 SRM-Tester
 http://sdm.lbl.gov/bestman
-Questions: srm@lbl.gov
+Questions: sdmsupport@lbl.gov
 
 BeStMan LICENSE: https://sdm.lbl.gov/wiki/Software/BeStMan/License
 BeStMan COPYRIGHT: https://sdm.lbl.gov/wiki/Software/BeStMan/Copyright
@@ -59,6 +59,7 @@ velocity 1.7
 Xalan 2.7.1
 XML-security 1.4.5
 Bouncy Castle crypto lib 1.4.6
+json-simple 1.1.1
 
 #####################################################################
 **** To make a setup deployment
@@ -381,4 +382,39 @@ Cross communication cases:
 OSG testing page:
 https://www.opensciencegrid.org/bin/view/SoftwareTeam/Sha2Support
 
-###################################################################
+############################################################################
+**** Notes on Java 1.7.0_45 and BeStMan-2  (Nov. 13, 2013)
+############################################################################
+The OSG Software team has found that the OpenJDK update to version 1.7.0_45
+(on 21 October) tightened some security settings, thereby causing low-level
+authentication failures in the BeStMan server and clients.
+
+The root cause of the failures is that Java no longer accepts RSA keys that
+are shorter than 1024 bits.  However, grid-proxy-init and other systems are
+creating proxies with 512 bits, triggering the issues.
+In OpenJDK 1.7.0_25 and earlier, Java allowed 512-bit proxies to be used.
+OSG Security is not aware of any urgent security issues which would
+necessitate increasing proxy strength immediately.
+
+For now, we have an easy workaround.  After updating to OpenJDK 1.7.0_45,
+which is still a recommended update, edit the Java security settings in:
+
+/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.45.x86_64/jre/lib/security/java.security
+
+Find the line that looks like this:
+
+jdk.certpath.disabledAlgorithms=MD2, RSA keySize < 1024
+
+And change it to this:
+
+jdk.certpath.disabledAlgorithms=MD2, RSA keySize < 512
+
+This change should be applied to any machine running the BeStMan server or
+client tools.  After the change, restart the BeStMan server, if present.
+
+The OSG Technology and Security teams are investigating more permanent
+solutions to the problem, including raising the default RSA key lengths
+throughout the software stack to 1024 bits.
+
+
+

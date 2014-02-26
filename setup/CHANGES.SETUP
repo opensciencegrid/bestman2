@@ -1,6 +1,6 @@
 * Current version
-2.2.2.3.0   Thu Jan  3 13:48:27 PST 2013
-BeStMan and SRM-Clients Copyright(c) 2007-2013,
+2.2.2.3.1   Wed Feb 19 13:13:58 PST 2014
+BeStMan and SRM-Clients Copyright(c) 2007-2014,
 Lawrence Berkeley National Laboratory. All rights reserved.
 Support at SRM@LBL.GOV and documents at http://sdm.lbl.gov/bestman
 
@@ -8,6 +8,9 @@ Open Science Grid (OSG) support:  osg-storage@opensciencegrid.org
 All Tier 3 sites and users
     for ATLAS, Doug Benjamin <benjamin@phy.duke.edu>
     for CMS, Rob Snihur <snihur@fnal.gov>
+
+2.2.2.3.1   Wed Feb 19 13:13:58 PST 2014
+* setup changes for bestman2-client-adapt.jar
 
 2.2.2.3.0   Thu Jan  3 13:48:27 PST 2013
 * setup changes for jglobus2 SHA-2 support
