@@ -88,6 +88,7 @@ slf4j-api.path=/software/bestman2/lib/others/slf4j-api-1.6.2.jar
 slf4j-log4j.path=/software/bestman2/lib/others/slf4j-log4j12-1.6.2.jar
 slf4j-simple.path=/software/bestman2/lib/others/slf4j-simple-1.6.2.jar
 which4j.path=/software/bestman2/lib/others/which4j.jar
+json-simple.path=/software/bestman2/lib/others/json-simple-1.1.1.jar
 #####################################################
 # Current working directory path
 bestmansrc.root=/workspace/bestman2
