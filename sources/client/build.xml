@@ -4,7 +4,7 @@
  *
  * *** Copyright Notice ***
  *
- * BeStMan Copyright (c) 2010-2011, The Regents of the University of California, 
+ * BeStMan Copyright (c) 2010-2014, The Regents of the University of California, 
  * through Lawrence Berkeley National Laboratory (subject to receipt of any 
  * required approvals from the U.S. Dept. of Energy).  This software was 
  * developed under funding from the U.S. Department of Energy and is 
@@ -64,6 +64,7 @@
     <fileset file="${jglobus-gridftp.path}"/>
     <fileset file="${cog-axis.path}"/>
     <fileset file="${log4j.path}"/>
+    <fileset file="${json-simpl.path}"/>
     <pathelement path="${java.class.path}"/>
   </path>
 
@@ -71,6 +72,7 @@
   <property name="pkgname" value="bestman2"/>
   <property name="package" value="gov.lbl.srm"/>
   <property name="package.dir" value="gov/lbl/srm"/>
+  <property name="adaptpackage.dir" value="gov/lbl/adapt"/>
   <property name="debug" value="no"/>  
 
   <target name="setenv">
@@ -91,6 +93,18 @@
   <target name="clean">
     <delete dir="${build.dir}" verbose="false"/>
     <ant antfile="${wsdl.dir}/build.xml" target="clean" dir="${wsdl.dir}" />
+  </target>
+
+  <target name="adaptclient" depends="setenv, wsdljar">
+    <javac srcdir="src/${package.dir}" destdir="${build.dest}" debug="${debug}"
+      deprecation="${deprecation}"
+      fork="yes" executable="${javac.path}"
+      classpathref="classpath" 
+      classpath="${wsdl.dir}/${build.lib}/${pkgname}-stub.jar">
+    </javac>
+    <jar jarfile="${build.lib}/${pkgname}-client-adapt.jar" manifest="ClientManifest.txt" basedir="${build.dest}" >
+      <include name="**/${adaptpackage.dir}/**" />
+    </jar>
   </target>
 
   <target name="client" depends="setenv, wsdljar">
@@ -120,11 +134,11 @@
     <ant antfile="${wsdl.dir}/build.xml" target="install" dir="${wsdl.dir}" />
   </target>
 
-  <target name="build" depends="client">
+  <target name="build" depends="client, adaptclient">
 	<echo message="BUILD ALL client into ${build.dir}"/>
   </target>
 
-<target name="all" depends="client">
+<target name="all" depends="client, adaptclient">
 	<echo message="BUILD ALL client into ${build.dir}"/>
 </target>
 
