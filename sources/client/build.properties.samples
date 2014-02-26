@@ -1,7 +1,7 @@
 #
 # *** Copyright Notice ***
 #
-# BeStMan Copyright (c) 2010-2011, The Regents of the University of California, 
+# BeStMan Copyright (c) 2010-2014, The Regents of the University of California, 
 # through Lawrence Berkeley National Laboratory (subject to receipt of any 
 # required approvals from the U.S. Dept. of Energy).  This software was 
 # developed under funding from the U.S. Department of Energy and is 
@@ -38,6 +38,7 @@ jaxrpc.path=/software/bestman2/lib/axis/jaxrpc.jar
 wsdl4j.path=/software/bestman2/lib/axis/wsdl4j-1.6.2.jar
 xercesImpl.path=/software/bestman2/lib/axis/xercesImpl-2.11.0.jar
 xml-apis.path=/software/bestman2/lib/axis/xml-apis-2.11.0.jar
+json-simple.path=/software/bestman2/lib/others/json-simple-1.1.1.jar
 #####################################################
 cog-axis.path=/software/bestman2/lib/jglobus2/cog-jglobus-axis.jar
 jglobus-gridftp.path=/software/bestman2/lib/jglobus2/gridftp-2.0.4.jar

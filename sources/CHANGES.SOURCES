@@ -1,13 +1,23 @@
 * Current version
-2.2.2.3.0   Thu Jan  3 11:35:32 PST 2013
-BeStMan and SRM-Clients Copyright(c) 2007-2013,
+2.2.2.3.1   Wed Feb 19 13:13:58 PST 2014
+BeStMan and SRM-Clients Copyright(c) 2007-2014,
 Lawrence Berkeley National Laboratory. All rights reserved.
-Support at SRM@LBL.GOV and documents at http://sdm.lbl.gov/bestman
+Support at SDMSUPPORT@LBL.GOV and documents at http://sdm.lbl.gov/bestman
+
 
 Open Science Grid (OSG) support:  osg-storage@opensciencegrid.org
 All Tier 3 sites and users
     for ATLAS, Doug Benjamin <benjamin@phy.duke.edu>
     for CMS, Rob Snihur <snihur@fnal.gov>
+
+
+2.2.2.3.1   Wed Feb 19 13:13:58 PST 2014
+* client
+1. added bestman2-client-adapt.jar for ADAPTIVE file transfers
+2. added srm-copy-adapt for ADAPTIVE file transfers
+   Adaptive file transfer is an option
+3. json-simple v.1.1.1 is a new dependent lib.
+
 
 2.2.2.3.0   Thu Jan  3 11:35:32 PST 2013
 * server/client/tester

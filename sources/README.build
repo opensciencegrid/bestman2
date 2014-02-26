@@ -1,6 +1,6 @@
 *** Copyright Notice ***
  
-BeStMan Copyright (c) 2010-2012, The Regents of the University of California, th
+BeStMan Copyright (c) 2010-2014, The Regents of the University of California, th
 rough Lawrence Berkeley National Laboratory (subject to receipt of any required 
 approvals from the U.S. Dept. of Energy).  This software was developed under fun
 ding from the U.S. Department of Energy and is associated with the Berkeley Lab 
@@ -24,7 +24,7 @@ lic, perform publicly and display publicly, and to permit others to do so.
 
 Berkeley Storage Manager (BeStMan) v2.2.2.x (a.k.a. BeStMan2 v2.2.x)
 http://sdm.lbl.gov/bestman
-Questions: srm@lbl.gov
+Questions: sdmsupport@lbl.gov
 
 BeStMan LICENSE: https://sdm.lbl.gov/wiki/Software/BeStMan/License
 BeStMan COPYRIGHT: https://sdm.lbl.gov/wiki/Software/BeStMan/Copyright
@@ -58,6 +58,7 @@ velocity 1.7
 Xalan 2.7.1  
 XML-security 1.4.5  
 Bouncy Castle crypto lib 1.4.6   
+json-simple 1.1.1
 
 ###########################################################################
 
@@ -71,7 +72,7 @@ Bouncy Castle crypto lib 1.4.6
    including all dependent libraries indicated above.
 
 e.g.  echo $CLASSPATH
-.:/software/bestman2/lib/axis/axis.jar:/software/bestman2/lib/axis/commons-discovery-0.2.jar:/software/bestman2/lib/axis/commons-logging-1.1.jar:/software/bestman2/lib/axis/jaxrpc.jar:/software/bestman2/lib/axis/wsdl4j-1.6.2.jar:/software/bestman2/lib/axis/xercesImpl-2.11.0.jar:/software/bestman2/lib/axis/xml-apis-2.11.0.jar:/software/bestman2/lib/gums2/commons-collections-3.2.1.jar:/software/bestman2/lib/gums2/commons-lang-2.6.jar/software/bestman2/lib/gums2/esapi-2.0.1.jar:/software/bestman2/lib/gums2/joda-time-1.6.2.jar:/software/bestman2/lib/gums2/opensaml-2.5.2.jar:/software/bestman2/lib/gums2/openws-1.4.3.jar:/software/bestman2/lib/gums2/privilege-xacml-2.2.5.jar:/software/bestman2/lib/gums2/velocity-1.7.jar:/software/bestman2/lib/gums2/xalan-2.7.1.jar:/software/bestman2/lib/gums2/xmlsec-1.4.5.jar:/software/bestman2/lib/gums2/xmltooling-1.3.3.jar:/software/bestman2/lib/gums2/glite-security-trustmanager-2.5.5.jar:/software/bestman2/lib/gums2/glite-security-util-java-2.8.0.jar:/software/bestman2/lib/jetty/jetty-client-8.0.1.v20110908.jar:/software/bestman2/lib/jetty/jetty-continuation-8.0.1.v20110908.jar:/software/bestman2/lib/jetty/jetty-deploy-8.0.1.v20110908.jar:/software/bestman2/lib/jetty/jetty-http-8.0.1.v20110908.jar:/software/bestman2/lib/jetty/jetty-io-8.0.1.v20110908.jar:/software/bestman2/lib/jetty/jetty-security-8.0.1.v20110908.jar:/software/bestman2/lib/jetty/jetty-server-8.0.1.v20110908.jar:/software/bestman2/lib/jetty/jetty-servlet-8.0.1.v20110908.jar:/software/bestman2/lib/jetty/jetty-util-8.0.1.v20110908.jar:/software/bestman2/lib/jetty/jetty-webapp-8.0.1.v20110908.jar:/software/bestman2/lib/jetty/jetty-xml-8.0.1.v20110908.jar:/software/bestman2/lib/jglobus2/cog-jglobus-axis.jar:/software/bestman2/lib/jglobus2/gridftp-2.0.4.jar:/software/bestman2/lib/jglobus2/gss-2.0.4.jar:/software/bestman2/lib/jglobus2/io-2.0.4.jar:/software/bestman2/lib/jglobus2/jsse-2.0.4.jar:/software/bestman2/lib/jglobus2/log4j-1.2.15.jar:/software/bestman2/lib/jglobus2/ssl-proxies-2.0.4.jar:/software/bestman2/lib/others/jcl-over-slf4j-1.6.0.jar:/software/bestman2/lib/others/je-4.1.10.jar:/software/bestman2/lib/others/servlet-api-3.0.jar:/software/bestman2/lib/others/slf4j-api-1.6.2.jar:/software/bestman2/lib/others/slf4j-log4j12-1.6.2.jar:/software/bestman2/lib/others/slf4j-simple-1.6.2.jar:/software/bestman2/lib/others/which4j.jar:/software/bestman2/lib/voms/bcprov-jdk15-146.jar:/software/bestman2/lib/voms/vomsjapi-2.0.6.jar
+.:/software/bestman2/lib/axis/axis.jar:/software/bestman2/lib/axis/commons-discovery-0.2.jar:/software/bestman2/lib/axis/commons-logging-1.1.jar:/software/bestman2/lib/axis/jaxrpc.jar:/software/bestman2/lib/axis/wsdl4j-1.6.2.jar:/software/bestman2/lib/axis/xercesImpl-2.11.0.jar:/software/bestman2/lib/axis/xml-apis-2.11.0.jar:/software/bestman2/lib/gums2/commons-collections-3.2.1.jar:/software/bestman2/lib/gums2/commons-lang-2.6.jar/software/bestman2/lib/gums2/esapi-2.0.1.jar:/software/bestman2/lib/gums2/joda-time-1.6.2.jar:/software/bestman2/lib/gums2/opensaml-2.5.2.jar:/software/bestman2/lib/gums2/openws-1.4.3.jar:/software/bestman2/lib/gums2/privilege-xacml-2.2.5.jar:/software/bestman2/lib/gums2/velocity-1.7.jar:/software/bestman2/lib/gums2/xalan-2.7.1.jar:/software/bestman2/lib/gums2/xmlsec-1.4.5.jar:/software/bestman2/lib/gums2/xmltooling-1.3.3.jar:/software/bestman2/lib/gums2/glite-security-trustmanager-2.5.5.jar:/software/bestman2/lib/gums2/glite-security-util-java-2.8.0.jar:/software/bestman2/lib/jetty/jetty-client-8.0.1.v20110908.jar:/software/bestman2/lib/jetty/jetty-continuation-8.0.1.v20110908.jar:/software/bestman2/lib/jetty/jetty-deploy-8.0.1.v20110908.jar:/software/bestman2/lib/jetty/jetty-http-8.0.1.v20110908.jar:/software/bestman2/lib/jetty/jetty-io-8.0.1.v20110908.jar:/software/bestman2/lib/jetty/jetty-security-8.0.1.v20110908.jar:/software/bestman2/lib/jetty/jetty-server-8.0.1.v20110908.jar:/software/bestman2/lib/jetty/jetty-servlet-8.0.1.v20110908.jar:/software/bestman2/lib/jetty/jetty-util-8.0.1.v20110908.jar:/software/bestman2/lib/jetty/jetty-webapp-8.0.1.v20110908.jar:/software/bestman2/lib/jetty/jetty-xml-8.0.1.v20110908.jar:/software/bestman2/lib/jglobus2/cog-jglobus-axis.jar:/software/bestman2/lib/jglobus2/gridftp-2.0.4.jar:/software/bestman2/lib/jglobus2/gss-2.0.4.jar:/software/bestman2/lib/jglobus2/io-2.0.4.jar:/software/bestman2/lib/jglobus2/jsse-2.0.4.jar:/software/bestman2/lib/jglobus2/log4j-1.2.15.jar:/software/bestman2/lib/jglobus2/ssl-proxies-2.0.4.jar:/software/bestman2/lib/others/jcl-over-slf4j-1.6.0.jar:/software/bestman2/lib/others/je-4.1.10.jar:/software/bestman2/lib/others/servlet-api-3.0.jar:/software/bestman2/lib/others/slf4j-api-1.6.2.jar:/software/bestman2/lib/others/slf4j-log4j12-1.6.2.jar:/software/bestman2/lib/others/slf4j-simple-1.6.2.jar:/software/bestman2/lib/others/which4j.jar:/software/bestman2/lib/others/json-simple-1.1.1.jar:/software/bestman2/lib/voms/bcprov-jdk15-146.jar:/software/bestman2/lib/voms/vomsjapi-2.0.6.jar
 
 3. Run "./configure"
    Default distribution directory is ./dist/

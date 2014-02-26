@@ -1,5 +1,5 @@
 client Process this file with autoconf to produce a configure script.
-AC_INIT(BeStMan, 2.2, srm@lbl.gov)
+AC_INIT(BeStMan, 2.2, sdmsupport@lbl.gov)
 
 AC_COPYRIGHT(BeStMan Copyright 2011 the Regents of the University Of California through Lawrence Berkeley National Laboratory. http://sdm.lbl.gov/bestman/)
 
@@ -191,6 +191,8 @@ SLF4JSIMPLE="slf4j-simple"
 SLF4JVERSION="1.6.2"
 WHICH4J="which4j"
 W4VERSION="0.21"
+JSONSIMPLE="json-simple"
+JSONVERSION="1.1.1" 
 
 my_JAR_VALIDATOR($MYCLASSPATH, $JCLOSLF4J, $JSVERSION, JSNAME, JSPATH, JSDIR)
 my_JAR_VALIDATOR($MYCLASSPATH, $BERKELEYDB, $BDBVERSION, BDBNAME, BDBPATH, BDBDIR)
@@ -199,6 +201,7 @@ my_JAR_VALIDATOR($MYCLASSPATH, $SLF4JAPI, $SLF4JVERSION, S4ANAME, S4APATH, S4ADI
 my_JAR_VALIDATOR($MYCLASSPATH, $SLF4JLOG4J12, $SLF4JVERSION, S4LNAME, S4LPATH, S4LDIR)
 my_JAR_VALIDATOR($MYCLASSPATH, $SLF4JSIMPLE, $SLF4JVERSION, S4SNAME, S4SPATH, S4SDIR)
 my_JAR_VALIDATOR($MYCLASSPATH, $WHICH4J, $W4VERSION, W4NAME, W4PATH, W4DIR)
+my_JAR_VALIDATOR($MYCLASSPATH, $JSONSIMPLE, $JSONVERSION, JSONNAME, JSONPATH, JSONDIR)
 
 AC_MSG_RESULT([PASSED: AXIS for version $AXISVERSION is found in $AXISPATH.])
 AC_MSG_RESULT([PASSED: COMMONS-DISCOVERY for version $CDVERSION is found in $CDPATH.])
@@ -247,6 +250,7 @@ AC_MSG_RESULT([PASSED: SLF4J-API for version $SLF4JVERSION is found in $S4APATH.
 AC_MSG_RESULT([PASSED: SLF4J-LOG4J12 for version $SLF4JVERSION is found in $S4LPATH.])
 AC_MSG_RESULT([PASSED: SLF4J-SIMPLE for version $SLF4JVERSION is found in $S4SPATH.])
 AC_MSG_RESULT([PASSED: WHICH4J for version $W4VERSION is found in $W4PATH.])
+AC_MSG_RESULT([PASSED: JSONSIMPLE for version $JSONVERSION is found in $JSONPATH.])
 
 echo "#" > build.properties
 echo "# *** Copyright Notice ***" >> build.properties
@@ -333,6 +337,7 @@ echo "slf4j-api.path=$S4APATH" >> build.properties
 echo "slf4j-log4j.path=$S4LPATH" >> build.properties
 echo "slf4j-simple.path=$S4SPATH" >> build.properties
 echo "which4j.path=$W4PATH" >> build.properties
+echo "json-simple.path=$JSONPATH" >> build.properties
 echo "#####################################################" >> build.properties
 echo "bestmansrc.root=$ptmp" >> build.properties
 echo "install.root=${prefix}" >> build.properties
