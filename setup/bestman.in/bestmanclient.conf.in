@@ -52,6 +52,13 @@ ServiceHandle=/srm/v2/server
 #Parallelism=1
 ###########################################################
 #
+# Use external globus-url-copy by default.
+# Comment out to use internal implementation.
+#
+###########################################################
+GUCPath=/usr/bin/globus-url-copy
+###########################################################
+#
 # User personal GSI related settings
 #
 ###########################################################
