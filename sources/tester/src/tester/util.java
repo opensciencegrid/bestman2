@@ -1045,8 +1045,10 @@ private static void runGUC(String gucScriptPath, String scriptPathDir,
            Vector vec = new Vector ();
            vec.addElement("-bs");
            vec.addElement(""+bufferSize);
-           vec.addElement("-p");
-           vec.addElement(""+parallelism);
+           if (parallelism > 1) {
+             vec.addElement("-p");
+             vec.addElement(""+parallelism);
+           }
            if(!dcau) { 
              vec.addElement("-nodcau");
            }
