@@ -56,8 +56,8 @@
   </target>
 
   <target name="wsdl">
-	<echo message="building server..."/>
-     <ant antfile="${wsdl.dir}/build.xml" dir="${wsdl.dir}" />
+	<echo message="building server wsdl in ${wsdl.dir}..."/>
+     <ant dir="${wsdl.dir}" />
   </target>
   <target name="client" depends="setenv,wsdl">
 	<echo message="building client..."/>
