@@ -124,8 +124,11 @@ class ValidatorControl {
 	    }
 	    return result;
 	} catch (Exception e) {
-	    TSRMLog.exception(GUMSXACMLClient.class, null, e);
+	    TSRMLog.exception(GUMSXACMLClient.class, "Failed to validate GUMS certificates.", e);
 	    return null;
+        } catch (Error e) {
+            TSRMLog.exception(GUMSXACMLClient.class, "Major failure when validating GUMS certificates: " + e.toString(), e);
+            return null;
 	} finally {
 	    TSRMUtil.releaseSync(_vvGuard);
 	}
@@ -229,67 +232,15 @@ public class GUMSXACMLClient implements IntGUMS {
           }
 	}
 
-    public void initOpenSaml0() {
-	try {
-		String gumsUrlStr = "/data/junmin/gPlazma/jay/test/lib/";
-		java.io.File f = new java.io.File(gumsUrlStr);
-	System.out.println("..........looking in: "+f.toURL()+"  "+f.exists());
-System.out.println("....."+java.io.File.class.getName());
-        java.net.URL[] urlArray= {new java.io.File(gumsUrlStr+"opensaml-2.2.1.jar").toURL(), 
-								  new java.io.File(gumsUrlStr+"xml-security-1.4.1.jar").toURL(),
-								  new java.io.File(gumsUrlStr+"commons-logging-1.0.4.jar").toURL(),
-								  new java.io.File(gumsUrlStr+"privilege-xacml-2.2.4.jar").toURL(),
-								  new java.io.File(gumsUrlStr+"opensaml-2.2.1.jar").toURL(),
-								  new java.io.File(gumsUrlStr+"xmltooling-1.0.1.jar").toURL(),
-								  new java.io.File(gumsUrlStr+"slf4j-api-1.5.0.jar").toURL(),
-								  new java.io.File(gumsUrlStr+"slf4j-simple-1.5.0.jar").toURL(),
-								  new java.io.File(gumsUrlStr+"velocity-1.5.jar").toURL(),
-								  new java.io.File(gumsUrlStr+"commons-collections-3.2.jar").toURL(),
-								  new java.io.File(gumsUrlStr+"commons-lang-2.1.jar").toURL(),
-								  new java.io.File(gumsUrlStr+"*.jar").toURL(),
-									};
-        java.net.URLClassLoader cl = new java.net.URLClassLoader(urlArray, null);
-		//cl.loadClass("org/opensaml/DefaultBootstrap");
-		Class bootClass = cl.loadClass("org.opensaml.DefaultBootstrap");
-		Class initClass = cl.loadClass("org.apache.xml.security.Init");
-		 cl.loadClass("org.apache.commons.logging.LogFactory");
-		 cl.loadClass("org.opensciencegrid.authz.xacml.client.MapCredentialsClient");
-		 cl.loadClass("org.opensaml.xml.ConfigurationException");
-		 cl.loadClass("org.slf4j.LoggerFactory");
-		 cl.loadClass("org.slf4j.impl.StaticLoggerBinder");
-		 cl.loadClass("org.apache.velocity.app.Velocity");
-		 cl.loadClass("org.apache.commons.collections.ExtendedProperties");
-		 cl.loadClass("org.apache.commons.lang.StringUtils");
-	    java.lang.reflect.Method initMethod = initClass.getMethod("init", null);
-		java.lang.reflect.Method bootMethod = bootClass.getMethod("bootstrap", null);
-
-    initMethod.invoke(null, null);
-	bootMethod.invoke(null, null);
-	/////////
-	    //String result =org.theshoemakers.which4j.Which4J.which(org.apache.xml.security.Init.class);
-	    //System.out.println(result);
-	   // String result        =org.theshoemakers.which4j.Which4J.which(org.opensaml.DefaultBootstrap.class);
-	    //System.out.println(result);
-	    /*
-	    org.apache.xml.security.Init.init();
-	    org.opensaml.DefaultBootstrap.bootstrap();
-		*/
-	} catch (Exception e) {
-	    TSRMLog.exception(this.getClass(), "init", e);
-		e.printStackTrace();
-	    throw new RuntimeException("Unabled to initialize opensaml."+e.getMessage());
-	}
-    }
 }   
 
 
 class VOMSInfo {
     public static List retrieve(X509Certificate[] certChain) {
 	try {
-	    //VOMSValidator vv = new VOMSValidator(certChain);
-	    //List vomsCerts = vv.parse().getVOMSAttributes();
 	    List vomsCerts = GUMSXACMLClient.getVomsCert(certChain);
 	    if (vomsCerts == null) {
+                TSRMLog.debug(VOMSInfo.class, null, "No cert chain retrieved.", null);
 		return null;
 	    }
 	    Vector result = new Vector();

@@ -1,0 +1,6 @@
+lib/
+release_dir/
+sources/client/build
+sources/server/build
+sources/tester/build
+sources/wsdl/build
