@@ -1,41 +1,12 @@
 
-# https://codeforge.lbl.gov/anonscm/bestman/bestman2
+# LBL: https://code.lbl.gov/projects/bestman
+# OSG: https://github.com/opensciencegrid/bestman2
 
 # Directory information
 
 COPYRIGHT: Copyright file 
-LICENSEi: License file (BSD with Grant-back provision)
+LICENSE: License file (BSD with Grant-back provision)
 
-
-sources: the backup copy (as of 2/3/2012) of source release 
-         of BeStMan2 server and clients, and SRM Tester
-         this directory should be preserved as is.
-setup: LBNL setup directory for configurations and executable scripts
-setup-osg: OSG setup directory for configurations and executable scripts
-branches/osg: OSG workspace
-       https://twiki.grid.iu.edu/bin/view/SoftwareTeam/BestmanDevelopment
-trunk: release directory of sources
-       for BeStMan2 server and clients, and SRM Tester
-
-# Branch/Merging
-http://svnbook.red-bean.com/en/1.7/svn-book.html#svn.branchmerge
-
-1. To create a temporary workspace
-% cd bestman2
-% svn copy trunk branches/osg
-
-2. To update changes from trunk to branches:
-% cd bestman2/branches/osg
-% svn merge ^/bestman2/trunk
-
-3. To merge integrate back into trunk from the working branch:
-% cd bestman2/trunk
-% svn update
-% svn merge --reintegrate ^/bestman2/branches/osg
-% svn delete ^/bestman2/branches/osg
-Note: Once a --reintegrate merge is done from branch to trunk, the branch is 
-    no longer usable for further work. It's not able to correctly absorb new 
-    trunk changes, nor can it be properly reintegrated to trunk again. 
-    For this reason, if you want to keep working on your feature branch, 
-    we recommend destroying it and then re-creating it from the trunk.
+sources: sources for BeStMan2 server and clients, and SRM Tester
+setup: setup directory for configurations and executable scripts
 
