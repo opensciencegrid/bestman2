@@ -175,6 +175,15 @@ my_JAR_VALIDATOR($MYCLASSPATH, $JCEJDK13, $JCEVERSION, JCENAME, JCEPATH, JCEDIR)
 my_JAR_VALIDATOR($MYCLASSPATH, $LOG4J, $LOG4JVERSION, LOG4JNAME, LOG4JPATH, LOG4JDIR)
 my_JAR_VALIDATOR($MYCLASSPATH, $PURETLS, $PTVERSION, PTNAME, PTPATH, PTDIR)
 
+dnl voms-api-java 3 related libs
+VOMSAPIJAVA="voms-api-java"
+VAJ3VERSION="3.1.0"
+CANL="canl-java"
+CANLVERSION="2.1.2"
+
+my_JAR_VALIDATOR($BUILDP, $MYCLASSPATH, $VOMSAPIJAVA, $VAJ3VERSION, VAJ3NAME, VAJ3PATH)
+my_JAR_VALIDATOR($BUILDP, $MYCLASSPATH, $CANL, $CANLVERSION, CANLNAME, CANLPATH)
+
 dnl voms related libs
 BCPROV="bcprov-jdk15"
 BPVERSION="1.4.6"
@@ -333,6 +342,8 @@ echo "puretls.path=$PTPATH" >> build.properties
 echo "#####################################################" >> build.properties
 echo "bcprov-jdk15.path=$BPPATH" >> build.properties
 echo "vomsjapi.path=$VJPATH" >> build.properties
+echo "voms-api-java.path=$VAJ3PATH" >> build.properties
+echo "canl.path=$CANLPATH" >> build.properties
 echo "#####################################################" >> build.properties
 echo "jcl-over-slf4j.path=$JSPATH" >> build.properties
 echo "je-4.1.10.path=$BDBPATH" >> build.properties

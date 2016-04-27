@@ -89,6 +89,8 @@
     <fileset file="${log4j.path}"/>
     <fileset file="${bcprov-jdk15.path}"/>
     <fileset file="${vomsjapi.path}"/>
+    <fileset file="${voms-api-java.path}"/>
+    <fileset file="${canl.path}"/>
     <fileset file="${jcl-over-slf4j.path}"/>
     <fileset file="${je-4.1.10.path}"/>
     <fileset file="${servlet-api.path}"/>
