@@ -45,6 +45,7 @@ import org.italiangrid.voms.VOMSAttribute;
 import org.italiangrid.voms.VOMSValidators;
 import org.italiangrid.voms.ac.VOMSACValidator;
 import org.italiangrid.voms.ac.impl.DefaultVOMSValidator;
+import org.italiangrid.voms.store.impl.DefaultUpdatingVOMSTrustStore;
 import org.italiangrid.voms.util.CertificateValidatorBuilder;
 
 import eu.emi.security.authn.x509.X509CertChainValidatorExt;
