@@ -33,6 +33,13 @@ if [ ! -f "$BESTMAN_SYSCONF_LIB" ]; then
    echo "ERROR: Cannot find the bestman2 configuration file: $BESTMAN_SYSCONF_LIB"
    exit 1;
 fi
+if [ "x$BESTMAN_RC" = "x" ] ; then
+   BESTMAN_RC="/etc/bestman2/conf/bestman2.rc"
+fi
+if [ ! -f "$BESTMAN_RC" ]; then
+   echo "ERROR: Cannot find the bestman2.rc file: $BESTMAN_RC"
+   exit 1;
+fi
 if [ "x$BESTMAN_PID" = "x" ] ; then
    BESTMAN_PID=/var/run/bestman2.pid
 fi
@@ -344,7 +351,7 @@ export CLASSPATH
 # cd $SRM_HOME
 
 if test "$HELPTOKEN" ; then
-exec $JAVA_HOME/bin/java -server -Xmx256m ${LOG4JDEF} ${JETTYDEF} ${JETTYDEBUGDEF} gov.lbl.srm.server.Server ${BESTMAN_SYSCONF} $* &
+exec $JAVA_HOME/bin/java -server -Xmx256m ${LOG4JDEF} ${JETTYDEF} ${JETTYDEBUGDEF} gov.lbl.srm.server.Server ${BESTMAN_RC} $* &
 else
 exec $JAVA_HOME/bin/java -server ${MAXPOOLSIZE} ${MAXHEAP} ${STACKSIZE} ${CONNECTORQUEUESIZE} ${CONNECTIONACCEPTORSIZE} ${EVENTLOGCOUNT} ${EVENTLOGSIZE} ${BESTMAN_EXTRALIB} ${MY_GLOBUSHOSTNAME} ${MY_TCP_PORTR} ${MY_CERT_DIR} ${MY_VOMS_DIR} ${MY_GUMS_OPT1} ${MY_GUMS_OPT2} ${MY_GUMS_OPT3} ${MY_GUMS_OPT4} ${JETTYDEF} ${JETTYDEBUGDEF} ${LOG4JDEF} ${BESTMAN_JAVA_SRM_OTHER_OPTS} gov.lbl.srm.server.Server ${BESTMAN2_CONF} $* &
 fi
