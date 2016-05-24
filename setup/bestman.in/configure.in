@@ -107,7 +107,7 @@ $SRM_HOME/conf/srmtester.conf:./bestman.in/srmtester.conf.in \
 $SRM_HOME/conf/bestman-diag.conf.sample:./bestman.in/bestman-diag.conf.sample.in \
 $SRM_HOME/conf/bestman-diag-msg.conf:./bestman.in/bestman-diag-msg.conf.in \
 $SRM_HOME/conf/grid-mapfile.empty:./bestman.in/grid-mapfile.empty.in \
-$SRM_HOME/conf/bestmanclient.conf:./bestman.in/bestmanclient.conf.in \
+$SRM_HOME/conf/srmclient.conf:./bestman.in/srmclient.conf.in \
 $SRM_HOME/sbin/bestman.server:./bestman.in/bestman.server.in \
 $SRM_HOME/sbin/SXXbestman:./bestman.in/SXXbestman.in \
 $SRM_HOME/sbin/SXXbestman.personal:./bestman.in/SXXbestman.personal.in"
@@ -159,7 +159,7 @@ $SRM_HOME/bin/srm-sp-tokens:./bestman.in/srm-sp-tokens.in \
 $SRM_HOME/bin/srm-sp-update:./bestman.in/srm-sp-update.in \
 $SRM_HOME/bin/srm-sp-update-status:./bestman.in/srm-sp-update-status.in \
 $SRM_HOME/bin/srm-transferprotocols:./bestman.in/srm-transferprotocols.in \
-$SRM_HOME/conf/bestmanclient.conf:./bestman.in/bestmanclient.conf.in" 
+$SRM_HOME/conf/srmclient.conf:./bestman.in/srmclient.conf.in"
 
 dnl $SRM_HOME/bin/srm-util:./bestman.in/srm-util.in" \
 dnl $SRM_HOME/bin/srm-request:./bestman.in/srm-request.in \
