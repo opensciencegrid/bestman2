@@ -720,7 +720,8 @@ public class Config {
 		TSRMUtil.startUpInfo("       however, local _ls_ will not invoke sudo");
 	    }
 	    //String sudoTest = "sudo -v -S";
-	    String sudoTest = _sudoCommand +" -v -S";
+            // sudo -i is incompatible with -v
+	    String sudoTest = _sudoCommand.replaceFirst(" -i$", "").replaceFirst(" -i ", " ") +" -v -S";
 	    if (!TPlatformUtil.execCmdValidationWithReturn(sudoTest)) {
 		TSRMUtil.startUpInfo("Failed to verify sudo command:"+sudoTest+" Exiting.");
 		//System.exit(1);
