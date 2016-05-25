@@ -778,7 +778,7 @@ public class Config {
 	} else {
 	    _gumsHostDN = hostDN;
 	}	
-	TSRMUtil.startUpInfo(".. gums host dn"+_gumsHostDN);
+	TSRMUtil.startUpInfo(".. bestman host dn for gums: " + _gumsHostDN);
 
 	try {
 	    if (doXACML) {
